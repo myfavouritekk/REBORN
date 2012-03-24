@@ -13,12 +13,14 @@ class Cell {
 
     private:
 
+        //  The degradation rate of a protein is modified
+        void mut_deg_prot();
+
         double currScore;
 
         //  Global Array of Coefficients
-        double** coefs;
-        Node** nodes;
-        Reaction* ReactionList;
+        std::vector<Node*> nodes;
+        std::vector<Reaction*> rlist;
 };
 
 #endif

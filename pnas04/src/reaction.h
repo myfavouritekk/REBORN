@@ -25,16 +25,33 @@ class Reaction{
         Reaction();
         ~Reaction();
 
+		void setReversible(const bool& rev);
+		bool isReversible ();
+
         void modifyForwardRate();
         void modifyReverseRate();
-        :A
+		void initForwardRateRandomly();	//	0~1
+		void initReverseRateRandomly();	//	0~1
 
-:A
+		void addReactant(const Node* sr);
+		void addModifier(const Node* sm);
+		void addProduct (const Node* sp);
+
+		int  getRtype ();
+		Node* getReactant(const int& ir);
+		Node* getModifier(const int& im);
+		Node* getProduct (const int& ip);
+
+		//	check equality with given reaction
+		bool operator==(const Reaction& r1) const;
 
     private:
 
+		//	reaction type
+		int rtype;
+
         //  reversibility
-        bool isReversible;
+        bool reversible;
 
         //  reaction rates
         double forwardRate;

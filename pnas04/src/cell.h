@@ -8,8 +8,14 @@ class Cell {
 
     public:
 
+		//	no default constructor
+		Cell (const int& _numind, const int& _numprot);
+
+		//	deconstructor
+		~Cell ();
+
+		//	call for six submutations successively
         Cell* mutation ();
-        double getScore (const scoreFunc&, const bool&);
 
     private:
 
@@ -27,10 +33,16 @@ class Cell {
 
 		//	A post transcriptional modification is added
 		void mut_add_postmod();
+
+		//	check if a node has been added previously
+		bool existsNode (const Node& node);
 		
-        //  Global Array of Coefficients
-        std::vector<Node*> nodes;
-        std::vector<Reaction*> rlist;
+		//	check if a reaction has been added previously
+		bool existsReaction (const Reaction& rxn);
+
+        //	Global Storage
+        vector<Node*> nodes;
+        vector<Reaction*> rlist;	//	document operations made to develop the network
 };
 
 #endif

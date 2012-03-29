@@ -1,5 +1,36 @@
 #include "cell.h"
 
+Cell::Cell(const int& _numind, const int& _numprot) {
+	int currIndex = nodes.size();
+	for(int im=0; im < _numind; im++) {
+		Node* inducer = new Node(currIndex+im, 1);
+	}
+	for(int ip=0; ip < _numprot; ip++) {
+		Node* gene = new Node(currIndex+, 2);
+		Node* gene = new Node(currINdex+, 3);
+	}
+}
+
+Cell::~Cell() {}
+
+bool Cell::existsNode (const Node& node) {
+	vector<Node*>::iterator iter = nodes.begin();
+	while (iter != nodes.end()) {
+		if(&(*iter) == node) {return true;}
+		iter ++;
+	}
+	return false;
+}
+
+bool Cell::existsReaction (const Reaction& rxn) {
+	vector<Reaction*>::iterator iter = rlist.begin();
+	while (iter != rlist.end()) {
+		if(&(*iter) == rxn) {return true;}
+		iter++;
+	}
+	return false;
+}
+
 void Cell::mut_deg_prot () {
 
 	if(!rlist.size()) return;
@@ -170,9 +201,9 @@ void Cell::add_mut_postmod () {
 		int num2 = 0;
 		vector<int> protIndice;
 			
-		std::vector<Nodes*>::iterator iter = nodes.begin();
+		vector<Nodes*>::iterator iter = nodes.begin();
 		while (iter != nodes.end()) {
-			if((*iter)->getNtype() == 1 || (*iter)->isProteinComplex()) { 
+			if((*iter)->getNode(0) == NULL) { 
 				num1++;
 				protIndice.push_back(num2);
 			}
@@ -184,6 +215,34 @@ void Cell::add_mut_postmod () {
 		
 		int opIndex1 = protIndice[rand()%num1];	//	protein 1
 		int opIndex2 = protIndice[rand()%num1];	//	protein 2
+
+		double possibility = (double)rand()/RAND_MAX;
+		if(possibility < 1/3) {//	dimerization
+			Node* dimer = new Node (nodes.size(), nodes[opIndex1], nodes[opIndex2]);
+			Reaction* dimerization = new Reaction ();
+			dimerization->setReversible(true);
+			dimerization->initForwardRateRandomly();
+			dimerization->initReverseRateRandomly();
+			dimerization->addReactant(nodes[opIndex1]);
+			dimerization->addReactant(nodes[opIndex2]);
+			dimerization->addProduct(dimer);
+			if(!existsReaction(dimerization)) {
+				nodes.push_back(dimer);
+				rlist->push_back(dimerization);
+			}
+			else {
+				delete dimer;
+				delete dimerization;
+			}
+		}
+		else if(possibility < 2/3) {
+			Reaction* partialDeg = new Reaction ();
+			partialDeg->setReversible(false);
+			partialDeg->initForwardRateRandomly();
+		}
+		else {
+		}
+	
 	
 
 

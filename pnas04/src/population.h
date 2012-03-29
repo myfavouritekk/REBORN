@@ -13,6 +13,8 @@ class Population {
     private:
         
         Cell* cells;
+        double* targetData;
+        scoreFunction sfunc;
 };
 
 #endif

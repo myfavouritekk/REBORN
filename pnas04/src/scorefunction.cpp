@@ -2,13 +2,13 @@
 #include "math.h"
 
 //Constructor
-void ScoreFunc::ScoreFunc(int _type){
+ScoreFunc::ScoreFunc(int _type){
 
     type = _type;
 
 }
 
-void ScoreFunc::~ScoreFunc(){
+ScoreFunc::~ScoreFunc(){
     
 }
 

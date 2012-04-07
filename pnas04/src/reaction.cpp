@@ -1,4 +1,5 @@
 #include "reaction.h"
+#include <vector>
 
 Reaction::Reaction () 
 {}
@@ -8,14 +9,15 @@ Reaction::~Reaction ()
 
 bool Reaction::operator==(const Reaction& r1) const {
 	if(rtype != r1.rtype) return false;
-	assert(reversible == r1.reversible);
+	//assert(reversible == r1.reversible);
 
-	vector<Node*>::iterator iter, iter1;
-	vector<int> indice, indice1;
+    std::vector<Node*>::iterator iter, iter1;
+    std::vector<int> indice, indice1;
 
 	/*********************
 	 * compare reactants
 	 * ******************/
+    
 	iter = reactants.begin();
 	iter1 = r1.reactants.begin();
 	while(iter != reactants.end()) {

@@ -1,4 +1,5 @@
 #include "reaction.h"
+#include <time.h>
 #include <vector>
 
 Reaction::Reaction () 

@@ -1,5 +1,6 @@
 #include "cell.h"
 #include "reaction.h"
+#include <time.h>
 #include <vector>
 #include <iostream>
 
@@ -300,8 +301,8 @@ void runge_kutta(double data[][MAXSTEPS],double (*odes[])(double y[],double x),i
 	
 	int currSerie,currStep;
 	int i;
-	double k1,k2,k3,k4;
-	double y[series],tempY[series];
+    double k1,k2,k3,k4;
+    double *y = new double[series], *tempY = new double[series];
 	
 	
 	
@@ -328,7 +329,8 @@ void runge_kutta(double data[][MAXSTEPS],double (*odes[])(double y[],double x),i
 			k4 = (*odes[currSerie])(tempY,currStep+1);
 			data[currSerie][currStep+1] = y[currSerie] + 1/6.0*(k1+2*k2+2*k3+k4);
 		}
-	}
+    }
+    delete y, tempY;
 }
 
 

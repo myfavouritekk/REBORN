@@ -6,7 +6,7 @@
 
 //constructor, by default it will use score function 1 and evlute 100 generations
 Population::Population (const int& _ncell)
-:ncell(_ncell), numr(0), numind(0), numprot(0), xpoints(NULL), ypoints(NULL), cells(NULL) , sfunc(1),evolution(100)
+:ncell(_ncell), numr(0), numind(0), numprot(0), xpoints(NULL), ypoints(NULL), cells(NULL) ,sfunc(ScoreFunc(0)),evolution(100)
 {
 	ncell = ncell <=0 ? 100 : ncell;
 }
@@ -38,8 +38,18 @@ Population::~Population () {
 //population initializer
 void Population::init(){
     
+    //read dynamic data
+    std::string fn;
+    std::cout << "Enter the input file name:" << std::endl;
+    std::cin >> fn;
+    
     //initialize the total set of cells that can contain 2*ncell cells
     cells = new Cell*[2 * ncell];
+    
+    readDynamics(fn);
+    
+    
+   
 }
 
 
@@ -50,7 +60,7 @@ void Population::growth(){;
     for(int i = 0; i < ncell; i++){
         
         //a cell will duplicate itself
-        cells[ncell + i] = cells[i];
+        cells[ncell + i] = cells[i]->aNewCopy();
         
         //mutation phase
         currCell = cells[ncell + i];
@@ -59,7 +69,7 @@ void Population::growth(){;
         //get its score
         currCell->getScore(sfunc, ypoints);
     }
-    evolution--;
+    evolution--;//evolution once
 }
 
 
@@ -111,7 +121,7 @@ void Population::selection(){
     //cells with lower score will extinct
     for (int i = ncell; i < 2 * ncell; i++) {
         if (cells[i] != NULL) {
-            delete [] cells[i];
+            //delete [] (cells[i]);
         }
     }
 }
@@ -139,6 +149,7 @@ void Population::readDynamics (const string& fn) {
 
 	//	number of xpoints, inducers and proteins
 	infile >>  numr >> numind >> numprot;
+    cout << numr << endl << numind << endl << numprot << endl;
     if (infile.bad ()) throw runtime_error ("IO stream corrupted");
 	if (infile.fail ()) throw runtime_error ("bad data");
 	if (!numr) {
@@ -154,19 +165,32 @@ void Population::readDynamics (const string& fn) {
 	ypoints = new double*[numr];
 	for(int ir = 0; ir < numr; ir++) {
 		infile >> xpoints[ir];
+        cout << xpoints[ir] << "\t";
 		ypoints[ir] = new double[numy];
 		for(int ic = 0; ic < numy; ic++) {
 			infile >> ypoints[ir][ic];
+            cout << ypoints[ir][ic] << "\t";
 			if (infile.bad ()) throw runtime_error ("IO stream corrupted");
 			if (infile.fail ()) throw runtime_error ("bad data");
 		}
+        cout << endl;
 	}
 
-	//	foreach cell, initialization
-	for (int ic=0; ic < ncell; ic++) {
-		cells[ic] = new Cell (numind, numprot);
+	//	for each cell, initialization
+	for (int i = 0; i < ncell; i++) {
+		cells[i] = new Cell(numind, numprot);
 	}
 
 	return;
+}
+
+void Population::readDynamicsFromConsole(){
+    
+}
+
+
+void Population::genTikzFormat(){
+    //to be implemented
+    return;
 }
 

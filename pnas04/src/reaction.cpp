@@ -10,14 +10,13 @@ Reaction::~Reaction ()
 bool Reaction::operator==(const Reaction& r1) const {
 	if(rtype != r1.rtype) return false;
 	//assert(reversible == r1.reversible);
-
-    std::vector<Node*>::iterator iter, iter1;
+    
+    std::vector<Node*>::const_iterator iter, iter1;
     std::vector<int> indice, indice1;
 
 	/*********************
 	 * compare reactants
 	 * ******************/
-    
 	iter = reactants.begin();
 	iter1 = r1.reactants.begin();
 	while(iter != reactants.end()) {
@@ -89,7 +88,7 @@ bool Reaction::isReversible () {
 }
 
 void Reaction::setReversible(const bool& rev) {
-	isReversible = rev;
+	reversible = rev;
 	return;
 }
 
@@ -119,17 +118,17 @@ void Reaction::initReverseRateRandomly () {//0-1
 	return;
 }
 
-void Reaction::addReactant(const Node* sr) {
+void Reaction::addReactant( Node* sr) {
 	reactants.push_back(sr);
 	return;
 }
 
-void Reaction::addModifier(const Node* sm) {
+void Reaction::addModifier( Node* sm) {
 	modifiers.push_back(sm);
 	return;
 }
 
-void Reaction::addProduct (const Node* sp) {
+void Reaction::addProduct ( Node* sp) {
 	products.push_back(sp);
 	return;
 }

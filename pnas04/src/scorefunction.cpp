@@ -46,8 +46,7 @@ double ScoreFunc::getScore(double* data1, double* data2, int n){
     }
     *
     */
-
-    return;
+    return 0;
 }
 
 //a score function based on the square of distance

@@ -1,69 +1,9 @@
 #include "node.h"
 #include <iostream>
 #include <vector>
+#include <sstream>
 
 
-
-/*
-
-Node::Node(int _nindex, Node* _nleft, Node* _nright)
-    :nindex(_nindex)
-{
-	//	merge N_left and N_right
-	
-	//	gene
-	if(_nleft->getNode(0) == NULL) {
-		if(_nright->getNode(0) == NULL) {
-			components[0] = NULL;
-		}
-		else {
-			components[0] = _nright->getNode(0);
-		}
-	}
-	else {
-		if(_nright->getNode(0) == NULL) {
-			components[0] = _nleft->getNode(0);
-		}
-		else{
-            std::cerr << "Error: more than one genes appear in a complex!" << std::endl;
-			std::exit (1);
-		}
-	}
-
-	//	proteins
-	int lsize = _nleft->getNsize ();
-	int rsize = _nright->getNsize ();
-
-	for(int ileft = 0; ileft < lsize; ileft++) {
-		components.push_back(_nleft->getNode(ileft));
-	}
-	for(int iright = 0; iright < rsize; iright++) {
-		components.push_back(_nright->getNode(iright));
-	}
-
-	//	sort
-	//components.sort ();
-	sort(components);
-    
-    
-	//	assign ntype
-	if(components[0] == NULL) {
-		if(components.size() > 2) {//	protein complex
-			ntype = 3;
-		}
-		else ntype = 1;	//	protein
-	}
-	else {
-		if(components.size() > 1) {//	gene/protein complex
-			ntype = 2;
-		}
-		else ntype = 0;	//	gene
-	}
-
-	//	assign representations
-	nstring = write();		
-}
-*/
 
 
 void quickSort(vector<Node*> _components,int num){
@@ -94,20 +34,22 @@ void quickSort(vector<Node*> _components,int num){
     //recursion
     quickSort(less,numLess);
     quickSort(greater,numGreater);
+
     
     //final assignments
     //first, for less members
-    std::vector<Node*>::iterator iter1 = less.end();
+    std::vector<Node*>::iterator iter1 = less.end()-1;
     if (iter1 != less.begin()) {
         _components.insert(_components.begin(),*iter1);
+        iter1--;
     }
     _components.insert(_components.begin(),*iter1);
     //second, for greater members
     std::vector<Node*>::iterator iter2 = greater.begin();
     if (iter2 != greater.end()) {
         _components.push_back(*iter2);
+        iter2++;
     }
-    _components.push_back(*iter2);
 }
 
 
@@ -137,7 +79,30 @@ void sort(std::vector<Node*> _components,int members[6]){
 }
 
 
+//basic node constructor
+Node::Node(int _nindex, int _ntype):nindex(_nindex),ntype(_ntype),components(NULL){
+    
+    
+    if (ntype == 1) {//inducer
+        std::stringstream ss;
+        ss << nindex;
+        nstring = "indu" + ss.str();
+    }   
+    if (ntype == 2) {//gene
+        std::stringstream ss;
+        ss << nindex;
+        nstring = "g" + ss.str();
+    }
+    
+    if (ntype == 1) {//protein
+        std::stringstream ss;
+        ss << nindex;
+        nstring = "P" + ss.str();
+    }    
+}
 
+
+//complex node constructor
 Node::Node(int _nindex, Node* _nleft, Node* _nright)
 :nindex(_nindex)
 {
@@ -205,13 +170,15 @@ Node::Node(int _nindex, Node* _nleft, Node* _nright)
 }
 
 
+//complex node constructon of certain type
+Node::Node(int _nindex, int _ntype, Node* _nleft, Node* _nright):ntype(_ntype){
+    Node(_nindex, _nleft, _nright);
+}
+
 
 Node::~Node()
 {}
 
-bool Node::operator==(const Node& n1) const {
-	return nstring == n1.nstring;
-}
 
 int Node::getNindex () {
 	return nindex;
@@ -219,6 +186,9 @@ int Node::getNindex () {
 
 int Node::getNtype () {
     return ntype;
+}
+int Node::getNsize () {
+	return components.size ();
 }
 
 Node* Node::getNode (const int& index) {
@@ -232,8 +202,8 @@ string Node::getNstring () {
 	return nstring;
 }
 
-int Node::getNsize () {
-	return components.size ();
+bool Node::operator==(const Node& n1) const {
+	return nstring == n1.nstring;
 }
 
 string Node::write () {
@@ -244,11 +214,16 @@ string Node::write () {
 	}
 
 	std::vector<Node*>::iterator iter = components.begin ();
-	iter++;
+	iter++;//components[0] is for gene
 	while (iter != components.end ()) {//proteins
 		nodestr = nodestr + (*iter)->getNstring() + ":";
 		iter++;
 	}
 
-	return nodestr.substr(0,nodestr.length()-1);
+	return nodestr.substr(0,nodestr.length()-1);//delete last ":"
+}
+
+
+Node* Node::extractFirstGene(){
+    return components[0];
 }

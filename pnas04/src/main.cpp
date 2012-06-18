@@ -7,7 +7,7 @@ int main (void) {
     mypop.init ();
 
 //  evolution
-    while (mypop.isTerminate ()) {
+    while (!mypop.isTerminate ()) {
         mypop.growth ();
         mypop.selection ();
     }

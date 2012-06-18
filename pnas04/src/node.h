@@ -11,7 +11,7 @@ using std::vector;
  * could be a gene, a protein or a complex composed of gene and proteins or proteins only.
  * We assign each node a specific string having the pattern a:A:B:C:... with
  * the first lower case representing the gene and following upper cases the proteins.
- * Each one of the six types, Inducer, Gene, Protein, Inducer/Protein Complex, Gene/Protein Complex, Pure Protein Complex, 
+ * Each one of the six types, Inducer 1, Gene 2, Protein 3, Inducer/Protein Complex 4, Gene/Protein Complex 5, Pure Protein Complex 6, 
  * has one associated number, 1, 2, 3, 4, 5, 6, respectively.
  */
 
@@ -34,7 +34,7 @@ class Node {
 		//	check equality with given node
 		bool operator==(const Node& n1) const;
 
-		//	output
+		//	assign representations
 		string write ();
     
     

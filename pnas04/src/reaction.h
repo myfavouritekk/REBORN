@@ -33,9 +33,9 @@ class Reaction{
 		void initForwardRateRandomly();	//	0~1
 		void initReverseRateRandomly();	//	0~1
 
-		void addReactant(const Node* sr);
-		void addModifier(const Node* sm);
-		void addProduct (const Node* sp);
+		void addReactant( Node* sr);//no const
+		void addModifier( Node* sm);//no const
+		void addProduct ( Node* sp);//no const
 
 		int  getRtype ();
 		Node* getReactant(const int& ir);

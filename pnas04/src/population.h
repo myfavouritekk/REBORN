@@ -34,6 +34,8 @@ class Population {
 		 * biochemical networks. 
 		 */
 		void readDynamics (const string& fn);
+        
+        void readDynamicsFromConsole();
 
         //initializer
         void init();
@@ -49,7 +51,8 @@ class Population {
     
         //generating certain output format
         void genTikzFormat();
-   
+    
+       
     private:
 
 		//	dynamics of network nodes

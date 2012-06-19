@@ -99,7 +99,7 @@ void Cell::mut_kin_const () {
 	
 	//	a kinetic constant of one reaction to be modified
 	
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	Reaction* currR = rlist[rand()%rlist.size()];
 
 	if((double)rand()/RAND_MAX <= 0.5 || !currR->isReversible()) {
@@ -224,7 +224,7 @@ void Cell::mut_add_regu () {
 void Cell::mut_add_postmod () {
 	//	a post modification is add
 	
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
 	if((double)rand()/RAND_MAX <= 0.5) {//	a single protein case
 
 
@@ -294,7 +294,7 @@ void Cell::mut_add_postmod () {
 
 //overall mutation method
 void Cell::mutation(){
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
     if (rand() < RAND_MAX*PROB1) {
         mut_deg_prot();
     }
@@ -351,8 +351,6 @@ void runge_kutta(double data[][MAXSTEPS],double (*odes[])(double y[],double x),i
     delete [] y;
     delete [] tempY;
 }
-
-
 
 
 /*get score using the sfunc as score function and change its own currScore member

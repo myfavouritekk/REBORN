@@ -102,20 +102,20 @@ void Reaction::modifyForwardRate () {
 }
 
 void Reaction::modifyReverseRate () {
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
     double rn = (double)rand()/RAND_MAX*2.0;
     reverseRate = reverseRate*rn;
     return;
 }
 
 void Reaction::initForwardRateRandomly () {//0-1
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
     forwardRate = (double)rand()/RAND_MAX;
 	return;
 }
 
 void Reaction::initReverseRateRandomly () {//0-1
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
     reverseRate = (double)rand()/RAND_MAX;
 	return;
 }

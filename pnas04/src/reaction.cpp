@@ -96,7 +96,7 @@ void Reaction::setReversible(const bool& rev) {
 
 void Reaction::modifyForwardRate () {
     srand(time(NULL));
-    double rn = (double)rand()/RAND_MAX*2.0;
+    double rn = (double)rand() / RAND_MAX * 2.0;
     forwardRate = forwardRate*rn;
     return;
 }

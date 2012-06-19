@@ -4,12 +4,15 @@
 #include "node.h"
 #include "reaction.h"
 #include "scorefunction.h"
+#include <time.h>
+#include <vector>
+#include <iostream>
 
 class Cell {
 
     public:
 
-		//	no default constructor
+		//	no default constructor, for construction, number of inducers and proteins should be provided
 		Cell (const int& _numind, const int& _numprot);
 
 		//	deconstructor
@@ -60,7 +63,7 @@ class Cell {
 		bool existsReaction (const Reaction& rxn);
 
         //	Global Storage
-        vector<Node*> nodes;
+        vector<Node*> nodes;//contain all the species within a cell
         vector<Reaction*> rlist;	//	document operations made to develop the network
 };
 

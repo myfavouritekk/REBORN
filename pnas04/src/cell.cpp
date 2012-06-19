@@ -1,11 +1,10 @@
 #include "cell.h"
-#include "reaction.h"
-#include <time.h>
-#include <vector>
-#include <iostream>
 
 
-//constructor
+
+/*constructor:
+ input: _numind(number of inducers); _numprot(number of proteins)
+ */
 Cell::Cell(const int& _numind, const int& _numprot) {
 	int currIndex = nodes.size();
 	for(int im = 0; im < _numind; im++) {
@@ -29,49 +28,61 @@ Cell::~Cell() {}
 
 
 
-bool Cell::existsNode (const Node& node) {
+bool Cell::existsNode (const Node& aNode) {
 	vector<Node*>::iterator iter = nodes.begin();
-	while (iter != nodes.end()) {
-		if(*(*iter) == node) {return true;}
+    vector<Node*>::iterator iter_end = nodes.end();
+	while (iter != iter_end) {
+		if(*(*iter) == aNode) {return true;}
 		iter ++;
 	}
 	return false;
 }
 
-bool Cell::existsReaction (const Reaction& rxn) {
+bool Cell::existsReaction (const Reaction& aReaction) {
 	vector<Reaction*>::iterator iter = rlist.begin();
-	while (iter != rlist.end()) {
-		if(*(*iter) == rxn) {return true;}
+    vector<Reaction*>::iterator iter_end = rlist.end();
+	while (iter != iter_end) {
+		if(*(*iter) == aReaction) {return true;}
 		iter++;
 	}
 	return false;
 }
 
+/*
+ *five types of mutation:
+ *1. deg_prot: change protein degradation 
+ *2. kin_const: change kinetic constant
+ *3. add_gene: create a neww gene
+ *4. add_regu: add new interaction between protein and a gene or a gene-protein complex
+ *5. add_postmod: add post transcriptional modification
+ */
+
+//mut_deg_prot: change the protein degradation rate
 void Cell::mut_deg_prot () {
 
-	if(!rlist.size()) return;
+	if(!rlist.size()) return;               //no reaction in the rlist, no modification
 
-    //  the degradation rate of a protein is modified
-
-    int num1 = 0;//contain number of degradation reactions
-    int num2 = 0;//index of a certain reaction
-    vector<int> indice;
+    //  the degradation rate of a protein to be modified
+    int numOfDegReaction = 0;               //contain number of degradation reactions
+    int indexOfDegReaction = 0;             //index of a certain reaction
+    vector<int> indice;                     //contain the indice of degradation reactions
 
     //  scan <rlist> and choose one degradation reaction (protein)
     std::vector<Reaction*>::iterator iter = rlist.begin();
-    while (iter != rlist.end()) {
-        if((*iter)->getRtype() == 1) { //   #1 is protein degradation
-            num1++;
-            indice.push_back(num2);
+    std::vector<Reaction*>::iterator iter_end = rlist.end();
+    while (iter != iter_end) {
+        if((*iter)->getRtype() == 1) {      //#1 is protein degradation
+            numOfDegReaction++;
+            indice.push_back(indexOfDegReaction);
         }
-        num2++;
+        indexOfDegReaction++;
         iter ++;
     }
 	
-	if(!num1) return;	//	no protein
+	if(!numOfDegReaction) return;           //no protein degradation reaction
 
     srand(time(NULL));
-    int opIndex = indice[rand()%num1];//opIndex contains a certain degradation reaction
+    int opIndex = indice[rand() % numOfDegReaction];//opIndex contains a certain degradation reaction
 
     //  modify its degradation rate
     Reaction* currR = rlist[opIndex];
@@ -80,16 +91,18 @@ void Cell::mut_deg_prot () {
     return;
 }
 
+
+//mut_kin_const: change the kinect constant of a reaction
 void Cell::mut_kin_const () {
 
 	if(!rlist.size()) return;
 	
-	//	a kinetic constant of one reaction is modified
+	//	a kinetic constant of one reaction to be modified
 	
 	srand(time(NULL));
 	Reaction* currR = rlist[rand()%rlist.size()];
 
-	if((double)rand()/RAND_MAX<=0.5 || !currR->isReversible()) {
+	if((double)rand()/RAND_MAX <= 0.5 || !currR->isReversible()) {
 		currR->modifyForwardRate();
 	}
 	else {
@@ -99,26 +112,28 @@ void Cell::mut_kin_const () {
 	return;
 }
 
-void Cell::mut_add_gene () {//	add a gene
+
+//mut_add_gene: add new gene and its protein into nodes, and transcription and protein degradation reaction into rlist
+void Cell::mut_add_gene () {            //	add a gene
 	
 	//	create new nodes representing this gene and its protein
 	int currNI = nodes.size();
 
 	Node* gene = new Node(currNI,2);	//	gene
 	nodes.push_back(gene);
-
+    
 	Node* prot = new Node(currNI+1,3);	//	prot
 	nodes.push_back(prot);
 	
-	//	create reaction 0, transcription
+	//	create Reaction r0, transcription
 	Reaction* r0 = new Reaction ();
-	r0->setReversible(false);
+	r0->setReversible(false);// irreversible and no reactants
 	r0->initForwardRateRandomly();
 	r0->addModifier(gene);
 	r0->addProduct(prot);
 	rlist.push_back(r0);
 
-	//	create reaction 1, protein degradation
+	//	create Reaction r1, protein degradation
 	Reaction* r1 = new Reaction ();
 	r1->setReversible(false);
 	r1->initForwardRateRandomly();
@@ -128,38 +143,41 @@ void Cell::mut_add_gene () {//	add a gene
 	return;
 }
 
+
+//mut_add_regu: add interaction
 void Cell::mut_add_regu () {
 	
 	//A new interaction between a protein and a gene or a gene/protein complex is introduced
-    int num1 = 0;//number of protein
-    int num2 = 0;//number of gene/protein complex
-	int num3 = 0;//index
+    int numPro = 0;                         //number of protein
+    int numGenePro = 0;                     //number of gene/protein complex
+	int index = 0;                          //index
     vector<int> protIndice;
 	vector<int> cplxIndice;
 
     //  scan <nodes> and choose  gene and one gene/promoter complex
     std::vector<Node*>::iterator iter1 = nodes.begin();
-    while (iter1 != nodes.end()) {
-        if((*iter1)->getNtype() == 3) { //   #3 is a protein
-            num1++;
-            protIndice.push_back(num3);
+    std::vector<Node*>::iterator iter1_end = nodes.end();
+    while (iter1 != iter1_end) {
+        if((*iter1)->getNtype() == 3) {     //   #3 is a protein
+            numPro++;
+            protIndice.push_back(index);
         }
 		
-		if((*iter1)->getNtype() == 5) {
-			num2++;
-			cplxIndice.push_back(num3);
+		if((*iter1)->getNtype() == 5) {     //   #5 is gene/protein complex
+			numGenePro++;
+			cplxIndice.push_back(index);
 		}
 
-        num3++;
+        index++;
         iter1++;
     }
 
-	if(!num1 || !num2) return; // no gene or gene/protein complex
+	if(!numPro || !numGenePro) return; // no gene or gene/protein complex
 
 	//	sample random number
     srand(time(NULL));
-    int opIndex1 = protIndice[rand()%num1];//contain index of a protein
-    int opIndex2 = cplxIndice[rand()%num2];//contain index of a gene or a gene/protein complex
+    int opIndex1 = protIndice[rand()%numPro];//contain index of a protein
+    int opIndex2 = cplxIndice[rand()%numGenePro];//contain index of a gene or a gene/protein complex
 	Node* exGene = nodes[opIndex2]->extractFirstGene();
 	if(exGene == NULL) return;
 	
@@ -330,7 +348,8 @@ void runge_kutta(double data[][MAXSTEPS],double (*odes[])(double y[],double x),i
 			data[currSerie][currStep+1] = y[currSerie] + 1/6.0*(k1+2*k2+2*k3+k4);
 		}
     }
-    delete y, tempY;
+    delete [] y;
+    delete [] tempY;
 }
 
 

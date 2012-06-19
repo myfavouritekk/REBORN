@@ -109,41 +109,41 @@ Node::Node(int _nindex, int _ntype):nindex(_nindex),ntype(_ntype),components(NUL
 Node::Node(int _nindex, Node* _nleft, Node* _nright)
 :nindex(_nindex)
 {
-	//	merge N_left and N_right
-	
-	//	gene
-	if(_nleft->getNode(0) == NULL) {
-		if(_nright->getNode(0) == NULL) {
-			components[0] = NULL;
-		}
-		else {
-			components[0] = _nright->getNode(0);
-		}
-	}
-	else {
-		if(_nright->getNode(0) == NULL) {
-			components[0] = _nleft->getNode(0);
-		}
-		else{
+    //	merge N_left and N_right
+    
+    //	gene
+    if(_nleft->getNode(0) == NULL) {
+        if(_nright->getNode(0) == NULL) {
+            components[0] = NULL;
+        }
+        else {
+            components[0] = _nright->getNode(0);
+        }
+    }
+    else {
+        if(_nright->getNode(0) == NULL) {
+            components[0] = _nleft->getNode(0);
+        }
+        else{
             std::cerr << "Error: more than one genes appear in a complex!" << std::endl;
-			std::exit (1);
-		}
-	}
+            std::exit (1);
+        }
+    }
     //the first component is set whether its a gene or NULL
     
-	//	proteins
-	int lsize = _nleft->getNsize ();
-	int rsize = _nright->getNsize ();
+    //	proteins
+    int lsize = _nleft->getNsize ();
+    int rsize = _nright->getNsize ();
     
-	for(int ileft = 1; ileft < lsize; ileft++) {
-		components.push_back(_nleft->getNode(ileft));
-	}
-	for(int iright = 1; iright < rsize; iright++) {
-		components.push_back(_nright->getNode(iright));
-	}
+    for(int ileft = 1; ileft < lsize; ileft++) {
+        components.push_back(_nleft->getNode(ileft));
+    }
+    for(int iright = 1; iright < rsize; iright++) {
+        components.push_back(_nright->getNode(iright));
+    }
     
-	//	sort
-	//components.sort ();
+    //	sort
+    //components.sort ();
     int members[3]={0};
     sort(components,members);
     
@@ -169,8 +169,8 @@ Node::Node(int _nindex, Node* _nleft, Node* _nright)
     }
     
     
-	//	assign representations
-	nstring = write();		
+    //	assign representations
+    nstring = write();		
 }
 
 
@@ -185,46 +185,46 @@ Node::~Node()
 
 
 int Node::getNindex () {
-	return nindex;
+    return nindex;
 }
 
 int Node::getNtype () {
     return ntype;
 }
 int Node::getNsize () {
-	return components.size ();
+    return components.size ();
 }
 
 Node* Node::getNode (const int& index) {
-	if(index >= 0 && index < components.size()) {
-		return components[index];
-	}
-	else return NULL;
+    if(index >= 0 && index < components.size()) {
+        return components[index];
+    }
+    else return NULL;
 }
 
 string Node::getNstring () {
-	return nstring;
+    return nstring;
 }
 
 bool Node::operator==(const Node& n1) const {
-	return nstring == n1.nstring;
+    return nstring == n1.nstring;
 }
 
 string Node::write () {
 
-	string nodestr = NULL;
-	if(components[0] != NULL) {                     //gene
-		nodestr += components[0]->getNstring()+":";
-	}
+    string nodestr = NULL;
+    if(components[0] != NULL) {                     //gene
+        nodestr += components[0]->getNstring()+":";
+    }
 
-	std::vector<Node*>::iterator iter = components.begin ();
-	iter++;                                         //components[0] is for gene
-	while (iter != components.end ()) {             //proteins
-		nodestr = nodestr + (*iter)->getNstring() + ":";
-		iter++;
-	}
+    std::vector<Node*>::iterator iter = components.begin ();
+    iter++;                                         //components[0] is for gene
+    while (iter != components.end ()) {             //proteins
+        nodestr = nodestr + (*iter)->getNstring() + ":";
+        iter++;
+    }
 
-	return nodestr.substr(0,nodestr.length()-1);    //delete last ":"
+    return nodestr.substr(0,nodestr.length()-1);    //delete last ":"
 }
 
 

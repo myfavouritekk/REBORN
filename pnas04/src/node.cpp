@@ -214,17 +214,17 @@ string Node::write () {
 
     string nodestr = NULL;
     if(components[0] != NULL) {                     //gene
-        nodestr += components[0]->getNstring()+":";
+        nodestr += components[0]->getNstring() + ":";
     }
 
     std::vector<Node*>::iterator iter = components.begin ();
-    iter++;                                         //components[0] is for gene
-    while (iter != components.end ()) {             //proteins
-        nodestr = nodestr + (*iter)->getNstring() + ":";
-        iter++;
+    std::vector<Node*>::iterator iter_end = components.end();
+    //components[0] is for gene
+    while (++iter != iter_end) {                    //proteins
+        nodestr += (*iter)->getNstring() + ":";
     }
 
-    return nodestr.substr(0,nodestr.length()-1);    //delete last ":"
+    return nodestr.substr(0, nodestr.length()-1);   //delete last ":"
 }
 
 

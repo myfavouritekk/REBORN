@@ -81,8 +81,8 @@ void Cell::mut_deg_prot () {
 	
 	if(!numOfDegReaction) return;           //no protein degradation reaction
 
-    srand(time(NULL));
-    int opIndex = indice[rand() % numOfDegReaction];//opIndex contains a certain degradation reaction
+    srand((unsigned int)time(NULL));
+    int opIndex = indice[rand()%numOfDegReaction];//opIndex contains a certain degradation reaction
 
     //  modify its degradation rate
     Reaction* currR = rlist[opIndex];
@@ -175,7 +175,7 @@ void Cell::mut_add_regu () {
 	if(!numPro || !numGenePro) return; // no gene or gene/protein complex
 
 	//	sample random number
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
     int opIndex1 = protIndice[rand()%numPro];//contain index of a protein
     int opIndex2 = cplxIndice[rand()%numGenePro];//contain index of a gene or a gene/protein complex
 	Node* exGene = nodes[opIndex2]->extractFirstGene();
@@ -221,11 +221,16 @@ void Cell::mut_add_regu () {
 	return;
 }
 
+
+
+//mut_add_postmod: add a post-transcriptional regulation to the network
 void Cell::mut_add_postmod () {
 	//	a post modification is add
 	
     srand((unsigned int)time(NULL));
 	if((double)rand()/RAND_MAX <= 0.5) {//	a single protein case
+        
+        /* a protein is to be chosen from the existing ones, and a modified version of it it to be introduced */
 
 
 	}
@@ -236,7 +241,8 @@ void Cell::mut_add_postmod () {
 		vector<int> protIndice;
 			
 		vector<Node*>::iterator iter = nodes.begin();
-		while (iter != nodes.end()) {
+        vector<Node*>::iterator iter_end = nodes.end();
+		while (iter != iter_end) {
 			if((*iter)->getNode(0) == NULL) { 
 				num1++;
 				protIndice.push_back(num2);
@@ -313,13 +319,16 @@ void Cell::mutation(){
 }
 
 //runge-kutta method
+/*input requirement: first colomn of data[][] is the initial value
+ *
+ */
 #define MAXSTEPS 100
 void runge_kutta(double data[][MAXSTEPS],double (*odes[])(double y[],double x),int series, int steps)
 {//100 is steps
 	
 	int currSerie,currStep;
 	int i;
-    double k1,k2,k3,k4;
+    double k1,k2,k3,k4;         //parameter in the runge-kutta method
     double *y = new double[series], *tempY = new double[series];
 	
 	
@@ -363,6 +372,10 @@ void Cell::getScore(const ScoreFunc& sfunc, double** targetData){
     *the biggest problem here is how to turn reaction into methods
     *
     */ 
+    
+    
+    
+    
     return;
 }
 

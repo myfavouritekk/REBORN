@@ -85,23 +85,21 @@ void sort(std::vector<Node*> _components, int num_of_members[3]){
 //basic node constructor
 Node::Node(int _nindex, int _ntype):nindex(_nindex),ntype(_ntype),components(NULL){
     
-    
-    if (ntype == 1) {               //inducer
-        std::stringstream ss;
-        ss << nindex;
+    std::stringstream ss;
+    ss << nindex;
+
+    switch (ntype) {
+    case 1:
         nstring = "indu" + ss.str();
-    }   
-    if (ntype == 2) {               //gene
-        std::stringstream ss;
-        ss << nindex;
+        break;
+    case 2:
         nstring = "g" + ss.str();
-    }
-    
-    if (ntype == 3) {               //protein
-        std::stringstream ss;
-        ss << nindex;
+        break;
+    case 3:
         nstring = "P" + ss.str();
-    }    
+        break;
+    }
+
 }
 
 

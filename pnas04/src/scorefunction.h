@@ -2,6 +2,8 @@
 #define SCOREFUNC_H
 
 
+#include <cmath>
+
 
 class ScoreFunc{
     

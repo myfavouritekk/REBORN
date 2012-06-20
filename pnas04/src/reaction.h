@@ -18,6 +18,10 @@
 
 #include "node.h"
 
+#include <ctime>
+#include <algorithm>
+#include <vector>
+
 class Reaction{
 
     public:

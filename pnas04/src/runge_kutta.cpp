@@ -1,5 +1,5 @@
 #include <iostream>
-#include "math.h"
+
 #define MAXSTEPS 1000
 
 using namespace std;

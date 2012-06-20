@@ -1,8 +1,6 @@
 #include "population.h"
-#include "cell.h"
-#include <iostream>
-#include <stdexcept>
-#include <fstream>
+
+
 
 //constructor, by default it will use score function 1 and evlute 100 generations
 Population::Population (const int& _ncell)

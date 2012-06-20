@@ -1,5 +1,5 @@
 #include "scorefunction.h"
-#include "math.h"
+
 
 //Constructor
 ScoreFunc::ScoreFunc(int _type){

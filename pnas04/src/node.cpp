@@ -231,3 +231,17 @@ string Node::write () {
 Node* Node::extractFirstGene(){
     return components[0];
 }
+
+/*
+ ode:
+ input: reactionList is the rlist variable in the cell; y contains the current value of each node, x is current time
+ */
+double Node::ode(std::vector<Reaction*> reactionList, double *y, double t){
+    /*
+     to be implemented
+     */
+    return 0;
+}
+
+
+

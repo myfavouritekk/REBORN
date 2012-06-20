@@ -19,6 +19,7 @@ using std::vector;
  * has one associated number, 1, 2, 3, 4, 5, 6, respectively.
  */
 
+class Reaction;
 
 class Node {
 
@@ -44,6 +45,9 @@ class Node {
     
         //for gene/protein complex
         Node* extractFirstGene();
+    
+        //ODE of this node
+        double ode(std::vector<Reaction*> rlist,double y[], double x);
 
     private:
 

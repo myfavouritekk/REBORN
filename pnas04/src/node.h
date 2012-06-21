@@ -48,6 +48,7 @@ class Node {
     
         //ODE of this node
         double ode(std::vector<Reaction*> rlist,double y[], double x);
+    
 
     private:
 

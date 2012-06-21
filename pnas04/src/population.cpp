@@ -65,7 +65,7 @@ void Population::growth(){;
         currCell->mutation();
         
         //get its score
-        currCell->getScore(sfunc, ypoints);
+        currCell->getScore(sfunc, ypoints, numind + numprot, numr);
     }
     evolution--;//evolution once
 }

@@ -322,8 +322,7 @@ void Cell::mutation(){
 /*input requirement: first colomn of data[][] is the initial value
  *
  */
-#define MAXSTEPS 100
-void runge_kutta(double data[][MAXSTEPS],double (*odes[])(double y[],double x),int series, int steps)
+void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int series, int steps)
 {//100 is steps
 	
 	int currSerie,currStep;
@@ -341,19 +340,19 @@ void runge_kutta(double data[][MAXSTEPS],double (*odes[])(double y[],double x),i
 		}
 		for(currSerie = 0; currSerie < series; currSerie++){
             
-			k1 = (*odes[currSerie])(y,currStep);
+			k1 = (nodes[currSerie]->ode)(rlist,y,currStep);
 			for(i = 0; i < series; i++){
 				tempY[i] = y[i] + k1/2.;
 			}
-			k2 = (*odes[currSerie])(tempY,currStep+0.5);
+			k2 = (nodes[currSerie]->ode)(rlist,tempY,currStep+0.5);
 			for(i = 0; i < series; i++){
 				tempY[i] = y[i] + k2/2.;
 			}
-			k3 = (*odes[currSerie])(tempY,currStep+0.5);
+			k3 = (nodes[currSerie]->ode)(rlist,tempY,currStep+0.5);
 			for(i = 0; i < series; i++){
 				tempY[i] = y[i] + k3;
 			}
-			k4 = (*odes[currSerie])(tempY,currStep+1);
+			k4 = (nodes[currSerie]->ode)(rlist,tempY,currStep+1);
 			data[currSerie][currStep+1] = y[currSerie] + 1/6.0*(k1+2*k2+2*k3+k4);
 		}
     }
@@ -362,21 +361,43 @@ void runge_kutta(double data[][MAXSTEPS],double (*odes[])(double y[],double x),i
 }
 
 
+
 /*get score using the sfunc as score function and change its own currScore member
  *fist: using Runge-Kutta method to generate the time course and store all them in currData
  *second: using the sfunction as a score function, and passing currData and targetData as parameters to calculate score
  *third: assign the score to currScore
+ 
+ 
+ 
+ *prerequirements: nodes in the cell's "nodes" vector should be sorted by indice
  */
-void Cell::getScore(const ScoreFunc& sfunc, double** targetData){
-    /*implement code here to calculate the score
-    *the biggest problem here is how to turn reaction into methods
-    *
-    */ 
+void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, int time){
+   
+    int size = nodes.size();//  how many nodes in this cell
+    /* initialization: store the initial value in the first column of
+     * currData, and for coloumn with index greater than number of target
+     * nodes, initial value is 0
+     */
+    for (int i = 0; i < numTargetNodes; i++) {
+        currData[i][0] = targetData[i][0];
+    }
+    for (int i = numTargetNodes; i < size; i++) {
+        currData[i][0] = 0.;
+    }
     
+    /* runge_kutta method, store the results in currData */
+    runge_kutta(currData, nodes, rlist, size, time);
     
+    /* calculate total score uses the ScoreFunc sfunc: only numTargetNodes nodes
+     * are calculated because there only those number nodes in targetData
+     * therefore, numTargetNodes = numind + numprot
+     */
+    double totalScore = 0;
+    for (int i = 0; i < numTargetNodes; i++) {
+        totalScore += sfunc.getScore(currData[i],targetData[i],time);
+    }
     
-    
-    return;
+    currScore = totalScore;
 }
 
 	

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "math.h"
+
 #define MAXSTEPS 1000
 
 using namespace std;
@@ -37,6 +37,6 @@ void runge_kutta(double data[][MAXSTEPS], double (*odes[])(double y[],double x),
 			data[currSerie][currStep+1] = y[currSerie] + 1/6.0*(k1+2*k2+2*k3+k4);
 		}
 	}
-    delete y;
-    delete tempY;
+    delete [] y;
+    delete [] tempY;
 }

@@ -3,6 +3,9 @@
 
 #include "cell.h"
 #include "scorefunction.h"
+#include <iostream>
+#include <stdexcept>
+#include <fstream>
 
 class Population {
 

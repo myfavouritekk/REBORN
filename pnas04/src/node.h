@@ -1,7 +1,6 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include "cstring"
 #include <string>
 #include <vector>
 #include <iostream>

@@ -18,6 +18,10 @@
 
 #include "node.h"
 
+#include <ctime>
+#include <algorithm>
+#include <vector>
+
 class Reaction{
 
     public:
@@ -65,8 +69,6 @@ class Reaction{
         std::vector<Node*> modifiers;
         std::vector<Node*> products;
 };
-
-
 
 
 #endif

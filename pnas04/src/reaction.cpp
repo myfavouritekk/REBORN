@@ -3,7 +3,10 @@
 #include <algorithm>
 #include <vector>
 
-Reaction::Reaction () 
+Reaction::Reaction ()
+{}
+
+Reaction::Reaction(int _rtype):rtype(_rtype)
 {}
 
 Reaction::~Reaction ()
@@ -91,6 +94,9 @@ bool Reaction::isReversible () {
 
 void Reaction::setReversible(const bool& rev) {
 	reversible = rev;
+    if (!rev) {
+        reverseRate = 0.;
+    }
 	return;
 }
 

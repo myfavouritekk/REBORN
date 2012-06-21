@@ -23,6 +23,7 @@ class Reaction{
     public:
         
         Reaction();
+        Reaction(int _rtype);
         ~Reaction();
 
 		void setReversible(const bool& rev);
@@ -44,6 +45,8 @@ class Reaction{
 
 		//	check equality with given reaction
 		bool operator==(const Reaction& r1) const;
+    
+        friend double Node::ode(std::vector<Reaction*> reactionList, double *y, double t);
 
     private:
 

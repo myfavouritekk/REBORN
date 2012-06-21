@@ -232,15 +232,119 @@ Node* Node::extractFirstGene(){
     return components[0];
 }
 
+
+#include "reaction.h"
 /*
  ode:
  input: reactionList is the rlist variable in the cell; y contains the current value of each node, x is current time
+ basic concepts: ode has the form of dN/dx = ode(Y,x), y is a vector contains current nodes' values, and node index is the subscript i in y[i]
  */
 double Node::ode(std::vector<Reaction*> reactionList, double *y, double t){
-    /*
-     to be implemented
-     */
-    return 0;
+    double result = 0;
+    std::vector<Reaction*>::iterator iter = reactionList.begin();
+    std::vector<Reaction*>::iterator iter_end = reactionList.end();
+    
+    /* iterate over all the reactions in the reactionList, and every reaction that contains this node will have influence on result */
+    while (iter != iter_end) {
+        bool containThisNode;
+        containThisNode = std::find((*iter)->reactants.begin(), (*iter)->reactants.end(), *this) != (*iter)->reactants.end() || std::find((*iter)->modifiers.begin(), (*iter)->modifiers.end(), *this) != (*iter)->modifiers.end() || std::find((*iter)->products.begin(), (*iter)->products.end(), *this) != (*iter)->products.end();
+        
+        
+        /* current reaction contains this node in reactants, modifiers or products */
+        if (containThisNode) {
+            int reactionType = (*iter) -> getRtype();
+            switch (reactionType) {
+                case 0:                 //Transcription of a gene from a free promoter or a bound promoter/protein complex
+                    if (!(std::find((*iter)->products.begin(), (*iter)->products.end(), *this)==(*iter)->products.end())) {
+                        //this node is in prodcuts of type 0 reaction , that is , this node is a protein, and is to be transcripted
+                        int proteinIndex, DNAIndex;
+                        double forwardRate = (*iter)->forwardRate;
+                        proteinIndex = this->nindex;
+                        DNAIndex = (*iter)->reactants[0]->nindex;
+                        result += forwardRate * y[DNAIndex];
+                    }
+                    break;
+                    
+                case 1:                 //degradation of protein
+                    if (!(std::find((*iter)->reactants.begin(), (*iter)->reactants.end(), *this)==(*iter)->reactants.end())) {
+                        //this node is in reactants of type 1 reaction , that is , this node is a protein, and is to degrade
+                        int proteinIndex;
+                        double forwardRate = (*iter)->forwardRate;
+                        proteinIndex = this->nindex;
+                        result -= forwardRate * y[proteinIndex];
+                    }
+                    break;
+                    
+                    
+                default:                //all the rest reaction types could have the same routine
+                    
+                    /* if this node is in reactants */
+                    if (!(std::find((*iter)->reactants.begin(), (*iter)->reactants.end(), *this)==(*iter)->reactants.end())) {
+                        //this node is a reactant
+                        double reactantsMultiply = 1., productsMultiply = 1.;
+                        
+                        /* calculate reactantsMultiply */
+                        std::vector<Node*>::iterator reactantsIter = (*iter)->reactants.begin();
+                        std::vector<Node*>::iterator reactantsIter_end = (*iter)->reactants.end();
+                        while (reactantsIter != reactantsIter_end) {
+                            int index = (*reactantsIter)->nindex;
+                            reactantsMultiply *= y[index];
+                            reactantsIter++;
+                        }
+                        
+                        /* calculate productsMultiply */
+                        std::vector<Node*>::iterator productsIter = (*iter)->products.begin();
+                        std::vector<Node*>::iterator productsIter_end = (*iter)->products.end();
+                        while (productsIter != productsIter_end) {
+                            int index = (*productsIter)->nindex;
+                            productsMultiply *= y[index];
+                            productsIter++;
+                        }
+                        
+                        double forwardRate = (*iter)->forwardRate;
+                        double reverseRate = (*iter)->reverseRate;
+                        
+                        result = result -  forwardRate * reactantsMultiply + reverseRate * productsMultiply;
+                    }
+                    
+                    
+                    /* if this node is in products, 
+                     *can't include the following block in else of the previous if statement, 
+                     *for this node may be in both reactants and products 
+                     */
+                    if (!(std::find((*iter)->products.begin(), (*iter)->products.end(), *this)==(*iter)->products.end())) {
+                            //this node is a reactant
+                        double reactantsMultiply = 1., productsMultiply = 1.;
+                        
+                        /* calculate reactantsMultiply */
+                        std::vector<Node*>::iterator reactantsIter = (*iter)->reactants.begin();
+                        std::vector<Node*>::iterator reactantsIter_end = (*iter)->reactants.end();
+                        while (reactantsIter != reactantsIter_end) {
+                            int index = (*reactantsIter)->nindex;
+                            reactantsMultiply *= y[index];
+                            reactantsIter++;
+                        }
+                        
+                        /* calculate productsMultiply */
+                        std::vector<Node*>::iterator productsIter = (*iter)->products.begin();
+                        std::vector<Node*>::iterator productsIter_end = (*iter)->products.end();
+                        while (productsIter != productsIter_end) {
+                            int index = (*productsIter)->nindex;
+                            productsMultiply *= y[index];
+                            productsIter++;
+                        }
+                        
+                        double forwardRate = (*iter)->forwardRate;
+                        double reverseRate = (*iter)->reverseRate;
+                        
+                        result = result +  forwardRate * reactantsMultiply - reverseRate * productsMultiply;
+                    }
+                break;
+            }
+        }
+    }
+    
+    return result;
 }
 
 

@@ -51,6 +51,10 @@ class Reaction{
 		bool operator==(const Reaction& r1) const;
     
         friend double Node::ode(std::vector<Reaction*> reactionList, double *y, double t);
+    
+    
+        //get a copy of this reaction for growth phase
+        Reaction* aNewCopy();
 
     private:
 

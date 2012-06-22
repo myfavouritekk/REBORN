@@ -291,10 +291,10 @@ void Cell::mut_add_postmod () {
 	return;
 }
 
-#define PROB1 0.5
-#define PROB2 0.5
-#define PROB3 0.5
-#define PROB4 0.5
+#define PROB1 1
+#define PROB2 1
+#define PROB3 1
+#define PROB4 1
 #define PROB5 0.0
 
 
@@ -413,7 +413,21 @@ double Cell::getCurrScore(){
 //duplicate itself
 Cell* Cell::aNewCopy(){
     Cell *newCell = new Cell(0,0);
-    *newCell = *this;
+    
+    //copy every node in the cell
+    std::vector<Node*>::iterator iter_node = this->nodes.begin();
+    std::vector<Node*>::iterator iter_node_end = this->nodes.end();
+    while (iter_node != iter_node_end) {
+        newCell->nodes.push_back((*iter_node)->aNewCopy());
+    }
+    
+    //copy every reaction in the cell
+    std::vector<Reaction*>::iterator iter_reaction = this->rlist.begin();
+    std::vector<Reaction*>::iterator iter_reaction_end = this->rlist.end();
+    while (iter_reaction != iter_reaction_end) {
+        newCell->rlist.push_back((*iter_reaction)->aNewCopy());
+    }
+    
     return newCell;
 }
 

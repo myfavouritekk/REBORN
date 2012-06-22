@@ -48,7 +48,9 @@ class Node {
     
         //ODE of this node
         double ode(std::vector<Reaction*> rlist,double y[], double x);
-    
+   
+        //get a new copy of itself for growth phase
+        Node* aNewCopy();
 
     private:
 

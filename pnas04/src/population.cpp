@@ -155,7 +155,7 @@ void Population::readDynamics (const string& fn) {
 		exit(1);
 	}
 	
-	//	number of columns, inducer plus protein
+	//	number of rows, inducer plus protein
 	int numy = numind + numprot;
 
 	//	read dynamic data

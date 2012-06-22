@@ -160,14 +160,16 @@ void Population::readDynamics (const string& fn) {
 
 	//	read dynamic data
 	xpoints = new double [numr];
-	ypoints = new double*[numr];
+	ypoints = new double*[numy];
+    for (int i = 0; i < numy; i++) {
+        ypoints[i] = new double[numr];
+    }
 	for(int ir = 0; ir < numr; ir++) {
 		infile >> xpoints[ir];
         cout << xpoints[ir] << "\t";
-		ypoints[ir] = new double[numy];
 		for(int ic = 0; ic < numy; ic++) {
-			infile >> ypoints[ir][ic];
-            cout << ypoints[ir][ic] << "\t";
+			infile >> ypoints[ic][ir];
+            cout << ypoints[ic][ir] << "\t";
 			if (infile.bad ()) throw runtime_error ("IO stream corrupted");
 			if (infile.fail ()) throw runtime_error ("bad data");
 		}

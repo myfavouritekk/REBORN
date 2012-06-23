@@ -84,7 +84,7 @@ bool Cell::existsReaction (const Reaction& aReaction) {
  *five types of mutation:
  *1. deg_prot: change protein degradation 
  *2. kin_const: change kinetic constant
- *3. add_gene: create a neww gene
+ *3. add_gene: create a new gene
  *4. add_regu: add new interaction between protein and a gene or a gene-protein complex
  *5. add_postmod: add post transcriptional modification
  */
@@ -163,15 +163,20 @@ void Cell::mut_add_gene () {            //	add a gene
 	r0->initForwardRateRandomly();
 	r0->addModifier(gene);
 	r0->addProduct(prot);
-	rlist.push_back(r0);
 
 	//	create Reaction r1, protein degradation
 	Reaction* r1 = new Reaction ();
 	r1->setReversible(false);
 	r1->initForwardRateRandomly();
 	r1->addReactant(prot);
-	rlist.push_back(r1);
-
+	if(!existsReaction(*r0) && !existsReaction(*r1)){
+		rlist.push_back(r0);
+		rlist.push_back(r1);
+	}
+	else{
+		delete r0;
+        delete r1;
+	}
 	return;
 }
 
@@ -195,7 +200,7 @@ void Cell::mut_add_regu () {
             protIndice.push_back(index);
         }
 		
-		if((*iter1)->getNtype() == 5) {     //   #5 is gene/protein complex
+		if((*iter1)->getNtype() == 5||(*iter1)->getNtype() == 2) {     //   #5 is gene/protein complex  and #2 is gene
 			numGenePro++;
 			cplxIndice.push_back(index);
 		}
@@ -238,7 +243,6 @@ void Cell::mut_add_regu () {
 	r0->initForwardRateRandomly();
 	r0->addModifier(ncomplex);
 	r0->addProduct(exProt);
-	rlist.push_back(r0);
 
 	//	create reaction 1, binding/unbinding between protein and gene or gene/protein complex
 	Reaction* r1 = new Reaction ();
@@ -248,7 +252,15 @@ void Cell::mut_add_regu () {
 	r1->addReactant(nodes[opIndex1]);
 	r1->addReactant(nodes[opIndex2]);
 	r1->addProduct (ncomplex);
-	rlist.push_back(r1);
+
+	if(!existsReaction(*r1) && !existsReaction(*r1)){
+		rlist.push_back(r0);
+		rlist.push_back(r1);
+}
+	else {
+		delete r0;
+		delete r1;
+	}
 
 	return;
 }
@@ -260,36 +272,87 @@ void Cell::mut_add_postmod () {
 	//	a post modification is add
 	
     srand((unsigned int)time(NULL));
-	if((double)rand()/RAND_MAX <= 0.5) {//	a single protein case
-        
-        /* a protein is to be chosen from the existing ones, and a modified version of it it to be introduced */
+	 /* a protein is to be chosen from the existing ones, and a modified version of it it to be introduced */
+	if((double)rand()/RAND_MAX <= 0.5) {                 //	single protein case
+        int indexOfProt=0;
+		int numOfProt=0;
+		vector<int> protIndice;
 
+		vector<Node*>::iterator iter = nodes.begin();
+		vector<Node*>::iterator iter_end = nodes.end();
+		while (iter !=iter_end){
+			if((*iter)->getNtype==3){   //if this node is single protein
+			 protIndice.push_back(indexOfProt);
+			 numOfProt++;
+			}
+			indexOfProt++;
+			iter++;
+		}
+		if(!numOfProt) return;   //no single protein
+		int opIndex=protIndice[rand()%numOfProt];  //choose a random single protein
+		Node* modProt = new Node(nodes.size(),3);
+		nodes.push_back(modProt);
 
+		Reaction* r0=new Reaction();    //add modification reaction
+		r0->setReversible(false);
+		r0->initForwardRateRandomly();
+		r0->addReactant(nodes[opIndex]);
+		r0->addProduct(modProt);
+
+		Reaction* r1=new Reaction();   //add degration reaction of modified protein
+		r1->setReversible(false);
+		r1->initForwardRateRandomly();
+		r1->addReactant(modProt);
+
+		if(!existsReaction(*r0) && !existsReaction(*r1)){
+			rlist.push_back(r0);
+			rlist.push_back(r1);
+		}
+		else{
+			delete r0;
+			delete r1;
+		}
+		return;
 	}
 	else {//	two proteins (protein complex) case
 		
-		int num1 = 0;
-		int num2 = 0;
+		int numOfProt = 0;
+		int indexOfProt = 0;
+		int numOfSingProt=0;
+		int numOfCompProt=0;
+
 		vector<int> protIndice;
+		vector<int> singProtIndice;
+		vector<int> compProtIndice;
 			
 		vector<Node*>::iterator iter = nodes.begin();
         vector<Node*>::iterator iter_end = nodes.end();
 		while (iter != iter_end) {
 			if((*iter)->getNode(0) == NULL) { 
-				num1++;
-				protIndice.push_back(num2);
+				numOfProt++;
+				protIndice.push_back(indexOfProt);
+				if((*iter)->getNtype==3){
+					numOfSingProt++;
+					singProtIndice.push_back(indexOfProt);
+				}
+				if((*iter)->getNtype==6){
+					numOfCompProt++;
+					compProtIndice.push_back(indexOfProt);
+				}
 			}
-			num2++;
+			indexOfProt++;
 			iter ++;
 		}
 
-		if(!num1) return;	//	no protein or protein complex
+		if(!numOfProt) return;	//	no protein or protein complex
 		
-		int opIndex1 = protIndice[rand()%num1];	//	protein 1
-		int opIndex2 = protIndice[rand()%num1];	//	protein 2
-
 		double possibility = (double)rand()/RAND_MAX;
-		if(possibility < 1/3) {//	dimerization
+
+		/*case 1, A+B->AB,dimerization*/
+
+		if(possibility < 1/3) {
+			int opIndex1 = protIndice[rand()%numOfProt];	//	protein 1
+		    int opIndex2 = protIndice[rand()%numOfProt];	//	protein 2
 			Node* dimer = new Node (nodes.size(), nodes[opIndex1], nodes[opIndex2]);
 			Reaction* dimerization = new Reaction ();
 			dimerization->setReversible(true);
@@ -307,15 +370,46 @@ void Cell::mut_add_postmod () {
 				delete dimerization;
 			}
 		}
-		else if(possibility < 2/3) {
+
+		/*case 2, A+B->A, partial degration*/
+
+		else if(possibility < 2/3) {      
+			if(!numOfSingProt) return;  //no single protein.
+			int opIndex1=singProtIndice[rand()%numOfSingProt];   //single protein 1
+			int opIndex2=singProtIndice[rand()%numOfSingProt];   //single protein 2
 			Reaction* partialDeg = new Reaction ();
 			partialDeg->setReversible(false);
 			partialDeg->initForwardRateRandomly();
+			partialDeg->addReactant(nodes[opIndex1]);
+			partialDeg->addReactant(nodes[opIndex2]);
+			if(rand()%2==0){                               //equally choose a protein to be degraded
+				partialDeg->addProduct(nodes[opIndex1]);}
+			else{
+				partialDeg->addProduct(nodes[opIndex2]);}
+			if(!existsReaction(*partialDeg)){
+			    rlist.push_back(partialDeg);}
+			else
+				delete partialDeg;
 		}
+
+		/*case 3, AB+C->A, complex degration*/
+
 		else {
-            
-            
-            //to be continued
+			if(!numOfCompProt)  return;  //no protein complex
+            int opIndex1=compProtIndice[rand()%numOfCompProt];    //complex protein 1
+			int opIndex2=singProtIndice[rand()%numOfSingProt];    //single protein 2
+			Reaction* compDeg=new Reaction();
+			compDeg->setReversible(false);
+			compDeg->initForwardRateRandomly;
+			compDeg->addReactant(nodes[opIndex1]);
+			compDeg->addReactant(nodes[opIndex2]);
+			int randComp=rand()%(nodes[opIndex1]->getNsize()-1)+1;
+		    compDeg->addProduct(nodes[opIndex1]->getNode(randComp));   //choose the protein in the complex
+			if(!existsReaction(*compDeg)){
+			   rlist.push_back(compDeg);
+			}
+			else
+				delete compDeg; 
 		}
 
 	}

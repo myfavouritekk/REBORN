@@ -52,7 +52,7 @@ bool Cell::existsReaction (const Reaction& aReaction) {
  *five types of mutation:
  *1. deg_prot: change protein degradation 
  *2. kin_const: change kinetic constant
- *3. add_gene: create a neww gene
+ *3. add_gene: create a new gene
  *4. add_regu: add new interaction between protein and a gene or a gene-protein complex
  *5. add_postmod: add post transcriptional modification
  */
@@ -163,7 +163,7 @@ void Cell::mut_add_regu () {
             protIndice.push_back(index);
         }
 		
-		if((*iter1)->getNtype() == 5) {     //   #5 is gene/protein complex
+		if((*iter1)->getNtype() == 5||(*iter1)->getNtype() == 2) {     //   #5 is gene/protein complex  #2 is gene
 			numGenePro++;
 			cplxIndice.push_back(index);
 		}

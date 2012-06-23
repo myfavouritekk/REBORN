@@ -228,11 +228,41 @@ void Cell::mut_add_postmod () {
 	//	a post modification is add
 	
     srand((unsigned int)time(NULL));
-	if((double)rand()/RAND_MAX <= 0.5) {//	a single protein case
-        
-        /* a protein is to be chosen from the existing ones, and a modified version of it it to be introduced */
+	 /* a protein is to be chosen from the existing ones, and a modified version of it it to be introduced */
+	if((double)rand()/RAND_MAX <= 0.5) {                 //	a single protein case
+        int indexOfProt=0;
+		int numOfProt=0;
+		vector<int> protIndice;
 
+		vector<Node*>::iterator iter = nodes.begin();
+		vector<Node*>::iterator iter_end = nodes.end();
+		while (iter !=iter_end){
+			if((*iter)->getNtype==3){   //if this node is single protein
+			 protIndice.push_back(indexOfProt);
+			 numOfProt++;
+			}
+			indexOfProt++;
+			iter++;
+		}
+		if(!numOfProt) return;   //no single protein
+		int opIndex=protIndice[rand()%numOfProt];  //choose a random single protein
+		Node* modProt = new Node(nodes.size(),3);
+		nodes.push_back(modProt);
 
+		Reaction* r0=new Reaction();    //add modification reaction
+		r0->setReversible(false);
+		r0->initForwardRateRandomly();
+		r0->addReactant(nodes[opIndex]);
+		r0->addProduct(modProt);
+		rlist.push_back(r0);
+
+		Reaction* r1=new Reaction();   //add degradation reaction of modified protein
+		r1->setReversible(false);
+		r1->initForwardRateRandomly();
+		r1->addReactant(modProt);
+		rlist.push_back(r1);
+
+		return;
 	}
 	else {//	two proteins (protein complex) case
 		
@@ -275,7 +305,7 @@ void Cell::mut_add_postmod () {
 				delete dimerization;
 			}
 		}
-		else if(possibility < 2/3) {
+		else if(possibility < 2/3) {   //case of partial degradation
 			Reaction* partialDeg = new Reaction ();
 			partialDeg->setReversible(false);
 			partialDeg->initForwardRateRandomly();

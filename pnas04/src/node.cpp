@@ -258,7 +258,7 @@ double Node::ode(std::vector<Reaction*> reactionList, double *y, double t){
                         int proteinIndex, DNAIndex;
                         double forwardRate = (*iter)->forwardRate;
                         proteinIndex = this->nindex;
-                        DNAIndex = (*iter)->reactants[0]->nindex;
+                        DNAIndex = (*iter)->modifiers[0]->nindex;//for protein transcription, a DNA is regarded as a modifier rather than a reactant
                         result += forwardRate * y[DNAIndex];
                     }
                     break;

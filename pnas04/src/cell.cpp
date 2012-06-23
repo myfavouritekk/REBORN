@@ -154,7 +154,7 @@ void Cell::mut_add_gene () {            //	add a gene
 	Node* gene = new Node(currNI,2);	//	gene
 	nodes.push_back(gene);
     
-	Node* prot = new Node(currNI+1,3);	//	prot
+	Node* prot = new Node(currNI+1,3);	//	protein
 	nodes.push_back(prot);
 	
 	//	create Reaction r0, transcription
@@ -272,7 +272,7 @@ void Cell::mut_add_postmod () {
 	//	a post modification is add
 	
     srand((unsigned int)time(NULL));
-	 /* a protein is to be chosen from the existing ones, and a modified version of it it to be introduced */
+	 /* a protein is to be chosen from the existing ones, and a modified version of it is to be introduced */
 	if((double)rand()/RAND_MAX <= 0.5) {                 //	single protein case
         int indexOfProt=0;
 		int numOfProt=0;
@@ -281,7 +281,7 @@ void Cell::mut_add_postmod () {
 		vector<Node*>::iterator iter = nodes.begin();
 		vector<Node*>::iterator iter_end = nodes.end();
 		while (iter !=iter_end){
-			if((*iter)->getNtype==3){   //if this node is single protein
+			if((*iter)->getNtype() == 3){   //if this node is single protein
 			 protIndice.push_back(indexOfProt);
 			 numOfProt++;
 			}
@@ -299,7 +299,7 @@ void Cell::mut_add_postmod () {
 		r0->addReactant(nodes[opIndex]);
 		r0->addProduct(modProt);
 
-		Reaction* r1=new Reaction();   //add degration reaction of modified protein
+		Reaction* r1=new Reaction();   //add degradation reaction of the modified protein
 		r1->setReversible(false);
 		r1->initForwardRateRandomly();
 		r1->addReactant(modProt);
@@ -331,11 +331,11 @@ void Cell::mut_add_postmod () {
 			if((*iter)->getNode(0) == NULL) { 
 				numOfProt++;
 				protIndice.push_back(indexOfProt);
-				if((*iter)->getNtype==3){
+				if((*iter)->getNtype() ==3){
 					numOfSingProt++;
 					singProtIndice.push_back(indexOfProt);
 				}
-				if((*iter)->getNtype==6){
+				if((*iter)->getNtype() ==6){
 					numOfCompProt++;
 					compProtIndice.push_back(indexOfProt);
 				}
@@ -392,15 +392,15 @@ void Cell::mut_add_postmod () {
 				delete partialDeg;
 		}
 
-		/*case 3, AB+C->A, complex degration*/
+		/*case 3, AB+C->A, complex degradation*/
 
 		else {
-			if(!numOfCompProt)  return;  //no protein complex
+			if(!numOfCompProt || !numOfSingProt)  return;  //no protein complex
             int opIndex1=compProtIndice[rand()%numOfCompProt];    //complex protein 1
 			int opIndex2=singProtIndice[rand()%numOfSingProt];    //single protein 2
 			Reaction* compDeg=new Reaction();
 			compDeg->setReversible(false);
-			compDeg->initForwardRateRandomly;
+			compDeg->initForwardRateRandomly();
 			compDeg->addReactant(nodes[opIndex1]);
 			compDeg->addReactant(nodes[opIndex2]);
 			int randComp=rand()%(nodes[opIndex1]->getNsize()-1)+1;

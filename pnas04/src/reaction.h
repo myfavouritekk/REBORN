@@ -28,6 +28,7 @@ class Reaction{
         
         Reaction();
         Reaction(int _rtype);
+        Reaction(Reaction &reaction);//copy constructor
         ~Reaction();
 
 		void setReversible(const bool& rev);
@@ -52,9 +53,6 @@ class Reaction{
     
         friend double Node::ode(std::vector<Reaction*> reactionList, double *y, double t);
     
-    
-        //get a copy of this reaction for growth phase
-        Reaction* aNewCopy();
 
     private:
 

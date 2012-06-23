@@ -28,6 +28,7 @@ class Node {
 		Node (int _nindex, int _ntype); //	basic node constructor
 		Node (int _nindex, Node* _nleft, Node* _nright); //complex node constructor
         Node (int _nindex, int _ntype, Node* _nleft, Node* _nright);//complex node constructor of certain type
+        Node (Node &node);//copy constructor
         ~Node ();   //deconstructor
 		
 		int getNtype ();	//  return node type 1-6
@@ -49,8 +50,6 @@ class Node {
         //ODE of this node
         double ode(std::vector<Reaction*> rlist,double y[], double x);
    
-        //get a new copy of itself for growth phase
-        Node* aNewCopy();
 
     private:
 

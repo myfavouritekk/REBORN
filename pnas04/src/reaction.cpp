@@ -6,6 +6,21 @@ Reaction::Reaction ()
 Reaction::Reaction(int _rtype):rtype(_rtype)
 {}
 
+//copy constructor
+Reaction::Reaction(Reaction &aReaction){
+    rtype = aReaction.rtype;
+    reversible = aReaction.reversible;
+    forwardRate = aReaction.forwardRate;
+    reverseRate = aReaction.reverseRate;
+    
+    /*here do not implement vectors in the reaction containing
+     *reactants, modifiers and products,
+     *leave them for cell to implement, because the relationships between
+     *nodes in vector nodes and reactions in rlist need to be
+     *implemented in the new cell
+     */
+}
+
 Reaction::~Reaction ()
 {}
 

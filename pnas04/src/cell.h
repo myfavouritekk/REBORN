@@ -14,12 +14,10 @@ class Cell {
 
 		//	no default constructor, for construction, number of inducers and proteins should be provided
 		Cell (const int& _numind, const int& _numprot);
+        Cell (Cell &cell);//copy constructor
 
 		//	deconstructor
 		~Cell ();
-
-        //duplicate itself
-        Cell* aNewCopy();
 
 		//	call for six submutations successively
         void mutation();

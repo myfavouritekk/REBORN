@@ -178,6 +178,20 @@ Node::Node(int _nindex, int _ntype, Node* _nleft, Node* _nright):ntype(_ntype){
 }
 
 
+
+//copy constructor
+Node::Node(Node &aNode){
+    nstring = aNode.nstring;
+    nindex = aNode.nindex;
+    ntype = aNode.ntype;
+    
+    /* do not copy components, leave it for cell to finish,
+     * because it needs the relationships with other node,
+     * with cannot judge right now.
+     */
+    
+}
+
 Node::~Node()
 {}
 
@@ -229,6 +243,7 @@ string Node::write () {
 Node* Node::extractFirstGene(){
     return components[0];
 }
+
 
 
 #include "reaction.h"

@@ -23,6 +23,38 @@ Cell::Cell(const int& _numind, const int& _numprot) {
 }
 
 
+//duplicate itself
+Cell::Cell(Cell &cell){
+    
+    //copy every node in the cell
+    std::vector<Node*>::iterator iter_node = cell.nodes.begin();
+    std::vector<Node*>::iterator iter_node_end = cell.nodes.end();
+    while (iter_node != iter_node_end) {
+        Node* nodeCopy = new Node(*(*iter_node));
+        nodes.push_back(nodeCopy);
+        iter_node++;
+    }
+    
+    //copy every reaction in the cell
+    std::vector<Reaction*>::iterator iter_reaction = cell.rlist.begin();
+    std::vector<Reaction*>::iterator iter_reaction_end = cell.rlist.end();
+    while (iter_reaction != iter_reaction_end) {
+        Reaction* reactionCopy = new Reaction(*(*iter_reaction));
+        rlist.push_back(reactionCopy);
+        iter_reaction++;
+    }
+    
+    /* IMPORTANT: reconstruct the relationship of nodes and rlist */
+    /* to be implemented */
+    
+}
+
+
+
+
+
+
+
 //destructor
 Cell::~Cell() {}
 
@@ -408,28 +440,6 @@ double Cell::getCurrScore(){
 }
 
 
-
-
-//duplicate itself
-Cell* Cell::aNewCopy(){
-    Cell *newCell = new Cell(0,0);
-    
-    //copy every node in the cell
-    std::vector<Node*>::iterator iter_node = this->nodes.begin();
-    std::vector<Node*>::iterator iter_node_end = this->nodes.end();
-    while (iter_node != iter_node_end) {
-        newCell->nodes.push_back((*iter_node)->aNewCopy());
-    }
-    
-    //copy every reaction in the cell
-    std::vector<Reaction*>::iterator iter_reaction = this->rlist.begin();
-    std::vector<Reaction*>::iterator iter_reaction_end = this->rlist.end();
-    while (iter_reaction != iter_reaction_end) {
-        newCell->rlist.push_back((*iter_reaction)->aNewCopy());
-    }
-    
-    return newCell;
-}
 
 
 

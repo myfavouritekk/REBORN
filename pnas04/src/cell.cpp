@@ -281,7 +281,7 @@ void Cell::mut_add_postmod () {
 		vector<Node*>::iterator iter = nodes.begin();
 		vector<Node*>::iterator iter_end = nodes.end();
 		while (iter !=iter_end){
-			if((*iter)->getNtype==3){   //if this node is single protein
+			if((*iter)->getNtype()==3){   //if this node is single protein
 			 protIndice.push_back(indexOfProt);
 			 numOfProt++;
 			}
@@ -331,11 +331,11 @@ void Cell::mut_add_postmod () {
 			if((*iter)->getNode(0) == NULL) { 
 				numOfProt++;
 				protIndice.push_back(indexOfProt);
-				if((*iter)->getNtype==3){
+				if((*iter)->getNtype()==3){
 					numOfSingProt++;
 					singProtIndice.push_back(indexOfProt);
 				}
-				if((*iter)->getNtype==6){
+				if((*iter)->getNtype()==6){
 					numOfCompProt++;
 					compProtIndice.push_back(indexOfProt);
 				}
@@ -400,7 +400,7 @@ void Cell::mut_add_postmod () {
 			int opIndex2=singProtIndice[rand()%numOfSingProt];    //single protein 2
 			Reaction* compDeg=new Reaction();
 			compDeg->setReversible(false);
-			compDeg->initForwardRateRandomly;
+			compDeg->initForwardRateRandomly();
 			compDeg->addReactant(nodes[opIndex1]);
 			compDeg->addReactant(nodes[opIndex2]);
 			int randComp=rand()%(nodes[opIndex1]->getNsize()-1)+1;

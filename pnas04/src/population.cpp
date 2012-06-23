@@ -58,7 +58,8 @@ void Population::growth(){;
     for(int i = 0; i < ncell; i++){
         
         //a cell will duplicate itself
-        cells[ncell + i] = cells[i]->aNewCopy();
+        Cell* aCell = new Cell(*(cells[i]));
+        cells[ncell + i] = aCell;
         
         //mutation phase
         currCell = cells[ncell + i];

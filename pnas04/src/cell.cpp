@@ -10,7 +10,8 @@ Cell::Cell(const int& _numind, const int& _numprot) {
 	for(int im = 0; im < _numind; im++) {
 		Node* inducer = new Node(currIndex, 1);
         nodes.push_back(inducer);
-        currIndex++;
+		inputIndice.push_back(currIndex);             //push back inducer's index
+        currIndex++;		
 	}
 	for(int ip = 0; ip < _numprot; ip++) {
 		Node* gene = new Node(currIndex, 2);//Type 2 is gene
@@ -18,6 +19,7 @@ Cell::Cell(const int& _numind, const int& _numprot) {
         currIndex++;
 		Node* prot = new Node(currIndex, 3);//type 3 is protein
         nodes.push_back(prot);
+		inputIndice.push_back(currIndex);             //push back protein's index
         currIndex++;
 	}
 }
@@ -504,13 +506,13 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
      * currData, and for coloumn with index greater than number of target
      * nodes, initial value is 0
      */
-    for (int i = 0; i < numTargetNodes; i++) {
-        currData[i][0] = targetData[i][0];
-    }
-    for (int i = numTargetNodes; i < size; i++) {
+	for (int i = 0; i < size; i++) {           
         currData[i][0] = 0.;
     }
-    
+    for (int i = 0; i < numTargetNodes; i++) {
+        currData[inputIndice[i]][0] = targetData[i][0];    //the initial value of inducers and proteins are the same as the input data.
+    }
+
     /* runge_kutta method, store the results in currData */
     runge_kutta(currData, nodes, rlist, size, time);
     
@@ -520,7 +522,7 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
      */
     double totalScore = 0;
     for (int i = 0; i < numTargetNodes; i++) {
-        totalScore += sfunc.getScore(currData[i],targetData[i],time);
+        totalScore += sfunc.getScore(currData[inputIndice[i]],targetData[i],time);  //compare the RK data and the input data, using score function.
     }
     
     currScore = totalScore;

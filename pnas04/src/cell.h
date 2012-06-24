@@ -63,6 +63,7 @@ class Cell {
         //	Global Storage
         vector<Node*> nodes;//contain all the species within a cell
         vector<Reaction*> rlist;	//	document operations made to develop the network
+		vector<int> inputIndice;   //indice of input sequences, including inducers and proteins, for scoring function
 };
 
 #endif

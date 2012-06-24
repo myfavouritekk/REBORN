@@ -47,6 +47,10 @@ class Reaction{
 		Node* getReactant(const int& ir);
 		Node* getModifier(const int& im);
 		Node* getProduct (const int& ip);
+    
+        int getReactantsSize();
+        int getModifiersSize();
+        int getProductsSize();
 
 		//	check equality with given reaction
 		bool operator==(const Reaction& r1) const;

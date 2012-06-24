@@ -167,3 +167,23 @@ Node* Reaction::getProduct  (const int& ip) {
 	if(ip < 0 || ip >= products.size()) return NULL;
 	else return products[ip];
 }
+
+int Reaction::getReactantsSize(){
+    return reactants.size();
+}
+
+
+int Reaction::getModifiersSize(){
+    return modifiers.size();
+}
+
+
+int Reaction::getProductsSize(){
+    return products.size();
+}
+
+
+
+
+
+

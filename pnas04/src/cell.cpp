@@ -44,9 +44,14 @@ Cell::Cell(Cell &cell){
     for (int indexNinCell = 0; indexNinCell < nodesSize; indexNinCell++) {
         int componentsSize = cell.nodes[indexNinCell]->getNsize();
         for (int componentIndex = 0; componentIndex < componentsSize; componentIndex++) {
-            int aComponentIndex = cell.nodes[indexNinCell]->getNode(componentIndex)->getNindex();//store the index of the ith components of this node in the cell
-            Node* correspondingComponent = this->nodes[aComponentIndex];
-            this->nodes[indexNinCell]->pushNode(correspondingComponent);
+            if (componentIndex == 0 && !cell.nodes[indexNinCell]->getNode(componentIndex)) {//for no gene case, components[0]==NULL
+                this->nodes[indexNinCell]->pushNode(NULL);
+            }else {
+                int aComponentIndex = cell.nodes[indexNinCell]->getNode(componentIndex)->getNindex();//store the index of the ith components of this node in the cell
+                Node* correspondingComponent = this->nodes[aComponentIndex];
+                this->nodes[indexNinCell]->pushNode(correspondingComponent);
+            }
+            
         }
     }
     

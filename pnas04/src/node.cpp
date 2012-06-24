@@ -118,15 +118,15 @@ Node::Node(int _nindex, Node* _nleft, Node* _nright)
     //	gene
     if(_nleft->getNode(0) == NULL) {
         if(_nright->getNode(0) == NULL) {
-            components[0] = NULL;
+            components.push_back(NULL);
         }
         else {
-            components[0] = _nright->getNode(0);
+            components.push_back(_nright->getNode(0)) ;
         }
     }
     else {
         if(_nright->getNode(0) == NULL) {
-            components[0] = _nleft->getNode(0);
+            components.push_back(_nleft->getNode(0));
         }
         else{
             std::cerr << "Error: more than one genes appear in a complex!" << std::endl;

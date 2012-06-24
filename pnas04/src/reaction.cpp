@@ -43,7 +43,7 @@ bool Reaction::operator==(const Reaction& r1) const {
 	std::sort(indice.begin(), indice.end());
 
 	while(iter1 != r1.reactants.end()) {
-		indice1.push_back((*iter)->getNindex());
+		indice1.push_back((*iter1)->getNindex());
 		iter1++;
 	}
 	std::sort(indice1.begin(), indice1.end()); 
@@ -64,7 +64,7 @@ bool Reaction::operator==(const Reaction& r1) const {
 	std::sort(indice.begin(), indice.end());
 
 	while(iter1 != r1.modifiers.end()) {
-		indice1.push_back((*iter)->getNindex());
+		indice1.push_back((*iter1)->getNindex());
 		iter1++;
 	}
 	std::sort(indice1.begin(), indice1.end()); 
@@ -85,7 +85,7 @@ bool Reaction::operator==(const Reaction& r1) const {
 	std::sort(indice.begin(), indice.end());
 
 	while(iter1 != r1.products.end()) {
-		indice1.push_back((*iter)->getNindex());
+		indice1.push_back((*iter1)->getNindex());
 		iter1++;
 	}
 	std::sort(indice1.begin(), indice1.end()); 

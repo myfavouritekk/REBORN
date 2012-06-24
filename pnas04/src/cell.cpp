@@ -332,7 +332,7 @@ void Cell::mut_add_postmod () {
 	
     srand((unsigned int)time(NULL));
 	 /* a protein is to be chosen from the existing ones, and a modified version of it is to be introduced */
-	if((double)rand()/RAND_MAX <= 0.5) {                 //	single protein case
+	if((double)rand()/RAND_MAX <= 0.5) {                 //	single protein or single protein complex case
         int indexOfProt=0;
 		int numOfProt=0;
 		vector<int> protIndice;
@@ -340,7 +340,7 @@ void Cell::mut_add_postmod () {
 		vector<Node*>::iterator iter = nodes.begin();
 		vector<Node*>::iterator iter_end = nodes.end();
 		while (iter !=iter_end){
-			if((*iter)->getNtype() == 3 || (*iter)->getNtype() == 6){   //if this node is single protein
+			if((*iter)->getNtype() == 3 || (*iter)->getNtype() == 6){   //if this node is single protein or single protein complex
 			 protIndice.push_back(indexOfProt);
 			 numOfProt++;
 			}
@@ -348,8 +348,8 @@ void Cell::mut_add_postmod () {
 			iter++;
 		}
 		if(!numOfProt) return;   //no single protein
-		int opIndex=protIndice[rand()%numOfProt];  //choose a random single protein
-		if(nodes[opIndex]->getNtype() == 3)
+		int opIndex=protIndice[rand()%numOfProt];  //choose a random protein
+		if(nodes[opIndex]->getNtype() == 3)       //if it is a single protein, the reaction type is A->A*
 		{
 			Node* modProt = new Node(nodes.size(),3);
 			nodes.push_back(modProt);
@@ -375,13 +375,13 @@ void Cell::mut_add_postmod () {
 			}
 			return;
 		}
-		else{
+		else{                                //if it is a protein complex, the reaction type is AB->A
 			Reaction* r2=new Reaction(4);
 			r2->setReversible(false);
 			r2->initForwardRateRandomly();
 			r2->addReactant(nodes[opIndex]);
 			int randComp=rand()%(nodes[opIndex]->getNsize()-1)+1;
-		    r2->addProduct(nodes[opIndex]->getNode(randComp));
+		    r2->addProduct(nodes[opIndex]->getNode(randComp));        //randomly choose a node in the complex as the product
 
 			Reaction* r3=new Reaction(1);
 			r3->setReversible(false);

@@ -35,17 +35,55 @@ Cell::Cell(Cell &cell){
         iter_node++;
     }
     
+    /*constructing the relationships of these cells, 
+     *that is implementing components vector in each cell
+     */
+    int nodesSize = cell.nodes.size();
+    for (int indexNinCell = 0; indexNinCell < nodesSize; indexNinCell++) {
+        int componentsSize = cell.nodes[indexNinCell]->getNsize();
+        for (int componentIndex = 0; componentIndex < componentsSize; componentIndex++) {
+            int aComponentIndex = cell.nodes[indexNinCell]->getNode(componentIndex)->getNindex();//store the index of the ith components of this node in the cell
+            Node* correspondingComponent = this->nodes[aComponentIndex];
+            this->nodes[indexNinCell]->pushNode(correspondingComponent);
+        }
+    }
+    
+    
+    
     //copy every reaction in the cell
     std::vector<Reaction*>::iterator iter_reaction = cell.rlist.begin();
     std::vector<Reaction*>::iterator iter_reaction_end = cell.rlist.end();
     while (iter_reaction != iter_reaction_end) {
         Reaction* reactionCopy = new Reaction(*(*iter_reaction));
+        /*reconstructing the relationships of nodes and rlist,
+         *based on the those relationships in the old cell called "cell"
+         */
+        int reactantsSize = (*iter_reaction)->getReactantsSize();
+        for (int indexInReactants = 0; indexInReactants < reactantsSize; indexInReactants++) {
+            int aNodeIndex = (*iter_reaction)->getReactant(indexInReactants)->getNindex();
+            Node* coorespondingNode = this->nodes[aNodeIndex];
+            reactionCopy->addReactant(coorespondingNode);
+        }
+        int modifiersSize = (*iter_reaction)->getModifiersSize();
+        for (int indexInModifiers = 0; indexInModifiers < modifiersSize; indexInModifiers++) {
+            int aNodeIndex = (*iter_reaction)->getModifier(indexInModifiers)->getNindex();
+            Node* coorespondingNode = this->nodes[aNodeIndex];
+            reactionCopy->addModifier(coorespondingNode);
+        }
+        int productsSize = (*iter_reaction)->getProductsSize();
+        for (int indexInProducts = 0; indexInProducts < productsSize; indexInProducts++) {
+            int aNodeIndex = (*iter_reaction)->getProduct(indexInProducts)->getNindex();
+            Node* coorespondingNode = this->nodes[aNodeIndex];
+            reactionCopy->addProduct(coorespondingNode);
+        }
+        
         rlist.push_back(reactionCopy);
         iter_reaction++;
     }
     
-    /* IMPORTANT: reconstruct the relationship of nodes and rlist */
-    /* to be implemented */
+    
+    
+    
     
 }
 
@@ -281,7 +319,7 @@ void Cell::mut_add_postmod () {
 		vector<Node*>::iterator iter = nodes.begin();
 		vector<Node*>::iterator iter_end = nodes.end();
 		while (iter !=iter_end){
-			if((*iter)->getNtype()==3){   //if this node is single protein
+			if((*iter)->getNtype() == 3){   //if this node is single protein
 			 protIndice.push_back(indexOfProt);
 			 numOfProt++;
 			}

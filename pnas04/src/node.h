@@ -34,7 +34,8 @@ class Node {
 		int getNtype ();	//  return node type 1-6
 		int getNindex ();	//	return node index
 		int getNsize ();	//	return size of components
-		Node* getNode (const int& index);	//	return indexed Node 		
+		Node* getNode (const int& index);	//	return the Node with index in the components vector
+        void pushNode(Node* aNode);//for cell to access components vector
 		string getNstring ();	//	return node string
 
 		//	check equality with given node
@@ -49,7 +50,6 @@ class Node {
     
         //ODE of this node
         double ode(std::vector<Reaction*> rlist,double y[], double x);
-   
 
     private:
 

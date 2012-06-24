@@ -245,6 +245,13 @@ Node* Node::extractFirstGene(){
 }
 
 
+//for cell to access components vector
+void Node::pushNode(Node* aNode){
+    components.push_back(aNode);
+}
+
+
+
 
 #include "reaction.h"
 /*

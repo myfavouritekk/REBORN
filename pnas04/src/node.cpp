@@ -277,9 +277,8 @@ double Node::ode(std::vector<Reaction*> reactionList, double *y, double t){
                 case 0:                 //Transcription of a gene from a free promoter or a bound promoter/protein complex
                     if (!(std::find((*iter)->products.begin(), (*iter)->products.end(), this)==(*iter)->products.end())) {
                         //this node is in prodcuts of type 0 reaction , that is , this node is a protein, and is to be transcripted
-                        int proteinIndex, DNAIndex;
+                        int DNAIndex;
                         double forwardRate = (*iter)->forwardRate;
-                        proteinIndex = this->nindex;
                         DNAIndex = (*iter)->modifiers[0]->nindex;//for protein transcription, a DNA is regarded as a modifier rather than a reactant
                         result += forwardRate * y[DNAIndex];
                     }

@@ -83,7 +83,7 @@ void sort(std::vector<Node*> _components, int num_of_members[3]){
 
 
 //basic node constructor
-Node::Node(int _nindex, int _ntype):nindex(_nindex),ntype(_ntype),components(NULL){
+Node::Node(int _nindex, int _ntype):nindex(_nindex),ntype(_ntype){
     
     std::stringstream ss;
     ss << nindex;
@@ -91,14 +91,20 @@ Node::Node(int _nindex, int _ntype):nindex(_nindex),ntype(_ntype),components(NUL
     switch (ntype) {
     case 1:
         nstring = "indu" + ss.str();
+        components.push_back(NULL);
+        components.push_back(this);
         break;
     case 2:
         nstring = "g" + ss.str();
+        components.push_back(this);
         break;
     case 3:
         nstring = "P" + ss.str();
+        components.push_back(NULL);
+        components.push_back(this);
         break;
     }
+    
 
 }
 

@@ -21,6 +21,20 @@ Cell::Cell(const int& _numind, const int& _numprot) {
         nodes.push_back(prot);
 		inputIndice.push_back(currIndex);             //push back protein's index
         currIndex++;
+
+		Reaction *r0 = new Reaction();         //add transcription reaction
+		r0->setReversible(false);
+		r0->initForwardRateRandomly();
+		r0->addReactant(gene);
+		r0->addProduct(prot);
+
+		Reaction* r1 = new Reaction();        //add degradation reaction
+		r1->setReversible(false);
+		r1->initForwardRateRandomly();
+		r1->addReactant(prot);
+
+		rlist.push_back(r0);
+		rlist.push_back(r1);
 	}
 }
 

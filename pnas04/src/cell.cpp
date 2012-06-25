@@ -315,7 +315,7 @@ void Cell::mut_add_regu () {
 	if(!existsReaction(*r0) && !existsReaction(*r1)){
 		rlist.push_back(r0);
 		rlist.push_back(r1);
-}
+	}
 	else {
 		delete r0;
 		delete r1;

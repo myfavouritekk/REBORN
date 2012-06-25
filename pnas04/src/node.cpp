@@ -410,6 +410,7 @@ double Node::ode(std::vector<Reaction*> reactionList, double *y, double t){
                 break;
             }
         }
+        iter++;   
     }
     
     return result;

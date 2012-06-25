@@ -437,7 +437,7 @@ void Cell::mut_add_postmod () {
 
 		/*case 1, A+B->AB,dimerization*/
 
-		if(possibility < 1/3) {
+		if(possibility < 1./3) {
 			int opIndex1 = protIndice[rand()%numOfProt];	//	protein 1
 		    int opIndex2 = protIndice[rand()%numOfProt];	//	protein 2
 			Node* dimer = new Node (nodes.size(), nodes[opIndex1], nodes[opIndex2]);
@@ -460,7 +460,7 @@ void Cell::mut_add_postmod () {
 
 		/*case 2, A+B->A, partial degradation*/
 
-		else if(possibility < 2/3) {      
+		else if(possibility < 2./3) {      
 			if(!numOfSingProt) return;  //no single protein.
 			int opIndex1=singProtIndice[rand()%numOfSingProt];   //single protein 1
 			int opIndex2=singProtIndice[rand()%numOfSingProt];   //single protein 2
@@ -508,7 +508,7 @@ void Cell::mut_add_postmod () {
 #define PROB2 1
 #define PROB3 1
 #define PROB4 1
-#define PROB5 0.0
+#define PROB5 1
 
 
 //overall mutation method
@@ -591,7 +591,9 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
      * currData, and for coloumn with index greater than number of target
      * nodes, initial value is 0
      */
-	for (int i = 0; i < size; i++) {           
+    currData = new double*[size];
+	for (int i = 0; i < size; i++) {
+        currData[i] = new double[time];
         currData[i][0] = 0.;
     }
     for (int i = 0; i < numTargetNodes; i++) {
@@ -611,6 +613,11 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
     }
     
     currScore = totalScore;
+    
+    for (int i = 0; i < size; i++) {
+        delete currData[i];
+    }
+    delete currData;
 }
 
 	

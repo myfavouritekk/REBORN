@@ -626,9 +626,27 @@ double Cell::getCurrScore(){
 }
 
 
-
-
-
+using namespace std;
+//description method
+void Cell::description(){
+    
+    //print nodes
+    cout << "Nodes:" << endl;
+    vector<Node*>::iterator iter = nodes.begin();
+    while (iter != nodes.end()) {
+        cout << "Node " << (*iter)->getNindex() << ": " << (*iter)->getNstring() << endl;
+        iter++;
+    }
+    
+    cout << endl << "Reactions:" << endl;
+    vector<Reaction*>::iterator iter_reaction = rlist.begin();
+    int index = 1;
+    while (iter_reaction != rlist.end()) {
+        (*iter_reaction)->description(index);
+        index++;
+        iter_reaction++;
+    }
+}
 
 
 

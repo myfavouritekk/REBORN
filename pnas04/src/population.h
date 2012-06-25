@@ -55,6 +55,9 @@ class Population {
         //generating certain output format
         void genTikzFormat();
     
+        //generating output
+        void output();
+    
        
     private:
 

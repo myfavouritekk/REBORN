@@ -24,11 +24,12 @@ Population::~Population () {
     
     //delete set of cells
     if (cells != NULL) {
-        for (int i = 0; i < ncell; i++) {
+        for (int i = 0; i < ncell * 2; i++) {
             if (cells[i] != NULL) {
-                delete [] cells[i];
+                delete cells[i];
             }
         }
+        delete cells;
     }
 }
 
@@ -194,5 +195,16 @@ void Population::readDynamicsFromConsole(){
 void Population::genTikzFormat(){
     //to be implemented
     return;
+}
+
+void Population::output(){
+    
+    Cell* currCell;
+    for (int i = 0; i < ncell; i++) {
+        cout << "Cell " << i+1 << endl;
+        currCell = cells[i];
+        currCell->description();
+    }
+    
 }
 

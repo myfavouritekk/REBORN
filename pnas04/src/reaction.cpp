@@ -186,10 +186,10 @@ using namespace std;
 //output method
 void Reaction::description(int reactionIndex){
     
-    cout << "Reaction " << reactionIndex << ":" << endl;
+    cout << "  Reaction " << reactionIndex << ":" << endl;
     
     //Print Type:
-    cout << "Type: " << "Type " << rtype << "\t";
+    cout << "   Type: " << "Type " << rtype << "  ";
     switch (rtype) {
         case 0:
             cout << "Transcription";
@@ -221,21 +221,21 @@ void Reaction::description(int reactionIndex){
     cout << endl;
     
     //Print reactant, modifiers and products
-    cout << "Reactants: ";
+    cout << "   Reactants: ";
     vector<Node*>::iterator iter = reactants.begin();
     while (iter != reactants.end()) {
         cout << (*iter)->getNstring() << "\t";
         iter++;
     }
     cout << endl;
-    cout << "Modifiers: ";
+    cout << "   Modifiers: ";
     iter = modifiers.begin();
     while (iter != modifiers.end()) {
         cout << (*iter)->getNstring() << "\t";
         iter++;
     }
     cout << endl;
-    cout << "Products: ";
+    cout << "   Products: ";
     iter = products.begin();
     while (iter != products.end()) {
         cout << (*iter)->getNstring() << "\t";
@@ -244,8 +244,8 @@ void Reaction::description(int reactionIndex){
     cout << endl;
     
     //Print kinect rates
-    cout << "Forward rate: " << forwardRate;
-    cout << "Reverse rate: " << reverseRate;
+    cout << "   Forward rate: " << forwardRate << endl;
+    cout << "   Reverse rate: " << reverseRate << endl << endl;
     
     
 }

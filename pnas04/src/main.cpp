@@ -13,7 +13,7 @@ int main (void) {
     }
 
 //  output
-    mypop.genTikzFormat ();
+    mypop.output();
 
     return 0;
 }

@@ -64,8 +64,9 @@ void sort(std::vector<Node*> _components, int num_of_members[3]){
     vector<Node*>::iterator iter_end = _components.end();
     do {
         num_of_members[(*iter)->getNtype()-1]++;
+        iter++;
     }
-    while(iter++ != iter_end);
+    while(iter != iter_end);
     
     //sort the vector by components' indice
     int num = _components.size()-1;
@@ -180,7 +181,49 @@ Node::Node(int _nindex, Node* _nleft, Node* _nright)
 
 //complex node constructon of certain type
 Node::Node(int _nindex, int _ntype, Node* _nleft, Node* _nright):ntype(_ntype){
-    Node(_nindex, _nleft, _nright);
+    
+    //	merge N_left and N_right
+    
+    //	gene
+    if(_nleft->getNode(0) == NULL) {
+        if(_nright->getNode(0) == NULL) {
+            components.push_back(NULL);
+        }
+        else {
+            components.push_back(_nright->getNode(0)) ;
+        }
+    }
+    else {
+        if(_nright->getNode(0) == NULL) {
+            components.push_back(_nleft->getNode(0));
+        }
+        else{
+            std::cerr << "Error: more than one genes appear in a complex!" << std::endl;
+            std::exit (1);
+        }
+    }
+    //the first component is set whether its a gene or NULL
+    
+    //	proteins
+    int lsize = _nleft->getNsize ();
+    int rsize = _nright->getNsize ();
+    
+    for(int ileft = 1; ileft < lsize; ileft++) {
+        components.push_back(_nleft->getNode(ileft));
+    }
+    for(int iright = 1; iright < rsize; iright++) {
+        components.push_back(_nright->getNode(iright));
+    }
+    
+    //	sort
+    //components.sort ();
+    int members[3]={0};
+    sort(components,members);
+    
+    ntype = _ntype;
+    
+    //	assign representations
+    nstring = write();	
 }
 
 
@@ -230,7 +273,7 @@ bool Node::operator==(const Node& n1) const {
 
 string Node::write () {
 
-    string nodestr = NULL;
+    string nodestr;
     if(components[0] != NULL) {                     //gene
         nodestr += components[0]->getNstring() + ":";
     }

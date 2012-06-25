@@ -312,7 +312,7 @@ void Cell::mut_add_regu () {
 	r1->addReactant(nodes[opIndex2]);
 	r1->addProduct (ncomplex);
 
-	if(!existsReaction(*r1) && !existsReaction(*r1)){
+	if(!existsReaction(*r0) && !existsReaction(*r1)){
 		rlist.push_back(r0);
 		rlist.push_back(r1);
 }

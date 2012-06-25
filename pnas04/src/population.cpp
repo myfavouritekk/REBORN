@@ -120,7 +120,7 @@ void Population::selection(){
     //cells with lower score will extinct
     for (int i = ncell; i < 2 * ncell; i++) {
         if (cells[i] != NULL) {
-            delete [] (cells[i]);
+            delete cells[i];
         }
     }
 }

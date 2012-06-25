@@ -170,7 +170,7 @@ void Cell::mut_deg_prot () {
 	
 	if(!numOfDegReaction) return;           //no protein degradation reaction
 
-    srand((unsigned int)time(NULL));
+    //srand((unsigned int)time(NULL));
     int opIndex = indice[rand()%numOfDegReaction];//opIndex contains a certain degradation reaction
 
     //  modify its degradation rate
@@ -188,7 +188,7 @@ void Cell::mut_kin_const () {
 	
 	//	a kinetic constant of one reaction to be modified
 	
-	srand((unsigned int)time(NULL));
+	//srand((unsigned int)time(NULL));
 	Reaction* currR = rlist[rand()%rlist.size()];
 
 	if((double)rand()/RAND_MAX <= 0.5 || !currR->isReversible()) {
@@ -269,7 +269,7 @@ void Cell::mut_add_regu () {
 	if(!numPro || !numGenePro) return; // no gene or gene/protein complex
 
 	//	sample random number
-    srand((unsigned int)time(NULL));
+    //srand((unsigned int)time(NULL));
     int opIndex1 = protIndice[rand()%numPro];//contain index of a protein
     int opIndex2 = cplxIndice[rand()%numGenePro];//contain index of a gene or a gene/protein complex
 	Node* exGene = nodes[opIndex2]->extractFirstGene();
@@ -328,7 +328,7 @@ void Cell::mut_add_regu () {
 void Cell::mut_add_postmod () {
 	//	a post modification is add
 	
-    srand((unsigned int)time(NULL));
+    //srand((unsigned int)time(NULL));
 	 /* a protein is to be chosen from the existing ones, and a modified version of it is to be introduced */
 	if((double)rand()/RAND_MAX <= 0.5) {                 //	single protein or single protein complex case
         int indexOfProt=0;
@@ -511,7 +511,7 @@ void Cell::mut_add_postmod () {
 
 //overall mutation method
 void Cell::mutation(){
-    srand((unsigned int)time(NULL));
+    //srand((unsigned int)time(NULL));
     if (rand() < RAND_MAX*PROB1) {
         mut_deg_prot();
     }

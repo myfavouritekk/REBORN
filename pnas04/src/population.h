@@ -11,7 +11,7 @@ class Population {
 
     public:
 
-		Population (const int& _ncell = 2);//_ncell used as a reference to 100 which is the number of total cells
+		Population (const int& _ncell = 10);//_ncell used as a reference to 100 which is the number of total cells
 		~Population ();
     
     

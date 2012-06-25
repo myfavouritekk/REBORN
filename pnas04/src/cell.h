@@ -4,7 +4,6 @@
 #include "node.h"
 #include "reaction.h"
 #include "scorefunction.h"
-#include <ctime>
 #include <vector>
 #include <iostream>
 

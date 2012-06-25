@@ -1,7 +1,10 @@
 #include "population.h"
+#include <ctime>
+
 
 int main (void) {
 
+    srand((unsigned int)time(NULL));
 //  initialization
     Population mypop;
     mypop.init ();

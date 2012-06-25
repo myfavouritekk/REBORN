@@ -2,83 +2,88 @@
 
 
 
-void quickSort(vector<Node*> _components, int num){
+void quickSort(vector<Node*> *_components, int num){
     
     int numLess = 0, numGreater = 0;    //to store lengths of two subgroups
     vector<Node*> less;                 //Node** less = new Node*[num];
     vector<Node*> greater;              //Node** greater = new Node*[num];
+    Node* temp;
     
     //end of recursion, no need to sort
     if(num <= 1) return;
     
-    vector<Node*>::iterator iter = _components.begin();
+    vector<Node*>::iterator iter = (*_components).begin();
     iter++;
-    if (_components.size() !=1 ) {
-        if ((*iter)->getNindex() > (*_components.begin())->getNindex()) {
+    if ((*_components).size() !=1 ) {
+        if ((*iter)->getNindex() > (*(*_components).begin())->getNindex()) {
             greater.push_back(*iter);
-            iter = _components.erase(iter);
+            iter = (*_components).erase(iter);
             numGreater++;
         }
         else {
             less.push_back(*iter);
-            iter = _components.erase(iter);
+            iter = (*_components).erase(iter);
             numLess++;
         }
     }
     
     
     //recursion
-    quickSort(less, numLess);
-    quickSort(greater, numGreater);
+    quickSort(&less, numLess);
+    quickSort(&greater, numGreater);
 
     
     //final assignments
+    temp = (*_components)[0];
+    (*_components).erase((*_components).begin());
     //first, for less members
-    std::vector<Node*>::iterator iter1 = less.end()-1;
-    if (iter1 != less.begin()) {
-        _components.insert(_components.begin(),*iter1);
-        iter1--;
+    std::vector<Node*>::iterator iter1 = less.begin();
+    if (iter1 != less.end()) {
+        (*_components).push_back((*iter1));
+        iter1++;
     }
-    _components.insert(_components.begin(),*iter1);
+    (*_components).push_back(temp);
     //second, for greater members
-    std::vector<Node*>::iterator iter2 = greater.begin();
-    if (iter2 != greater.end()) {
-        _components.push_back(*iter2);
-        iter2++;
+    iter1 = greater.begin();
+    if (iter1 != greater.end()) {
+        (*_components).push_back(*iter1);
+        iter1++;
     }
 }
 
 
 
-void sort(std::vector<Node*> _components, int num_of_members[3]){
+void sort(std::vector<Node*> *_components, int num_of_members[3]){
     
     //count each components and put the numbers in members
     for (int i = 0; i < 3; i++) {
         num_of_members[i] = 0;
     }
-    vector<Node*>::iterator iter = _components.begin();
+    vector<Node*>::iterator iter = (*_components).begin();
     if (*iter != NULL) {
         num_of_members[2-1] = 1;                //have one gene
         iter++;
     }
-    vector<Node*>::iterator iter_end = _components.end();
-    do {
-        num_of_members[(*iter)->getNtype()-1]++;
+    vector<Node*>::iterator iter_end = (*_components).end();
+    
+    while (iter != iter_end)  {
+        if((*iter) != NULL){
+            num_of_members[(*iter)->getNtype()-1]++;
+        }
         iter++;
     }
-    while(iter != iter_end);
     
     //sort the vector by components' indice
-    int num = _components.size()-1;
+    int num = (*_components).size()-1;
 
     //delete the first one
     //either gene or NULL, should not be sorted
-    Node* temp = *_components.begin();
-    _components.erase(_components.begin());
+    Node* temp = *(*_components).begin();
+    (*_components).erase((*_components).begin());
     //sort the rest
     quickSort(_components, num);
     //put the first one back
-    _components.insert(_components.begin(), temp);
+    (*_components).insert((*_components).begin(), temp);
 
 }
 
@@ -150,7 +155,7 @@ Node::Node(int _nindex, Node* _nleft, Node* _nright)
     //	sort
     //components.sort ();
     int members[3]={0};
-    sort(components,members);
+    sort(&components,members);
     
     ntype = 0;
     //assign ntype
@@ -180,7 +185,7 @@ Node::Node(int _nindex, Node* _nleft, Node* _nright)
 
 
 //complex node constructon of certain type
-Node::Node(int _nindex, int _ntype, Node* _nleft, Node* _nright):ntype(_ntype){
+Node::Node(int _nindex, int _ntype, Node* _nleft, Node* _nright):nindex(_nindex){
     
     //	merge N_left and N_right
     
@@ -218,7 +223,7 @@ Node::Node(int _nindex, int _ntype, Node* _nleft, Node* _nright):ntype(_ntype){
     //	sort
     //components.sort ();
     int members[3]={0};
-    sort(components,members);
+    sort(&components,members);
     
     ntype = _ntype;
     

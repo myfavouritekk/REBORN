@@ -180,6 +180,7 @@ void Population::readDynamics (const string& fn) {
 	//	for each cell, initialization
 	for (int i = 0; i < ncell; i++) {
 		cells[i] = new Cell(numind, numprot);
+        cells[i]->getScore(sfunc, ypoints, numind + numprot, numr);//getScore in initialization
 	}
 
 	return;

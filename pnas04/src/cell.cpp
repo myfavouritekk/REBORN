@@ -102,9 +102,7 @@ Cell::Cell(Cell &cell){
         iter_reaction++;
     }
     
-    
-    
-    
+    inputIndice = cell.inputIndice;
     
 }
 

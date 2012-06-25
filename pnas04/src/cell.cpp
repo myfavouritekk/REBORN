@@ -502,11 +502,11 @@ void Cell::mut_add_postmod () {
 	return;
 }
 
-#define PROB1 1
-#define PROB2 1
-#define PROB3 1
-#define PROB4 1
-#define PROB5 1
+#define PROB1 0.5
+#define PROB2 0.5
+#define PROB3 0.5
+#define PROB4 0.5
+#define PROB5 0.025
 
 
 //overall mutation method

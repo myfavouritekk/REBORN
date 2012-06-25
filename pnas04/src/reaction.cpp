@@ -182,7 +182,73 @@ int Reaction::getProductsSize(){
     return products.size();
 }
 
-
+using namespace std;
+//output method
+void Reaction::description(int reactionIndex){
+    
+    cout << "Reaction " << reactionIndex << ":" << endl;
+    
+    //Print Type:
+    cout << "Type: " << "Type " << rtype << "\t";
+    switch (rtype) {
+        case 0:
+            cout << "Transcription";
+            break;
+        case 1:
+            cout << "Protein Degradation";
+            break;
+        case 2:
+            cout << "Binding";
+            break;
+        case 3:
+            cout << "Modification";
+            break;
+        case 4:
+            cout << "Partial Degradation";
+            break;
+        case 5:
+            cout << "Dimerization";
+            break;
+        case 6:
+            cout << "Catalytic Degradation";
+            break;
+        case 7:
+            cout << "Partial Catalytic Degradation";
+            break;
+        default:
+            break;
+    }
+    cout << endl;
+    
+    //Print reactant, modifiers and products
+    cout << "Reactants: ";
+    vector<Node*>::iterator iter = reactants.begin();
+    while (iter != reactants.end()) {
+        cout << (*iter)->getNstring() << "\t";
+        iter++;
+    }
+    cout << endl;
+    cout << "Modifiers: ";
+    iter = modifiers.begin();
+    while (iter != modifiers.end()) {
+        cout << (*iter)->getNstring() << "\t";
+        iter++;
+    }
+    cout << endl;
+    cout << "Products: ";
+    iter = products.begin();
+    while (iter != products.end()) {
+        cout << (*iter)->getNstring() << "\t";
+        iter++;
+    }
+    cout << endl;
+    
+    //Print kinect rates
+    cout << "Forward rate: " << forwardRate;
+    cout << "Reverse rate: " << reverseRate;
+    
+    
+}
 
 
 

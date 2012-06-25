@@ -56,6 +56,9 @@ class Reaction{
 		bool operator==(const Reaction& r1) const;
     
         friend double Node::ode(std::vector<Reaction*> reactionList, double *y, double t);
+        
+        //output method
+        void description(int reactionIndex);
     
 
     private:

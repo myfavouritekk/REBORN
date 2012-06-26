@@ -113,7 +113,21 @@ Cell::Cell(Cell &cell){
 
 
 //destructor
-Cell::~Cell() {}
+Cell::~Cell() {
+    std::vector<Node*>::iterator iter_node = nodes.begin();
+    while (iter_node != nodes.end()) {
+        delete (*iter_node);
+        iter_node++;
+    }
+    nodes.clear();
+    std::vector<Reaction*>::iterator iter_reaction = rlist.begin();
+    while (iter_reaction != rlist.end()) {
+        delete (*iter_reaction);
+        iter_reaction++;
+    }    
+    rlist.clear();
+    inputIndice.clear();
+}
 
 
 

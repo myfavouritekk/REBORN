@@ -5,18 +5,18 @@
 int main (void) {
 
     srand((unsigned int)time(NULL));
-//  initialization
-    Population mypop;
-    mypop.init ();
+    //  initialization
+    Population myPop;
+    myPop.init ();
 
-//  evolution
-    while (!mypop.isTerminate ()) {
-        mypop.growth ();
-        mypop.selection ();
+    //  evolution
+    while (!myPop.isTerminate ()) {
+        myPop.growth ();
+        myPop.selection ();
     }
 
-//  output
-    mypop.output();
+    //  output
+    myPop.output();
 
     return 0;
 }

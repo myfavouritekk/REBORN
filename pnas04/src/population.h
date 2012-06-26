@@ -62,14 +62,14 @@ class Population {
     private:
 
 		//	dynamics of network nodes
-		int numr;	//	number of x points
+		int numr;               //	number of x points
 		double*  xpoints; //dynamic array containing the xpoints
 
-		int numind, numprot; // number of inducers and proteins
-		double** ypoints;	//	 number of y points per x
+		int numind, numprot;    // number of inducers and proteins
+		double** ypoints;       //	 number of y points per x
 
-		int ncell;//number of cells in the population
-        Cell** cells;//set of pointers of cells
+		int ncell;              //number of cells in the population
+        Cell** cells;           //set of pointers of cells
     
         int evolution;
     

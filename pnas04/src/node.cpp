@@ -2,35 +2,31 @@
 
 
 
-void quickSort(vector<Node*> *_components, int num){
+void quickSort(vector<Node*> *_components){
     
-    int numLess = 0, numGreater = 0;    //to store lengths of two subgroups
     vector<Node*> less;                 //Node** less = new Node*[num];
     vector<Node*> greater;              //Node** greater = new Node*[num];
     Node* temp;
+    int num = (*_components).size();
     
     //end of recursion, no need to sort
     if(num <= 1) return;
     
-    vector<Node*>::iterator iter = (*_components).begin();
-    iter++;
-    while ((*_components).size() !=1 ) {
+    vector<Node*>::iterator iter = (*_components).begin() + 1;
+    while (iter != (*_components).end()) {
         if ((*iter)->getNindex() > (*(*_components).begin())->getNindex()) {
             greater.push_back(*iter);
-            iter = (*_components).erase(iter);
-            numGreater++;
         }
         else {
             less.push_back(*iter);
-            iter = (*_components).erase(iter);
-            numLess++;
         }
+        iter++;
     }
     
     
     //recursion
-    quickSort(&less, numLess);
-    quickSort(&greater, numGreater);
+    quickSort(&less);
+    quickSort(&greater);
 
     
     //final assignments
@@ -38,14 +34,14 @@ void quickSort(vector<Node*> *_components, int num){
     (*_components).clear();
     //first, for less members
     std::vector<Node*>::iterator iter1 = less.begin();
-    if (iter1 != less.end()) {
+    while (iter1 != less.end()) {
         (*_components).push_back((*iter1));
         iter1++;
     }
     (*_components).push_back(temp);
     //second, for greater members
     iter1 = greater.begin();
-    if (iter1 != greater.end()) {
+    while (iter1 != greater.end()) {
         (*_components).push_back(*iter1);
         iter1++;
     }
@@ -74,14 +70,13 @@ void sort(std::vector<Node*> *_components, int num_of_members[3]){
     }
     
     //sort the vector by components' indice
-    int num = (*_components).size()-1;
 
     //delete the first one
     //either gene or NULL, should not be sorted
     Node* temp = *(*_components).begin();
     (*_components).erase((*_components).begin());
     //sort the rest
-    quickSort(_components, num);
+    quickSort(_components);
     //put the first one back
     (*_components).insert((*_components).begin(), temp);
 

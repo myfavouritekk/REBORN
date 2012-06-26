@@ -49,8 +49,8 @@ bool Reaction::operator==(const Reaction& r1) const {
 	std::sort(indice1.begin(), indice1.end()); 
 
 	if(indice != indice1) return false;
-	indice.empty ();
-	indice1.empty ();
+	indice.clear ();      //clear members in indice
+	indice1.clear ();     //clear members in indice1
 
 	/*********************
 	 * compare modifiers
@@ -70,8 +70,8 @@ bool Reaction::operator==(const Reaction& r1) const {
 	std::sort(indice1.begin(), indice1.end()); 
 
 	if(indice != indice1) return false;
-	indice.empty ();
-	indice1.empty ();
+	indice.clear ();   //clear members in indice
+	indice1.clear ();  //clear members in indice1
 
 	/*********************
 	 * compare products
@@ -91,7 +91,8 @@ bool Reaction::operator==(const Reaction& r1) const {
 	std::sort(indice1.begin(), indice1.end()); 
 
 	if(indice != indice1) return false;
-
+	indice.clear ();         //clear members in indice
+	indice1.clear ();       //clear members in indice1
 	//	else
 	return true;
 }

@@ -30,6 +30,12 @@ class Cell {
         //description method
         void description();
     
+        //	check if a node has been added previously
+		bool existsNode (const Node& node);
+		
+		//	check if a reaction has been added previously
+		bool existsReaction (const Reaction& rxn);
+    
 
     private:
 
@@ -56,11 +62,7 @@ class Cell {
         //durrent score generated with currData using Score function
         double currScore;
 
-		//	check if a node has been added previously
-		bool existsNode (const Node& node);
 		
-		//	check if a reaction has been added previously
-		bool existsReaction (const Reaction& rxn);
 
         //	Global Storage
         vector<Node*> nodes;//contain all the species within a cell

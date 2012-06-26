@@ -503,10 +503,10 @@ void Cell::mut_add_postmod () {
 }
 
 #define PROB1 0.5
-#define PROB2 0.5
-#define PROB3 0.5
-#define PROB4 0.5
-#define PROB5 0.025
+#define PROB2 1.0
+#define PROB3 0.02
+#define PROB4 0.05
+#define PROB5 0.0025
 
 
 //overall mutation method

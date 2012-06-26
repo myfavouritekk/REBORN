@@ -124,6 +124,8 @@ void Population::selection(){
             delete cells[i];
         }
     }
+    
+    std::cout << "Finished Evolution: " << 100 - evolution << std::endl;
 }
 
 

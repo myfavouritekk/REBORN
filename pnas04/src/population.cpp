@@ -11,14 +11,14 @@ Population::Population (const int& _ncell)
 
 //destructor
 Population::~Population () {
-	if(xpoints != NULL) {delete xpoints;}
+	if(xpoints != NULL) {delete [] xpoints;}
 	if(ypoints != NULL) {
-		for(int ir = 0; ir < numr; ir++) {
+		for(int ir = 0; ir < numind + numprot; ir++) {
 			if(ypoints[ir] != NULL) {
-				delete ypoints[ir];
+				delete [] (ypoints[ir]);
 			}
 		}
-		delete ypoints;
+		delete [] ypoints;
 	}
     
     

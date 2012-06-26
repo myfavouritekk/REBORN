@@ -14,7 +14,7 @@ void quickSort(vector<Node*> *_components, int num){
     
     vector<Node*>::iterator iter = (*_components).begin();
     iter++;
-    if ((*_components).size() !=1 ) {
+    while ((*_components).size() !=1 ) {
         if ((*iter)->getNindex() > (*(*_components).begin())->getNindex()) {
             greater.push_back(*iter);
             iter = (*_components).erase(iter);
@@ -35,7 +35,7 @@ void quickSort(vector<Node*> *_components, int num){
     
     //final assignments
     temp = (*_components)[0];
-    (*_components).erase((*_components).begin());
+    (*_components).clear();
     //first, for less members
     std::vector<Node*>::iterator iter1 = less.begin();
     if (iter1 != less.end()) {

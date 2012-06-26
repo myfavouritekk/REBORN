@@ -292,6 +292,10 @@ void Cell::mut_add_regu () {
 
 	//	create a new node as the product
 	Node* ncomplex = new Node(nodes.size(), 5, nodes[opIndex1], nodes[opIndex2]);
+	if(existsNode(*ncomplex)){
+		delete ncomplex;
+		return;
+	}
 	nodes.push_back(ncomplex);
 
 	//	create reaction 0, transcription
@@ -439,6 +443,10 @@ void Cell::mut_add_postmod () {
 			int opIndex1 = protIndice[rand()%numOfProt];	//	protein 1
 		    int opIndex2 = protIndice[rand()%numOfProt];	//	protein 2
 			Node* dimer = new Node (nodes.size(), nodes[opIndex1], nodes[opIndex2]);
+			if(existsNode(*dimer)){
+				delete dimer;
+				return;
+			}
 			Reaction* dimerization = new Reaction (5);
 			dimerization->setReversible(true);
 			dimerization->initForwardRateRandomly();

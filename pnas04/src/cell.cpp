@@ -559,8 +559,10 @@ void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int 
 {//100 is steps
 	
 	int currSerie,currStep;
-	int i;
-    double k1,k2,k3,k4;         //parameter in the runge-kutta method
+    double *k1 = new double[series];
+    double *k2 = new double[series];
+    double *k3 = new double[series];
+    double *k4 = new double[series];
     double *y = new double[series], *tempY = new double[series];
 	
 	
@@ -573,22 +575,40 @@ void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int 
 		}
 		for(currSerie = 0; currSerie < series; currSerie++){
             
-			k1 = (nodes[currSerie]->ode)(rlist,y,currStep);
-			for(i = 0; i < series; i++){
-				tempY[i] = y[i] + k1/2.;
-			}
-			k2 = (nodes[currSerie]->ode)(rlist,tempY,currStep+0.5);
-			for(i = 0; i < series; i++){
-				tempY[i] = y[i] + k2/2.;
-			}
-			k3 = (nodes[currSerie]->ode)(rlist,tempY,currStep+0.5);
-			for(i = 0; i < series; i++){
-				tempY[i] = y[i] + k3;
-			}
-			k4 = (nodes[currSerie]->ode)(rlist,tempY,currStep+1);
-			data[currSerie][currStep+1] = y[currSerie] + 1/6.0*(k1+2*k2+2*k3+k4);
-		}
+			double delta = (nodes[currSerie]->ode)(rlist,y,currStep);
+            k1[currSerie] = delta;
+			tempY[currSerie] = (y[currSerie] + k1[currSerie]/2. < 0.) ? 0. : (y[currSerie] + k1[currSerie]/2.);
+        }
+        for(currSerie = 0; currSerie < series; currSerie++){
+            
+			double delta = (nodes[currSerie]->ode)(rlist,tempY,currStep + 0.5);
+            k2[currSerie] = delta;
+			tempY[currSerie] = (y[currSerie] + k2[currSerie]/2. < 0.) ? 0. : (y[currSerie] + k2[currSerie]/2.);
+        }
+        for(currSerie = 0; currSerie < series; currSerie++){
+            
+			double delta = (nodes[currSerie]->ode)(rlist,tempY,currStep + 0.5);
+            k3[currSerie] = delta;
+			tempY[currSerie] = (y[currSerie] + k3[currSerie] < 0.) ? 0. : (y[currSerie] + k3[currSerie]);
+        }
+        for(currSerie = 0; currSerie < series; currSerie++){
+            
+			double delta = (nodes[currSerie]->ode)(rlist,tempY,currStep + 1.);
+            k4[currSerie] = delta;
+        }
+		for (currSerie = 0; currSerie < series; currSerie++) {
+            data[currSerie][currStep + 1] = y[currSerie] + 1 / 6.0 * (k1[currSerie]+ 2 * k2[currSerie] + 2 * k3[currSerie] + k4[currSerie]);
+            if (data[currSerie][currStep + 1] < 0.) {
+                data[currSerie][currStep + 1] = 0;
+            }
+        }	
+			
     }
+    
+    delete [] k1;
+    delete [] k2;
+    delete [] k3;
+    delete [] k4;
     delete [] y;
     delete [] tempY;
 }
@@ -635,9 +655,9 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
     currScore = totalScore;
     
     for (int i = 0; i < size; i++) {
-        delete currData[i];
+        delete [] currData[i];
     }
-    delete currData;
+    delete [] currData;
 }
 
 	

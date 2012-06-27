@@ -4,7 +4,7 @@
 
 //constructor, by default it will use score function 1 and evlute 100 generations
 Population::Population (const int& _ncell)
-:ncell(_ncell), numr(0), numind(0), numprot(0), xpoints(NULL), ypoints(NULL), cells(NULL) ,sfunc(ScoreFunc(0)),evolution(100)
+:ncell(_ncell), numr(0), numind(0), numprot(0), xpoints(NULL), ypoints(NULL), cells(NULL) ,sfunc(ScoreFunc(1)),evolution(100)
 {
 	ncell = ncell <=0 ? 100 : ncell;
 }
@@ -67,7 +67,7 @@ void Population::growth(){;
         currCell->mutation();
         
         //get its score
-        currCell->getScore(sfunc, ypoints, numind + numprot, numr);
+        currCell->getScore(sfunc, ypoints, numind + numprot, numr, false);
     }
     evolution--;//evolution once
 }
@@ -126,6 +126,7 @@ void Population::selection(){
     }
     
     std::cout << "Finished Evolution: " << 100 - evolution << std::endl;
+    std::cout << "BestScore: " << cells[0]->getCurrScore() << std::endl;
 }
 
 
@@ -183,7 +184,7 @@ void Population::readDynamics (const string& fn) {
 	//	for each cell, initialization
 	for (int i = 0; i < ncell; i++) {
 		cells[i] = new Cell(numind, numprot);
-        cells[i]->getScore(sfunc, ypoints, numind + numprot, numr);//getScore in initialization
+        cells[i]->getScore(sfunc, ypoints, numind + numprot, numr, false);//getScore in initialization
 	}
 
 	return;
@@ -207,6 +208,11 @@ void Population::output(){
         currCell = cells[i];
         currCell->description();
     }
+    
+    //plot the best result
+    currCell = cells[0];
+    currCell->getScore(sfunc, ypoints, numind + numprot, numr, true);
+    
     
 }
 

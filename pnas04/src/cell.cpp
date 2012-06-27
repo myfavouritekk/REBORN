@@ -598,8 +598,11 @@ void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int 
         }
 		for (currSerie = 0; currSerie < series; currSerie++) {
             data[currSerie][currStep + 1] = y[currSerie] + 1 / 6.0 * (k1[currSerie]+ 2 * k2[currSerie] + 2 * k3[currSerie] + k4[currSerie]);
-            if (data[currSerie][currStep + 1] < 0.) {
+            if (data[currSerie][currStep + 1] < 0.) {//in case of negative density
                 data[currSerie][currStep + 1] = 0;
+            }
+            if (data[currSerie][currStep + 1] > 100.) {// in case of "infinite" density
+                data[currSerie][currStep + 1] = 100;
             }
         }	
 			
@@ -624,7 +627,7 @@ void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int 
  
  *prerequirements: nodes in the cell's "nodes" vector should be sorted by indice
  */
-void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, int time){
+void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, int time, bool print){
    
     int size = nodes.size();//  how many nodes in this cell
     /* initialization: store the initial value in the first column of
@@ -653,6 +656,15 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
     }
     
     currScore = totalScore;
+    
+    if (print) {
+        for (int i = 0; i < numTargetNodes; i++) {
+            for (int j = 0; j < time; j++) {
+                std::cout << currData[inputIndice[i]][j] << "\t";
+            }
+            std::cout << std::endl;
+        }
+    }
     
     for (int i = 0; i < size; i++) {
         delete [] currData[i];

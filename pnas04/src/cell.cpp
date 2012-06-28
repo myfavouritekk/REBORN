@@ -7,11 +7,13 @@
  */
 Cell::Cell(const int& _numind, const int& _numprot):numInducer(_numind) {
 	int currIndex = nodes.size();
+	int iop = 0;
+	int* indexOfProt = new int[_numprot];
 	for(int im = 0; im < _numind; im++) {
 		Node* inducer = new Node(currIndex, 1);
         nodes.push_back(inducer);
-		inputIndice.push_back(currIndex);             //push back inducer's index
-        currIndex++;		
+		inputIndice.push_back(currIndex);           //push back inducer's index
+       	currIndex++;		
 	}
 	for(int ip = 0; ip < _numprot; ip++) {
 		Node* gene = new Node(currIndex, 2);//Type 2 is gene
@@ -20,7 +22,9 @@ Cell::Cell(const int& _numind, const int& _numprot):numInducer(_numind) {
 		Node* prot = new Node(currIndex, 3);//type 3 is protein
         nodes.push_back(prot);
 		inputIndice.push_back(currIndex);             //push back protein's index
-        currIndex++;
+        indexOfProt[iop] = currIndex;
+		iop++;
+		currIndex++;
 
 		Reaction *r0 = new Reaction(0);         //add transcription reaction
 		r0->setReversible(false);
@@ -36,6 +40,22 @@ Cell::Cell(const int& _numind, const int& _numprot):numInducer(_numind) {
 		rlist.push_back(r0);
 		rlist.push_back(r1);
 	}
+	for(int ioi =  0; ioi < _numind; ioi++){
+		int iopIndex = indexOfProt[rand()% _numprot];
+		Node* selectedProt = nodes[iopIndex];
+		Node* selectedind = nodes[ioi];
+		Node* complex = new Node(currIndex, 4, selectedProt, selectedind);
+		nodes.push_back(complex);
+		Reaction* r8 = new Reaction(8);
+		r8->setReversible(true);
+		r8->setForwardRate (100);
+		r8->initReverseRateRandomly();
+		r8->addReactant(selectedProt);
+		r8->addReactant(selectedind);
+		r8->addProduct(complex);
+		rlist.push_back(r8);
+	}
+	delete [] indexOfProt;
 }
 
 

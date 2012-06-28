@@ -14,6 +14,7 @@
  * (5) dimerization
  * (6) catalytic degradation
  * (7) partial catalytic degradation
+ * (8) binding reaction between a inducer and a protein
  */
 
 #include "node.h"

@@ -48,7 +48,7 @@ Cell::Cell(const int& _numind, const int& _numprot):numInducer(_numind) {
 		nodes.push_back(complex);
 		Reaction* r8 = new Reaction(8);
 		r8->setReversible(true);
-		r8->setForwardRate (100);
+		r8->setForwardRate (40);
 		r8->initReverseRateRandomly();
 		r8->addReactant(selectedProt);
 		r8->addReactant(selectedind);
@@ -61,6 +61,8 @@ Cell::Cell(const int& _numind, const int& _numprot):numInducer(_numind) {
 
 //duplicate itself
 Cell::Cell(Cell &cell){
+    
+    numInducer = cell.numInducer;
     
     //copy every node in the cell
     std::vector<Node*>::iterator iter_node = cell.nodes.begin();
@@ -224,9 +226,10 @@ void Cell::mut_kin_const () {
 	
 	//srand((unsigned int)time(NULL));
 	Reaction* currR = rlist[rand()%rlist.size()];
-
 	if((double)rand()/RAND_MAX <= 0.5 || !currR->isReversible()) {
-		currR->modifyForwardRate();
+		if(currR -> getRtype() != 8){
+           currR->modifyForwardRate();
+        }
 	}
 	else {
 		currR->modifyReverseRate();

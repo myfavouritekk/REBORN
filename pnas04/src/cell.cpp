@@ -5,7 +5,7 @@
 /*constructor:
  input: _numind(number of inducers); _numprot(number of proteins)
  */
-Cell::Cell(const int& _numind, const int& _numprot) {
+Cell::Cell(const int& _numind, const int& _numprot):numInducer(_numind) {
 	int currIndex = nodes.size();
 	for(int im = 0; im < _numind; im++) {
 		Node* inducer = new Node(currIndex, 1);
@@ -555,7 +555,7 @@ void Cell::mutation(){
 /*input requirement: first colomn of data[][] is the initial value
  *
  */
-void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int series, int steps)
+void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int numInducers, int series, int steps)
 {//100 is steps
 	
 	int currSerie,currStep;
@@ -574,29 +574,28 @@ void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int 
 			y[currSerie] = data[currSerie][currStep];
 		}
 		for(currSerie = 0; currSerie < series; currSerie++){
-            
 			double delta = (nodes[currSerie]->ode)(rlist,y,currStep);
-            k1[currSerie] = delta;
+            k1[currSerie] = (currSerie < numInducers) ? 0. : delta;
 			tempY[currSerie] = (y[currSerie] + k1[currSerie]/2. < 0.) ? 0. : (y[currSerie] + k1[currSerie]/2.);
         }
         for(currSerie = 0; currSerie < series; currSerie++){
             
 			double delta = (nodes[currSerie]->ode)(rlist,tempY,currStep + 0.5);
-            k2[currSerie] = delta;
+            k2[currSerie] = (currSerie < numInducers) ? 0. : delta;
 			tempY[currSerie] = (y[currSerie] + k2[currSerie]/2. < 0.) ? 0. : (y[currSerie] + k2[currSerie]/2.);
         }
         for(currSerie = 0; currSerie < series; currSerie++){
             
 			double delta = (nodes[currSerie]->ode)(rlist,tempY,currStep + 0.5);
-            k3[currSerie] = delta;
+            k3[currSerie] = (currSerie < numInducers) ? 0. : delta;
 			tempY[currSerie] = (y[currSerie] + k3[currSerie] < 0.) ? 0. : (y[currSerie] + k3[currSerie]);
         }
         for(currSerie = 0; currSerie < series; currSerie++){
             
 			double delta = (nodes[currSerie]->ode)(rlist,tempY,currStep + 1.);
-            k4[currSerie] = delta;
+            k4[currSerie] = (currSerie < numInducers) ? 0. : delta;
         }
-		for (currSerie = 0; currSerie < series; currSerie++) {
+		for (currSerie = numInducers; currSerie < series; currSerie++) {
             data[currSerie][currStep + 1] = y[currSerie] + 1 / 6.0 * (k1[currSerie]+ 2 * k2[currSerie] + 2 * k3[currSerie] + k4[currSerie]);
             if (data[currSerie][currStep + 1] < 0.) {//in case of negative density
                 data[currSerie][currStep + 1] = 0;
@@ -642,9 +641,14 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
     for (int i = 0; i < numTargetNodes; i++) {
         currData[inputIndice[i]][0] = targetData[i][0];    //the initial value of inducers and proteins are the same as the input data.
     }
+    for (int i = 0; i < numInducer; i++) {
+        for (int j = 0; j < time; j++) {
+            currData[i][j] = targetData[i][j];
+        }
+    }
 
     /* runge_kutta method, store the results in currData */
-    runge_kutta(currData, nodes, rlist, size, time);
+    runge_kutta(currData, nodes, rlist, numInducer, size, time);
     
     /* calculate total score uses the ScoreFunc sfunc: only numTargetNodes nodes
      * are calculated because there only those number nodes in targetData

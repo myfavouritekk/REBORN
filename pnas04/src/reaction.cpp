@@ -139,6 +139,11 @@ void Reaction::initReverseRateRandomly () {//0-1
 	return;
 }
 
+
+void Reaction::setForwardRate(double rate){
+	forwardRate = rate;
+}
+
 void Reaction::addReactant( Node* sr) {
 	reactants.push_back(sr);
 	return;

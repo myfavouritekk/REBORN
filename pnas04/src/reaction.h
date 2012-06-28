@@ -14,7 +14,7 @@
  * (5) dimerization
  * (6) catalytic degradation
  * (7) partial catalytic degradation
- * (8) binding reaction between a inducer and a protein
+ * (8) binding reaction between an inducer and a protein
  */
 
 #include "node.h"
@@ -38,6 +38,7 @@ class Reaction{
         void modifyReverseRate();
 		void initForwardRateRandomly();	//	0~1
 		void initReverseRateRandomly();	//	0~1
+		void setForwardRate(double rate);
 
 		void addReactant( Node* sr);//no const
 		void addModifier( Node* sm);//no const
@@ -56,7 +57,7 @@ class Reaction{
 		bool operator==(const Reaction& r1) const;
     
         friend double Node::ode(std::vector<Reaction*> reactionList, double *y, double t);
-        
+
         //output method
         void description(int reactionIndex);
     

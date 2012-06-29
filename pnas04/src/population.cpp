@@ -75,12 +75,13 @@ void Population::growth(){;
 
 void quickSort(Cell* cells[],int num){
     
+    //end of recursion, no need to sort
+    if(num <= 1)return;
+    
     int numLess = 0, numGreater = 0;//to store lengths of two subgroups
     Cell** less = new Cell*[num];
     Cell** greater = new Cell*[num];
     
-    //end of recursion, no need to sort
-    if(num <= 1)return;
     
     for(int i = 1; i < num; i++){//starts from i = 1, the second member
         if(cells[i]->getCurrScore() > cells[0]->getCurrScore()){

@@ -24,7 +24,8 @@ Population::~Population () {
     
     //delete set of cells
     if (cells != NULL) {
-        for (int i = 0; i < ncell * 2; i++) {
+        //ncell ~ ncell*2-1 have been deleted in selection()
+        for (int i = 0; i < ncell; i++) {
             if (cells[i] != NULL) {
                 delete cells[i];
             }

@@ -29,7 +29,7 @@ Population::~Population () {
                 delete cells[i];
             }
         }
-        delete cells;
+        delete [] cells;
     }
 }
 

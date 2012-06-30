@@ -52,8 +52,14 @@ class Reaction{
         int getReactantsSize();
         int getModifiersSize();
         int getProductsSize();
-
-		//	check equality with given reaction
+    
+        //adding method to judge whether a node is in this reaction
+        bool containNode( Node* aNode);
+        bool containNodeAsReactant( Node* aNode);
+        bool containNodeAsModifier( Node* aNode);
+        bool containNodeAsProduct( Node* aNode);
+        
+        //	check equality with given reaction
 		bool operator==(const Reaction& r1) const;
     
         friend double Node::ode(std::vector<Reaction*> reactionList, double *y, double t);

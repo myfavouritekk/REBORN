@@ -316,7 +316,7 @@ double Node::ode(std::vector<Reaction*> reactionList, double *y, double t){
     /* iterate over all the reactions in the reactionList, and every reaction that contains this node will have influence on result */
     while (iter != iter_end) {
         bool containThisNode;
-        containThisNode = std::find((*iter)->reactants.begin(), (*iter)->reactants.end(), this) != (*iter)->reactants.end() || std::find((*iter)->modifiers.begin(), (*iter)->modifiers.end(), this) != (*iter)->modifiers.end() || std::find((*iter)->products.begin(), (*iter)->products.end(), this) != (*iter)->products.end();
+        containThisNode = (*iter)->containNode(this);
         
         
         /* current reaction contains this node in reactants, modifiers or products */
@@ -324,7 +324,7 @@ double Node::ode(std::vector<Reaction*> reactionList, double *y, double t){
             int reactionType = (*iter) -> getRtype();
             switch (reactionType) {
                 case 0:                 //Transcription of a gene from a free promoter or a bound promoter/protein complex
-                    if (!(std::find((*iter)->products.begin(), (*iter)->products.end(), this)==(*iter)->products.end())) {
+                    if ((*iter)->containNodeAsProduct(this)) {
                         //this node is in prodcuts of type 0 reaction , that is , this node is a protein, and is to be transcripted
                         int DNAIndex;
                         double forwardRate = (*iter)->forwardRate;
@@ -334,7 +334,7 @@ double Node::ode(std::vector<Reaction*> reactionList, double *y, double t){
                     break;
                     
                 case 1:                 //degradation of protein
-                    if (!(std::find((*iter)->reactants.begin(), (*iter)->reactants.end(), this)==(*iter)->reactants.end())) {
+                    if ((*iter)->containNodeAsReactant(this)) {
                         //this node is in reactants of type 1 reaction , that is , this node is a protein, and is to degrade
                         int proteinIndex;
                         double forwardRate = (*iter)->forwardRate;
@@ -347,7 +347,7 @@ double Node::ode(std::vector<Reaction*> reactionList, double *y, double t){
                 default:                //all the rest reaction types could have the same routine
                     
                     /* if this node is in reactants */
-                    if (!(std::find((*iter)->reactants.begin(), (*iter)->reactants.end(), this)==(*iter)->reactants.end())) {
+                    if ((*iter)->containNodeAsReactant(this)) {
                         //this node is a reactant
                         double reactantsMultiply = 1., productsMultiply = 1.;
                         
@@ -380,7 +380,7 @@ double Node::ode(std::vector<Reaction*> reactionList, double *y, double t){
                      *can't include the following block in else of the previous if statement, 
                      *for this node may be in both reactants and products 
                      */
-                    if (!(std::find((*iter)->products.begin(), (*iter)->products.end(), this)==(*iter)->products.end())) {
+                    if ((*iter)->containNodeAsProduct(this)) {
                             //this node is a reactant
                         double reactantsMultiply = 1., productsMultiply = 1.;
                         

@@ -5,7 +5,6 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
-#include <algorithm>
 
 using std::string;
 using std::vector;

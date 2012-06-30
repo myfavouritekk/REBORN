@@ -174,6 +174,52 @@ Node* Reaction::getProduct  (const int& ip) {
 	else return products[ip];
 }
 
+bool Reaction::containNode(Node* aNode){
+    if (containNodeAsModifier(aNode) || containNodeAsReactant(aNode) || containNodeAsProduct(aNode)) {
+        return true;
+    }
+    return false;
+}
+
+bool Reaction::containNodeAsReactant(Node* aNode){
+    std::vector<Node*>::iterator iter = reactants.begin();
+    std::vector<Node*>::iterator iter_end = reactants.end();
+    while (iter != iter_end) {
+        if ((*iter) == aNode) {
+            return true;
+        }
+        iter++;
+    }
+    return false;
+}
+
+
+
+bool Reaction::containNodeAsModifier(Node* aNode){
+    std::vector<Node*>::iterator iter = modifiers.begin();
+    std::vector<Node*>::iterator iter_end = modifiers.end();
+    while (iter != iter_end) {
+        if ((*iter) == aNode) {
+            return true;
+        }
+        iter++;
+    }
+    return false;
+}
+
+bool Reaction::containNodeAsProduct(Node* aNode){
+    std::vector<Node*>::iterator iter = products.begin();
+    std::vector<Node*>::iterator iter_end = products.end();
+    while (iter != iter_end) {
+        if ((*iter) == aNode) {
+            return true;
+        }
+        iter++;
+    }
+    return false;
+}
+
+
 int Reaction::getReactantsSize(){
     return reactants.size();
 }

@@ -30,6 +30,13 @@ class Cell {
         //description method
         void description();
     
+        //cell's equation operator
+        bool operator== (Cell& aCell);
+    
+    
+        //generate time courses and put them in currData
+        void generateTimeCourses();
+    
     
 
     private:

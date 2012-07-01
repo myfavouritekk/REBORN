@@ -174,6 +174,30 @@ bool Cell::existsReaction (const Reaction& aReaction) {
 	return false;
 }
 
+
+bool Cell::operator==(Cell& aCell){
+    if (nodes.size() != aCell.nodes.size() || rlist.size() != aCell.rlist.size()) {
+        return false;
+    }else {
+        std::vector<Node*>::iterator iter_node = aCell.nodes.begin();
+        std::vector<Node*>::iterator iter_node_end = aCell.nodes.end();
+        while (iter_node != iter_node_end) {
+            if (!existsNode(*(*iter_node))) {
+                return false;
+            }
+            iter_node++;
+        }
+        std::vector<Reaction*>::iterator iter_reaction = aCell.rlist.begin();
+        std::vector<Reaction*>::iterator iter_reaction_end = aCell.rlist.end();
+        while (iter_reaction != iter_reaction_end) {
+            if (!existsReaction(*(*iter_reaction))) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 /*
  *five types of mutation:
  *1. deg_prot: change protein degradation 

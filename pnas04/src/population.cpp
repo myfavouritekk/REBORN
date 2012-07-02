@@ -211,6 +211,7 @@ void Population::output(){
         currCell->generateTimeCourses(ypoints, numind + numprot, numr);
         currCell->correlationMatrix(numr);
         currCell->getVariation(numr);
+        currCell->fitnessVariation(numr);
         currCell->description(numr);
         
     }

@@ -247,6 +247,27 @@ void Cell::correlationMatrix( double ** data,int series, int steps){
 }
 
 
+void Cell::getVariation(int time){
+	int size = nodes.size();
+	currDataVariation = new int* [size];
+	for(int j = 0; j < size; j++){
+		currDataVariation[j] = new int[time];
+		currDataVariation[j][0] = 0;
+	}
+	for(int j = 0; j < size; j++){
+		for(int k = 1; k < time; k++){
+			if(currData[j][k] > currData[j][k-1])
+				currDataVariation[j][k] = 1;
+			else
+				if(currData[j][k-1] > currData[j][k])
+					currDataVariation[j][k] = -1;
+				else
+					currDataVariation[j][k] = 0;
+		}
+	}
+}
+
+
 bool Cell::operator==(Cell& aCell){
     if (nodes.size() != aCell.nodes.size() || rlist.size() != aCell.rlist.size()) {
         return false;

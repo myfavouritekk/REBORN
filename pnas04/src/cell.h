@@ -44,6 +44,10 @@ class Cell {
         //calculating correlation matrix
         void correlationMatrix( double ** Data,int xpoints, int steps);
 
+    
+        // calculate current variation between two time points
+        void getVariation(int time);
+    
     private:
 
         //  The degradation rate of a protein is modified
@@ -71,6 +75,9 @@ class Cell {
 
         //matrix that contains two sets of correlation data
         double*** corMatrix;
+    
+        //current variation between two time points
+        int** currDataVariation;
     
         //durrent score generated with currData using Score function
         double currScore;

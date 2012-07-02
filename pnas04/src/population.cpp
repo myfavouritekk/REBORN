@@ -208,7 +208,11 @@ void Population::output(){
     for (int i = 0; i < ncell; i++) {
         cout << "Cell " << i+1 << endl;
         currCell = cells[i];
+        currCell->generateTimeCourses(ypoints, numind + numprot, numr);
+        currCell->correlationMatrix(numr);
+        currCell->getVariation(numr);
         currCell->description();
+        
     }
     
     //plot the best result

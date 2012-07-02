@@ -5,7 +5,7 @@
 /*constructor:
  input: _numind(number of inducers); _numprot(number of proteins)
  */
-Cell::Cell(const int& _numind, const int& _numprot):numInducer(_numind) {
+Cell::Cell(const int& _numind, const int& _numprot):numInducer(_numind),corMatrix(NULL) {
 	int currIndex = nodes.size();
 	int iop = 0;
 	int* indexOfProt = new int[_numprot];
@@ -126,6 +126,7 @@ Cell::Cell(Cell &cell){
     }
     
     inputIndice = cell.inputIndice;
+    corMatrix = NULL;
     
 }
 
@@ -152,14 +153,15 @@ Cell::~Cell() {
     }
 
     int series = nodes.size();
-    for (int i = 0 ; i < 2; i++) {
-        for (int j = 0; j < series; j++) {
-            delete [] corMatrix[i][j];
+    if (corMatrix != NULL) {
+        for (int i = 0 ; i < 2; i++) {
+            for (int j = 0; j < series; j++) {
+                delete [] corMatrix[i][j];
+            }
+            delete [] corMatrix[i];
         }
-        delete [] corMatrix[i];
+        delete [] corMatrix;
     }
-    delete [] corMatrix;
-    
     
 }
 
@@ -187,26 +189,31 @@ bool Cell::existsReaction (const Reaction& aReaction) {
 
 double Cell::corMatrixElements(double *timecourse1,double *timecourse2,int points)
 {
-	double x=0,y=0,interxy=0,squarex=0,squarey=0;
-	for(int i=0;i<points;i++){
-		x+=timecourse1[i];   
-		y+=timecourse2[i];
-		interxy+=timecourse1[i]*timecourse2[i];
-		squarex+=pow(timecourse1[i],2);
-		squarey+=pow(timecourse2[i],2);
+	double x = 0,y = 0,interxy = 0,squarex = 0,squarey = 0;
+	for(int i = 0;i < points ;i++){
+		x += timecourse1[i];   
+		y += timecourse2[i];
+		interxy += timecourse1[i] * timecourse2[i];
+		squarex += pow(timecourse1[i],2.);
+		squarey += pow(timecourse2[i],2.);
 	}
-	x=x/points;              //average value of x
-	y=y/points;              //average value of y
-	interxy=interxy/points;  //average value of xy
-	squarex=squarex/points;  //average value of x^2
-	squarey=squarey/points;  //average value of y^2
-	double r=(interxy-x*y)/sqrt((squarex-x*x)*(squarey-y*y));
-	return r;
+	x = x/points;              //average value of x
+	y = y/points;              //average value of y
+	interxy = interxy / points;  //average value of xy
+	squarex = squarex / points;  //average value of x^2
+	squarey = squarey / points;  //average value of y^2
+	double numerator = (interxy - x * y);
+    double denominator = sqrt((squarex - x * x) * (squarey - y * y));
+    if (denominator == 0.) {
+        return 0;
+    }
+	return numerator / denominator;
 }
 
 
-void Cell::correlationMatrix( double ** data,int series, int steps){
-	corMatrix = new double**[2];
+void Cell::correlationMatrix(int steps){
+	int series = nodes.size();
+    corMatrix = new double**[2];
     for (int i = 0; i < 2; i++) {
         corMatrix[i] = new double*[series];
         for (int j = 0; j < series; j++) {
@@ -224,7 +231,7 @@ void Cell::correlationMatrix( double ** data,int series, int steps){
 	//for corMatrix[0][][], no time delay, it is a symmetric matrix
 	for(int i = 0;i < series - 1; i++){    
 		for(int j = i + 1;j < series;j++){
-			corMatrix[0][i][j] = corMatrix[0][j][i] = corMatrixElements(data[i],data[j],steps );
+			corMatrix[0][i][j] = corMatrix[0][j][i] = corMatrixElements(this->currData[i],this->currData[j],steps );
 		}
 	}
     
@@ -234,8 +241,8 @@ void Cell::correlationMatrix( double ** data,int series, int steps){
 			if(j==i)continue;
 			else{
 				for(int k = 0;k < steps - 1;k++){
-					tempData1[k]=data[i][k];     
-					tempData2[k]=data[j][k+1];   //for the jth node, its time delay is 1
+					tempData1[k]=this->currData[i][k];     
+					tempData2[k]=this->currData[j][k+1];   //for the jth node, its time delay is 1
 				}
 				corMatrix[1][i][j] = corMatrixElements(tempData1,tempData2,steps - 1); //only steps - 1 time steps
 			}
@@ -256,10 +263,10 @@ void Cell::getVariation(int time){
 	}
 	for(int j = 0; j < size; j++){
 		for(int k = 1; k < time; k++){
-			if(currData[j][k] > currData[j][k-1])
+			if(this->currData[j][k] > this->currData[j][k-1])
 				currDataVariation[j][k] = 1;
 			else
-				if(currData[j][k-1] > currData[j][k])
+				if(this->currData[j][k-1] > this->currData[j][k])
 					currDataVariation[j][k] = -1;
 				else
 					currDataVariation[j][k] = 0;
@@ -765,22 +772,22 @@ void Cell::generateTimeCourses(double** targetData,int numTargetNodes, int time)
      * currData, and for coloumn with index greater than number of target
      * nodes, initial value is 0
      */
-    currData = new double*[size];
+    this->currData = new double*[size];
 	for (int i = 0; i < size; i++) {
-        currData[i] = new double[time];
-        currData[i][0] = 1.;   // the initial value of gene is 1
+        this->currData[i] = new double[time];
+        this->currData[i][0] = 1.;   // the initial value of gene is 1
     }
     for (int i = 0; i < numTargetNodes; i++) {
-        currData[inputIndice[i]][0] = targetData[i][0];    //the initial value of inducers and proteins are the same as the input data.
+        this->currData[inputIndice[i]][0] = targetData[i][0];    //the initial value of inducers and proteins are the same as the input data.
     }
     for (int i = 0; i < numInducer; i++) {
         for (int j = 0; j < time; j++) {
-            currData[i][j] = targetData[i][j];
+            this->currData[i][j] = targetData[i][j];
         }
     }
     
     /* runge_kutta method, store the results in currData */
-    runge_kutta(currData, nodes, rlist, numInducer, size, time);
+    runge_kutta(this->currData, nodes, rlist, numInducer, size, time);
     
     
 }
@@ -802,22 +809,22 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
      * currData, and for coloumn with index greater than number of target
      * nodes, initial value is 0
      */
-    currData = new double*[size];
+    this->currData = new double*[size];
 	for (int i = 0; i < size; i++) {
-        currData[i] = new double[time];
-        currData[i][0] = 1.;   // the initial value of gene is 1
+        this->currData[i] = new double[time];
+        this->currData[i][0] = 1.;   // the initial value of gene is 1
     }
     for (int i = 0; i < numTargetNodes; i++) {
-        currData[inputIndice[i]][0] = targetData[i][0];    //the initial value of inducers and proteins are the same as the input data.
+        this->currData[inputIndice[i]][0] = targetData[i][0];    //the initial value of inducers and proteins are the same as the input data.
     }
     for (int i = 0; i < numInducer; i++) {
         for (int j = 0; j < time; j++) {
-            currData[i][j] = targetData[i][j];
+            this->currData[i][j] = targetData[i][j];
         }
     }
 
     /* runge_kutta method, store the results in currData */
-    runge_kutta(currData, nodes, rlist, numInducer, size, time);
+    runge_kutta(this->currData, nodes, rlist, numInducer, size, time);
     
     /* calculate total score uses the ScoreFunc sfunc: only numTargetNodes nodes
      * are calculated because there only those number nodes in targetData
@@ -825,7 +832,7 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
      */
     double totalScore = 0;
     for (int i = 0; i < numTargetNodes; i++) {
-        totalScore += sfunc.getScore(currData[inputIndice[i]],targetData[i],time);  //compare the RK data and the input data, using score function.
+        totalScore += sfunc.getScore(this->currData[inputIndice[i]],targetData[i],time);  //compare the RK data and the input data, using score function.
     }
     
     currScore = totalScore;
@@ -833,16 +840,16 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
     if (print) {
         for (int i = 0; i < numTargetNodes; i++) {
             for (int j = 0; j < time; j++) {
-                std::cout << currData[inputIndice[i]][j] << "\t";
+                std::cout << this->currData[inputIndice[i]][j] << "\t";
             }
             std::cout << std::endl;
         }
     }
     
     for (int i = 0; i < size; i++) {
-        delete [] currData[i];
+        delete [] this->currData[i];
     }
-    delete [] currData;
+    delete [] this->currData;
 }
 
 	
@@ -872,6 +879,17 @@ void Cell::description(){
         (*iter_reaction)->description(index);
         index++;
         iter_reaction++;
+    }
+    
+    
+    //print correlationMatrix and Variation Matrix
+    cout << "Correlation Matrix:" << endl;
+    int series = nodes.size();
+    for (int i = 0 ; i < series; i++) {
+        for (int j = 0; j < series; j++) {
+            cout << corMatrix[1][i][j] << "\t";
+        }
+        cout << endl;
     }
 }
 

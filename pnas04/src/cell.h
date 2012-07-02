@@ -43,7 +43,7 @@ class Cell {
         double corMatrixElements(double *timecourse1,double *timecourse2,int points);
     
         //calculating correlation matrix
-        void correlationMatrix( double ** Data,int xpoints, int steps);
+        void correlationMatrix(int steps);
 
     
         // calculate current variation between two time points

@@ -6,6 +6,7 @@
 #include "scorefunction.h"
 #include <vector>
 #include <iostream>
+#include <cmath>
 
 class Cell {
 

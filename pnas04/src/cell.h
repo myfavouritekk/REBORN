@@ -48,6 +48,9 @@ class Cell {
     
         // calculate current variation between two time points
         void getVariation(int time);
+
+		// construct a matrix of variation condition
+		void fitnessVariation(int time);
     
     private:
 
@@ -79,6 +82,9 @@ class Cell {
     
         //current variation between two time points
         int** currDataVariation;
+
+		//variation condition matrix of cell
+		int** variationCondition;
     
         //durrent score generated with currData using Score function
         double currScore;

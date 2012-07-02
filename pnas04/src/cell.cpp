@@ -150,6 +150,17 @@ Cell::~Cell() {
         delete (*iter_reaction);
         iter_reaction++;
     }
+
+    int series = nodes.size();
+    for (int i = 0 ; i < 2; i++) {
+        for (int j = 0; j < series; j++) {
+            delete [] corMatrix[i][j];
+        }
+        delete [] corMatrix[i];
+    }
+    delete [] corMatrix;
+    
+    
 }
 
 
@@ -191,6 +202,48 @@ double Cell::corMatrixElements(double *timecourse1,double *timecourse2,int point
 	squarey=squarey/points;  //average value of y^2
 	double r=(interxy-x*y)/sqrt((squarex-x*x)*(squarey-y*y));
 	return r;
+}
+
+
+void Cell::correlationMatrix( double ** data,int series, int steps){
+	corMatrix = new double**[2];
+    for (int i = 0; i < 2; i++) {
+        corMatrix[i] = new double*[series];
+        for (int j = 0; j < series; j++) {
+            corMatrix[i][j] = new double[series];
+        }
+    }
+    
+	double* tempData1 = new double[steps - 1];
+	double* tempData2 = new double[steps - 1];
+	for(int i = 0;i < 2; i++){
+		for(int j = 0;j < series;j++)
+			corMatrix[i][j][j] = 1;    //diagonal elements are equal to 1
+	} 
+    
+	//for corMatrix[0][][], no time delay, it is a symmetric matrix
+	for(int i = 0;i < series - 1; i++){    
+		for(int j = i + 1;j < series;j++){
+			corMatrix[0][i][j] = corMatrix[0][j][i] = corMatrixElements(data[i],data[j],steps );
+		}
+	}
+    
+	//for corMatrix[1][][], time delay, it is an asymmetric matrix
+    for(int i = 0;i < series;i++){     
+		for(int j = 0;j < series;j++){
+			if(j==i)continue;
+			else{
+				for(int k = 0;k < steps - 1;k++){
+					tempData1[k]=data[i][k];     
+					tempData2[k]=data[j][k+1];   //for the jth node, its time delay is 1
+				}
+				corMatrix[1][i][j] = corMatrixElements(tempData1,tempData2,steps - 1); //only steps - 1 time steps
+			}
+		}
+	}
+    
+	delete[] tempData1;
+	delete[] tempData2;
 }
 
 

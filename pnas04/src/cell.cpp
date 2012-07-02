@@ -862,7 +862,7 @@ double Cell::getCurrScore(){
 
 using namespace std;
 //description method
-void Cell::description(){
+void Cell::description(int time){
     
     //print nodes
     cout << " Nodes:" << endl;
@@ -887,11 +887,29 @@ void Cell::description(){
     int series = nodes.size();
     for (int i = 0 ; i < series; i++) {
         for (int j = 0; j < series; j++) {
+            cout << corMatrix[0][i][j] << "\t";
+        }
+        cout << endl << endl;
+    }
+    
+    for (int i = 0 ; i < series; i++) {
+        for (int j = 0; j < series; j++) {
             cout << corMatrix[1][i][j] << "\t";
         }
         cout << endl;
     }
+    
+    //print difference matrix
+    cout << endl << "Difference Matrix:" << endl;
+    for (int i = 0 ; i < series; i++) {
+        for (int j = 0; j < time; j++) {
+            cout << currDataVariation[i][j] << "\t";
+        }
+        cout << endl;
+    }
+    
 }
+
 
 
 

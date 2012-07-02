@@ -29,7 +29,7 @@ class Cell {
         double getCurrScore();
     
         //description method
-        void description();
+        void description(int time);
     
         //cell's equation operator
         bool operator== (Cell& aCell);

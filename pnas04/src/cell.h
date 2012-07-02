@@ -36,7 +36,7 @@ class Cell {
     
     
         //generate time courses and put them in currData
-        void generateTimeCourses();
+        void generateTimeCourses(double** targetData,int numTargetNodes, int x);
     
     
         //calculating correlation matrix elements

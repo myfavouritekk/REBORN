@@ -758,6 +758,34 @@ void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int 
 
 
 
+void Cell::generateTimeCourses(double** targetData,int numTargetNodes, int time){
+    
+    int size = nodes.size();//  how many nodes in this cell
+    /* initialization: store the initial value in the first column of
+     * currData, and for coloumn with index greater than number of target
+     * nodes, initial value is 0
+     */
+    currData = new double*[size];
+	for (int i = 0; i < size; i++) {
+        currData[i] = new double[time];
+        currData[i][0] = 1.;   // the initial value of gene is 1
+    }
+    for (int i = 0; i < numTargetNodes; i++) {
+        currData[inputIndice[i]][0] = targetData[i][0];    //the initial value of inducers and proteins are the same as the input data.
+    }
+    for (int i = 0; i < numInducer; i++) {
+        for (int j = 0; j < time; j++) {
+            currData[i][j] = targetData[i][j];
+        }
+    }
+    
+    /* runge_kutta method, store the results in currData */
+    runge_kutta(currData, nodes, rlist, numInducer, size, time);
+    
+    
+}
+
+
 /*get score using the sfunc as score function and change its own currScore member
  *fist: using Runge-Kutta method to generate the time course and store all them in currData
  *second: using the sfunction as a score function, and passing currData and targetData as parameters to calculate score

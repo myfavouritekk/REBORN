@@ -174,6 +174,25 @@ bool Cell::existsReaction (const Reaction& aReaction) {
 	return false;
 }
 
+double Cell::corMatrixElements(double *timecourse1,double *timecourse2,int points)
+{
+	double x=0,y=0,interxy=0,squarex=0,squarey=0;
+	for(int i=0;i<points;i++){
+		x+=timecourse1[i];   
+		y+=timecourse2[i];
+		interxy+=timecourse1[i]*timecourse2[i];
+		squarex+=pow(timecourse1[i],2);
+		squarey+=pow(timecourse2[i],2);
+	}
+	x=x/points;              //average value of x
+	y=y/points;              //average value of y
+	interxy=interxy/points;  //average value of xy
+	squarex=squarex/points;  //average value of x^2
+	squarey=squarey/points;  //average value of y^2
+	double r=(interxy-x*y)/sqrt((squarex-x*x)*(squarey-y*y));
+	return r;
+}
+
 
 bool Cell::operator==(Cell& aCell){
     if (nodes.size() != aCell.nodes.size() || rlist.size() != aCell.rlist.size()) {

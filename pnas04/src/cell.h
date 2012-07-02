@@ -38,7 +38,8 @@ class Cell {
         void generateTimeCourses();
     
     
-
+        //calculating correlation matrix elements
+        double corMatrixElements(double *timecourse1,double *timecourse2,int points);
     private:
 
         //  The degradation rate of a protein is modified

@@ -84,7 +84,7 @@ class Cell {
         int** currDataVariation;
     
         //variation condition matrix of cell
-        int** variationCondition;
+        double** variationCondition;
     
         //durrent score generated with currData using Score function
         double currScore;

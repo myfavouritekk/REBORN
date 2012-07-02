@@ -860,15 +860,15 @@ double Cell::getCurrScore(){
 }
 void Cell::fitnessVariation(int time){
 	int size = nodes.size();
-	variationCondition = new int* [size];
+	variationCondition = new double* [size];
 	for(int m = 0; m < size; m++){
-		variationCondition[m] = new int[size];
+		variationCondition[m] = new double[size];
 	}
-	for(int i =0; i < size; i++){
-		for(int j = i; j < size; j++){
+	for(int i = 0; i < size; i++){
+		for(int j = i + 1; j < size; j++){
 			int num_2 = 0;
 			int num_0 = 0;
-			for(int l =0; l < time; l++){
+			for(int l = 0; l < time; l++){
 				int v = currDataVariation[i][l] + currDataVariation[j][l];
 				if(v == 2 || v == -2)
 					num_2++;
@@ -876,10 +876,9 @@ void Cell::fitnessVariation(int time){
 					if(v == 0)
 						num_0++;
 			}
-			variationCondition[i][j] = (num_2 - num_0) / time;
-			variationCondition[j][i] = variationCondition[i][j];
-			
+			variationCondition[j][i] = variationCondition[i][j] = (num_2 - num_0) / (time * 1.);
 		}
+        variationCondition[i][i] = 1.;
 	}
 }
 
@@ -925,10 +924,10 @@ void Cell::description(int time){
     }
     
     //print difference matrix
-    cout << endl << "Difference Matrix:" << endl;
+    cout << endl << "Variation Condition Matrix:" << endl;
     for (int i = 0 ; i < series; i++) {
-        for (int j = 0; j < time; j++) {
-            cout << currDataVariation[i][j] << "\t";
+        for (int j = 0; j < series; j++) {
+            cout << variationCondition[i][j] << "\t";
         }
         cout << endl;
     }

@@ -858,6 +858,31 @@ double Cell::getCurrScore(){
     //std::cout << currScore << std::endl;
     return currScore;
 }
+void Cell::fitnessVariation(int time){
+	int size = nodes.size();
+	variationCondition = new int* [size];
+	for(int m = 0; m < size; m++){
+		variationCondition[m] = new int[size];
+	}
+	for(int i =0; i < size; i++){
+		for(int j = i; j < size; j++){
+			int num_2 = 0;
+			int num_0 = 0;
+			for(int l =0; l < time; l++){
+				int v = currDataVariation[i][l] + currDataVariation[j][l];
+				if(v == 2 || v == -2)
+					num_2++;
+				else
+					if(v == 0)
+						num_0++;
+			}
+			variationCondition[i][j] = (num_2 - num_0) / time;
+			variationCondition[j][i] = variationCondition[i][j];
+			
+		}
+	}
+}
+
 
 
 using namespace std;

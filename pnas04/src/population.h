@@ -71,6 +71,9 @@ class Population {
 		int ncell;              //number of cells in the population
         Cell** cells;           //set of pointers of cells
     
+        //classification of cells
+        std::vector<std::vector<int> > clssifiedCells;
+    
         int evolution;
     
         //score function for sorting

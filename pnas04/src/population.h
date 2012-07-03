@@ -60,6 +60,8 @@ class Population {
         //generating output
         void output();
     
+        //generating XML output format
+        void genXMLFormat();
        
     private:
 

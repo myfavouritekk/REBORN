@@ -197,6 +197,11 @@ void Population::readDynamicsFromConsole(){
 }
 
 
+void Population::genXMLFormat(){
+    
+}
+
+
 void Population::genTikzFormat(){
     //to be implemented
     return;

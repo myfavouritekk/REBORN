@@ -144,6 +144,15 @@ void Reaction::setForwardRate(double rate){
 	forwardRate = rate;
 }
 
+
+double Reaction::getForwardRate(){
+    return forwardRate;
+}
+
+double Reaction::getReverseRate(){
+    return reverseRate;
+}
+
 void Reaction::addReactant( Node* sr) {
 	reactants.push_back(sr);
 	return;
@@ -233,6 +242,19 @@ int Reaction::getModifiersSize(){
 int Reaction::getProductsSize(){
     return products.size();
 }
+
+std::vector<Node*>* Reaction::getReactantsVector(){
+    return &reactants;
+}
+
+std::vector<Node*>* Reaction::getModifiersVector(){
+    return &modifiers;
+}
+
+std::vector<Node*>* Reaction::getProductsVector(){
+    return &products;
+}
+
 
 using namespace std;
 //output method

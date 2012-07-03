@@ -48,6 +48,13 @@ class Reaction{
 		Node* getReactant(const int& ir);
 		Node* getModifier(const int& im);
 		Node* getProduct (const int& ip);
+        
+        std::vector<Node*>* getReactantsVector();
+        std::vector<Node*>* getModifiersVector();
+        std::vector<Node*>* getProductsVector();
+
+        double getForwardRate();
+        double getReverseRate();
     
         int getReactantsSize();
         int getModifiersSize();

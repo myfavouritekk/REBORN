@@ -6,6 +6,8 @@
 #include <iostream>
 #include <stdexcept>
 #include <fstream>
+#include <libxml/tree.h>
+#include <libxml/parser.h>
 
 class Population {
 

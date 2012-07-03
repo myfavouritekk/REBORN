@@ -202,25 +202,83 @@ void Population::genXMLFormat(){
     xmlNodePtr root_node = xmlNewNode(NULL, BAD_CAST"Survivals");
     xmlDocSetRootElement(outputXML, root_node);
     for (int i = 0; i < ncell; i++) {
+        char cellIndex[10];
+        sprintf(cellIndex, "%d",i + 1);
         xmlNodePtr aCell = xmlNewNode(NULL, BAD_CAST"Cell");
         xmlAddChild(root_node, aCell);
-        xmlNodePtr cellIndex = xmlNewNode(NULL, BAD_CAST((unsigned char *)(i + 1)));
-        xmlAddChild(aCell, cellIndex);
+        xmlNewTextChild(aCell, NULL, BAD_CAST"Index", BAD_CAST cellIndex);
         xmlNodePtr nodes = xmlNewNode(NULL, BAD_CAST"Nodes");
         xmlAddChild(aCell, nodes);
+        
+        //adding every Node in nodes vector
         std::vector<Node*>::iterator iter_node = cells[i]->getNodesVector()->begin();
         std::vector<Node*>::iterator iter_node_end = cells[i]->getNodesVector()->end();
         while (iter_node != iter_node_end) {
             xmlNodePtr aNode = xmlNewNode(NULL, BAD_CAST"Node");
             xmlAddChild(nodes, aNode);
-            int nodeIndex = (*iter_node)->getNindex();
-            xmlNewTextChild(aNode, NULL, BAD_CAST"Index", BAD_CAST((unsigned char*)nodeIndex));
+            char nodeIndex[10];
+            sprintf(nodeIndex, "%d",(*iter_node)->getNindex());
+            xmlNewTextChild(aNode, NULL, BAD_CAST"Index", BAD_CAST(nodeIndex));
             string nodeString = (*iter_node)->getNstring();
             xmlNewTextChild(aNode, NULL, BAD_CAST"NodeString", BAD_CAST((unsigned char*)nodeString.c_str()));
             iter_node++;
         }
+        
+        xmlNodePtr rlist = xmlNewNode(NULL, BAD_CAST"Reaction List");
+        xmlAddChild(aCell, rlist);
+        
+        //adding every Reaction in rlist vector
+        std::vector<Reaction*>::iterator iter_reaction = cells[i]->getRlistVector()->begin();
+        std::vector<Reaction*>::iterator iter_reaction_end = cells[i]->getRlistVector()->end();
+        while (iter_reaction != iter_reaction_end) {
+            xmlNodePtr aReaction = xmlNewNode(NULL, BAD_CAST"Reaction");
+            xmlAddChild(rlist, aReaction);
+            char reactionType[10];
+            sprintf(reactionType, "%d",(*iter_reaction)->getRtype());
+            xmlNewTextChild(aReaction, NULL, BAD_CAST"Type", BAD_CAST reactionType);
+            //reactants
+            xmlNodePtr reactants = xmlNewNode(NULL, BAD_CAST"Reactants");
+            xmlAddChild(aReaction, reactants);
+            iter_node = (*iter_reaction)->getReactantsVector()->begin();
+            iter_node_end = (*iter_reaction)->getReactantsVector()->end();
+            while (iter_node != iter_node_end) {
+                std::string nodeString = (*iter_node)->getNstring();
+                xmlNewTextChild(reactants, NULL, BAD_CAST"Node", BAD_CAST((unsigned char*)nodeString.c_str()));
+                iter_node++;
+            }
+            //modifiers
+            xmlNodePtr modifiers = xmlNewNode(NULL, BAD_CAST"Modifiers");
+            xmlAddChild(aReaction, modifiers);
+            iter_node = (*iter_reaction)->getModifiersVector()->begin();
+            iter_node_end = (*iter_reaction)->getModifiersVector()->end();
+            while (iter_node != iter_node_end) {
+                std::string nodeString = (*iter_node)->getNstring();
+                xmlNewTextChild(modifiers, NULL, BAD_CAST"Node", BAD_CAST((unsigned char*)nodeString.c_str()));
+                iter_node++;
+            }
+            //products
+            xmlNodePtr products = xmlNewNode(NULL, BAD_CAST"Products");
+            xmlAddChild(aReaction, products);
+            iter_node = (*iter_reaction)->getProductsVector()->begin();
+            iter_node_end = (*iter_reaction)->getProductsVector()->end();
+            while (iter_node != iter_node_end) {
+                std::string nodeString = (*iter_node)->getNstring();
+                xmlNewTextChild(products, NULL, BAD_CAST"Node", BAD_CAST((unsigned char*)nodeString.c_str()));
+                iter_node++;
+            }
+            
+            char forwardRate[20];
+            sprintf(forwardRate, "%.6f",(*iter_reaction)->getForwardRate());
+            xmlNewTextChild(aReaction, NULL, BAD_CAST"Forward Rate", BAD_CAST forwardRate);
+            char reverseRate[20];
+            sprintf(reverseRate, "%.6f",(*iter_reaction)->getReverseRate());
+            xmlNewTextChild(aReaction, NULL, BAD_CAST"Reverse Rate", BAD_CAST reverseRate);
+            
+            iter_reaction++;
+        }
     }
-    xmlSaveFile("output.xml", outputXML);
+    xmlKeepBlanksDefault(0);
+    xmlSaveFormatFileEnc("XMLOutput.xml", outputXML, NULL, 1);
     xmlFreeDoc(outputXML);
 }
 

@@ -196,9 +196,32 @@ void Population::readDynamicsFromConsole(){
     
 }
 
-
+#define BAD_CAST (xmlChar *)
 void Population::genXMLFormat(){
-    
+    xmlDocPtr outputXML = xmlNewDoc(BAD_CAST"1.0");
+    xmlNodePtr root_node = xmlNewNode(NULL, BAD_CAST"Survivals");
+    xmlDocSetRootElement(outputXML, root_node);
+    for (int i = 0; i < ncell; i++) {
+        xmlNodePtr aCell = xmlNewNode(NULL, BAD_CAST"Cell");
+        xmlAddChild(root_node, aCell);
+        xmlNodePtr cellIndex = xmlNewNode(NULL, BAD_CAST((unsigned char *)(i + 1)));
+        xmlAddChild(aCell, cellIndex);
+        xmlNodePtr nodes = xmlNewNode(NULL, BAD_CAST"Nodes");
+        xmlAddChild(aCell, nodes);
+        std::vector<Node*>::iterator iter_node = cells[i]->getNodesVector()->begin();
+        std::vector<Node*>::iterator iter_node_end = cells[i]->getNodesVector()->end();
+        while (iter_node != iter_node_end) {
+            xmlNodePtr aNode = xmlNewNode(NULL, BAD_CAST"Node");
+            xmlAddChild(nodes, aNode);
+            int nodeIndex = (*iter_node)->getNindex();
+            xmlNewTextChild(aNode, NULL, BAD_CAST"Index", BAD_CAST((unsigned char*)nodeIndex));
+            string nodeString = (*iter_node)->getNstring();
+            xmlNewTextChild(aNode, NULL, BAD_CAST"NodeString", BAD_CAST((unsigned char*)nodeString.c_str()));
+            iter_node++;
+        }
+    }
+    xmlSaveFile("output.xml", outputXML);
+    xmlFreeDoc(outputXML);
 }
 
 

@@ -17,6 +17,7 @@ int main (void) {
 
     //  output
     myPop.output();
+    myPop.genXMLFormat();
 
     return 0;
 }

@@ -935,9 +935,13 @@ void Cell::description(int time){
 }
 
 
+std::vector<Node*>* Cell::getNodesVector(){
+    return &nodes;
+}
 
-
-
+std::vector<Reaction*>* Cell::getRlistVector(){
+    return &rlist;
+}
 
 
 

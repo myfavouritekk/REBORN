@@ -52,6 +52,12 @@ class Cell {
         // construct a matrix of variation condition
         void fitnessVariation(int time);
     
+        //get nodes vector
+        std::vector<Node*>* getNodesVector();
+    
+        //get rlist vector
+        std::vector<Reaction*>* getRlistVector();
+    
     private:
 
         //  The degradation rate of a protein is modified

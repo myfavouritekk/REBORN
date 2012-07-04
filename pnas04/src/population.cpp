@@ -133,6 +133,7 @@ void Population::selection(){
 
 
 
+
 bool Population::isTerminate(){
     return !evolution;//if evolution equals 0, then evolution terminates
 }
@@ -282,6 +283,137 @@ void Population::genXMLFormat(){
     xmlFreeDoc(outputXML);
 }
 
+//after evolution, classify those cells
+void Population::classification(){
+    for (int i = 0; i < ncell; i++) {
+        Cell* currCell = cells[i];        
+        if (classifiedCells.size() == 0) {
+            std::vector<Cell*>* firstType = new std::vector<Cell*>;
+            classifiedCells.push_back(*firstType);
+        }
+        std::vector<std::vector<Cell*> >::iterator iter_out = classifiedCells.begin();
+
+        while (iter_out != classifiedCells.end()) {
+            if ((*iter_out).size() == 0) {
+                (*iter_out).push_back(currCell);
+                break;
+            }
+            if ((*iter_out)[0] == currCell) {
+                (*iter_out).push_back(currCell);
+                break;
+            }
+            if (iter_out + 1 == classifiedCells.end()) {
+                std::vector<Cell*>* newType = new std::vector<Cell*>;
+                newType->push_back(currCell);
+                classifiedCells.push_back(*newType);
+                break;
+            }
+            iter_out++;
+        }
+    }
+    
+    //generate XML file containing classified cells
+    xmlDocPtr classifiedCellsXMLOutput = xmlNewDoc(BAD_CAST"1.0");
+    xmlNodePtr root_node = xmlNewNode(NULL, BAD_CAST"Classified Cells");
+    xmlDocSetRootElement(classifiedCellsXMLOutput, root_node);
+    int type = 1;
+    std::vector<std::vector<Cell*> >::iterator iter_out = classifiedCells.begin();
+    while (iter_out != classifiedCells.end()) {
+        
+        //constructing <Classified Cells>-<Type>
+        char classificationType[10];
+        sprintf(classificationType, "%d",type);
+        xmlNodePtr aType = xmlNewNode(NULL, BAD_CAST"Type");
+        xmlAddChild(root_node, aType);
+        //constructing <Classified Cells>-<Type>-<Type Index>
+        xmlNewTextChild(aType, NULL, BAD_CAST"Type Index", BAD_CAST classificationType);
+        //constructing <Classified Cells>-<Type>-<Cells>
+        xmlNodePtr cellsOfThisType = xmlNewNode(NULL, BAD_CAST"Cells");
+        xmlAddChild(aType, cellsOfThisType);
+
+        //constructing <Classified Cells>-<Type>-<Cells>-<Cell>
+        std::vector<Cell*>::iterator iter_inner = (*iter_out).begin();
+        while (iter_inner != iter_out->end()) {
+            xmlNodePtr aCell = xmlNewNode(NULL, BAD_CAST"Cell");
+            xmlAddChild(cellsOfThisType, aCell);
+            xmlNodePtr nodes = xmlNewNode(NULL, BAD_CAST"Nodes");
+            xmlAddChild(aCell, nodes);
+            
+            //adding every Node in nodes vector
+            std::vector<Node*>::iterator iter_node = (*iter_inner)->getNodesVector()->begin();
+            std::vector<Node*>::iterator iter_node_end = (*iter_inner)->getNodesVector()->end();
+            while (iter_node != iter_node_end) {
+                xmlNodePtr aNode = xmlNewNode(NULL, BAD_CAST"Node");
+                xmlAddChild(nodes, aNode);
+                char nodeIndex[10];
+                sprintf(nodeIndex, "%d",(*iter_node)->getNindex());
+                xmlNewTextChild(aNode, NULL, BAD_CAST"Index", BAD_CAST(nodeIndex));
+                string nodeString = (*iter_node)->getNstring();
+                xmlNewTextChild(aNode, NULL, BAD_CAST"NodeString", BAD_CAST((unsigned char*)nodeString.c_str()));
+                iter_node++;
+            }
+            
+            xmlNodePtr rlist = xmlNewNode(NULL, BAD_CAST"Reaction List");
+            xmlAddChild(aCell, rlist);
+            
+            //adding every Reaction in rlist vector
+            std::vector<Reaction*>::iterator iter_reaction = (*iter_inner)->getRlistVector()->begin();
+            std::vector<Reaction*>::iterator iter_reaction_end = (*iter_inner)->getRlistVector()->end();
+            while (iter_reaction != iter_reaction_end) {
+                xmlNodePtr aReaction = xmlNewNode(NULL, BAD_CAST"Reaction");
+                xmlAddChild(rlist, aReaction);
+                char reactionType[10];
+                sprintf(reactionType, "%d",(*iter_reaction)->getRtype());
+                xmlNewTextChild(aReaction, NULL, BAD_CAST"Type", BAD_CAST reactionType);
+                //reactants
+                xmlNodePtr reactants = xmlNewNode(NULL, BAD_CAST"Reactants");
+                xmlAddChild(aReaction, reactants);
+                iter_node = (*iter_reaction)->getReactantsVector()->begin();
+                iter_node_end = (*iter_reaction)->getReactantsVector()->end();
+                while (iter_node != iter_node_end) {
+                    std::string nodeString = (*iter_node)->getNstring();
+                    xmlNewTextChild(reactants, NULL, BAD_CAST"Node", BAD_CAST((unsigned char*)nodeString.c_str()));
+                    iter_node++;
+                }
+                //modifiers
+                xmlNodePtr modifiers = xmlNewNode(NULL, BAD_CAST"Modifiers");
+                xmlAddChild(aReaction, modifiers);
+                iter_node = (*iter_reaction)->getModifiersVector()->begin();
+                iter_node_end = (*iter_reaction)->getModifiersVector()->end();
+                while (iter_node != iter_node_end) {
+                    std::string nodeString = (*iter_node)->getNstring();
+                    xmlNewTextChild(modifiers, NULL, BAD_CAST"Node", BAD_CAST((unsigned char*)nodeString.c_str()));
+                    iter_node++;
+                }
+                //products
+                xmlNodePtr products = xmlNewNode(NULL, BAD_CAST"Products");
+                xmlAddChild(aReaction, products);
+                iter_node = (*iter_reaction)->getProductsVector()->begin();
+                iter_node_end = (*iter_reaction)->getProductsVector()->end();
+                while (iter_node != iter_node_end) {
+                    std::string nodeString = (*iter_node)->getNstring();
+                    xmlNewTextChild(products, NULL, BAD_CAST"Node", BAD_CAST((unsigned char*)nodeString.c_str()));
+                    iter_node++;
+                }
+                
+                char forwardRate[20];
+                sprintf(forwardRate, "%.6f",(*iter_reaction)->getForwardRate());
+                xmlNewTextChild(aReaction, NULL, BAD_CAST"Forward Rate", BAD_CAST forwardRate);
+                char reverseRate[20];
+                sprintf(reverseRate, "%.6f",(*iter_reaction)->getReverseRate());
+                xmlNewTextChild(aReaction, NULL, BAD_CAST"Reverse Rate", BAD_CAST reverseRate);
+                iter_reaction++;
+            }
+            iter_inner++;
+        }
+        iter_out++;
+        type++;
+    }
+    
+    xmlKeepBlanksDefault(0);
+    xmlSaveFormatFileEnc("ClassifiedCells.xml", classifiedCellsXMLOutput, NULL, 1);
+    xmlFreeDoc(classifiedCellsXMLOutput);
+}
 
 void Population::genTikzFormat(){
     //to be implemented

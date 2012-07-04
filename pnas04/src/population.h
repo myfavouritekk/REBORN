@@ -52,6 +52,9 @@ class Population {
         //for selection phase
         void selection ();
     
+        //classify the surviving cells
+        void classification();
+    
         //judging whether the evolution is terminated
         bool isTerminate();
     
@@ -77,7 +80,7 @@ class Population {
         Cell** cells;           //set of pointers of cells
     
         //classification of cells
-        std::vector<std::vector<int> > clssifiedCells;
+        std::vector<std::vector<Cell*> > classifiedCells;
     
         int evolution;
     

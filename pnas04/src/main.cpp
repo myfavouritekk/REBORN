@@ -15,6 +15,8 @@ int main (void) {
         myPop.selection ();
     }
 
+    myPop.classification();
+    
     //  output
     myPop.output();
     myPop.genXMLFormat();

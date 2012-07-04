@@ -293,6 +293,7 @@ bool Cell::operator==(Cell& aCell){
             if (!existsReaction(*(*iter_reaction))) {
                 return false;
             }
+            iter_reaction++;
         }
     }
     return true;

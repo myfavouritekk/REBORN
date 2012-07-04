@@ -298,7 +298,7 @@ void Population::classification(){
                 (*iter_out).push_back(currCell);
                 break;
             }
-            if ((*iter_out)[0] == currCell) {
+            if (*(*iter_out)[0] == *currCell) {
                 (*iter_out).push_back(currCell);
                 break;
             }

@@ -154,7 +154,7 @@ Cell::~Cell() {
 
     int series = nodes.size();
     if (corMatrix != NULL) {
-        for (int i = 0 ; i < 2; i++) {
+        for (int i = 0 ; i < 3; i++) {
             for (int j = 0; j < series; j++) {
                 delete [] corMatrix[i][j];
             }
@@ -213,8 +213,8 @@ double Cell::corMatrixElements(double *timecourse1,double *timecourse2,int point
 
 void Cell::correlationMatrix(int steps){
 	int series = nodes.size();
-    corMatrix = new double**[2];
-    for (int i = 0; i < 2; i++) {
+    corMatrix = new double**[3];
+    for (int i = 0; i < 3; i++) {
         corMatrix[i] = new double*[series];
         for (int j = 0; j < series; j++) {
             corMatrix[i][j] = new double[series];
@@ -223,7 +223,7 @@ void Cell::correlationMatrix(int steps){
     
 	double* tempData1 = new double[steps - 1];
 	double* tempData2 = new double[steps - 1];
-	for(int i = 0;i < 2; i++){
+	for(int i = 0;i < 3; i++){
 		for(int j = 0;j < series;j++)
 			corMatrix[i][j][j] = 1;    //diagonal elements are equal to 1
 	} 
@@ -246,6 +246,13 @@ void Cell::correlationMatrix(int steps){
 				}
 				corMatrix[1][i][j] = corMatrixElements(tempData1,tempData2,steps - 1); //only steps - 1 time steps
 			}
+		}
+	}
+	for(int i=0;i<series-1;i++){
+		for(int j=i+1;j<series;j++){
+			corMatrix[2][i][j] = (fabs(corMatrix[0][i][j]) > fabs(corMatrix[1][i][j]))?corMatrix[0][i][j]:corMatrix[1][i][j];
+			corMatrix[2][i][j] = (fabs(corMatrix[2][i][j]) > fabs(corMatrix[1][j][i]))?corMatrix[1][i][j]:corMatrix[1][j][i];
+			corMatrix[2][j][i] = corMatrix[2][i][j];
 		}
 	}
     
@@ -923,6 +930,13 @@ void Cell::description(int time){
         cout << endl;
     }
     
+	for ( int i=0 ; i<series; i++){
+		for(int j=0 ; j<series; j++){
+			cout << corMatrix[2][i][j] << "\t";
+		}
+		cout << endl;
+	}
+
     //print difference matrix
     cout << endl << "Variation Condition Matrix:" << endl;
     for (int i = 0 ; i < series; i++) {

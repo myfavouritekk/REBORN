@@ -945,8 +945,7 @@ void Cell::description(int time){
             cout << variationCondition[i][j] << "\t";
         }
         cout << endl;
-    }
-    
+    }	
 }
 
 
@@ -966,7 +965,7 @@ void Cell::genRegulatoryRelationships(){
 		if(nodes[i] -> getNtype() == 3 || nodes[i] -> getNtype() == 6)
 			numOfProtLike ++;
 		else
-			if(nodes[i] -> getNtype == 2)
+			if(nodes[i] -> getNtype() == 2)
 				numOfGene ++;
 	}
 	// initial function of regulatoryMatrix to zero

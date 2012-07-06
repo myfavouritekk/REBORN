@@ -957,6 +957,102 @@ std::vector<Node*>* Cell::getNodesVector(){
 std::vector<Reaction*>* Cell::getRlistVector(){
     return &rlist;
 }
+void Cell::genRegulatoryRelationships(){
+	int numOfProtLike = 0; 
+	int numOfGene = 0;
+	int sizeOfNode = nodes.size();
+	// figure out the quantity of genes and prots
+	for(int i = 0; i < sizeOfNode; i++){
+		if(nodes[i] -> getNtype() == 3 || nodes[i] -> getNtype() == 6)
+			numOfProtLike ++;
+		else
+			if(nodes[i] -> getNtype == 2)
+				numOfGene ++;
+	}
+	// initial function of regulatoryMatrix to zero
+	regulatoryMatrix = new int* [numOfGene];
+	for(int j = 0; j < numOfGene; j++){
+		regulatoryMatrix[j] = new int [numOfProtLike];
+	}
+	for(int i = 0; i < numOfGene; i++)
+		for(int j = 0; j < numOfProtLike; j++){
+			regulatoryMatrix[i][j] = 0;
+		}
+	// to restore the index of genes and prots
+	int* indexOfProtLike = new int [numOfProtLike];
+	int* indexOfGene = new int[numOfGene];
+	int h = 0;
+	int k = 0;
+	for(int i = 0; i < sizeOfNode; i++){
+		if(nodes[i] -> getNtype() == 3 || nodes[i] -> getNtype() == 6){
+			indexOfProtLike[h] = nodes[i] -> getNindex();
+			h++;
+		}
+		else
+			if(nodes[i] -> getNtype() == 2){
+				indexOfGene[k] = nodes[i] -> getNindex();
+				k++;
+			}
+	}
+	int sizeOfReaction = rlist.size();
+	int indexOfNewMod;
+	int indexOfOldMod;
+	int indexOfTargetProt;
+	// find the reaction of type3
+	for(int l = 0; l < sizeOfReaction; l++){
+		if(rlist[l] -> getRtype() == 2){
+			indexOfNewMod = rlist[l] -> getProduct(0) -> getNindex();
+			if(rlist[l] -> getReactant(0) -> getNtype() == 1){
+				indexOfOldMod = rlist[l] -> getReactant(0) -> getNtype();
+		        indexOfTargetProt = rlist[l] -> getReactant(1) -> getNtype();
+			}
+			else{
+				indexOfOldMod = rlist[l] -> getReactant(1) -> getNtype();
+		        indexOfTargetProt = rlist[l] -> getReactant(0) -> getNtype();
+			}
+		double forwardrateOfNew;
+		double forwardrateOfOld;
+		// get the forwardrate of the old and the new
+		for(int p = 0; p < sizeOfReaction; p++){
+			if(rlist[p] -> getRtype() == 0){
+				if(rlist[p] -> getModifier(0) -> getNindex() == indexOfNewMod)
+					forwardrateOfNew = rlist[p] -> getForwardRate();
+				else
+					if(rlist[p] -> getModifier(0) -> getNindex() == indexOfOldMod)
+						forwardrateOfOld = rlist[p] -> getForwardRate();
+			}
+		}
+		int s = 0; // x 
+		int t = 0; // y
+		// find the possition of selected prot and gene
+		for(int q = 0; q < numOfGene; q++){
+			if(indexOfGene[q] == indexOfOldMod)
+				s = q;
+			break;
+		}
+		for(int r = 0; r < numOfProtLike; r++){
+			if(indexOfProtLike[r] = indexOfTargetProt)
+				t = r;
+			break;
+		}
+		if(forwardrateOfNew > forwardrateOfOld)
+			regulatoryMatrix[s][t] = 1;
+		else
+			regulatoryMatrix[s][t] = -1;
+		}
+	}
+	delete [] indexOfProtLike;
+	delete [] indexOfGene;
+}
+
+
+
+				
+		
+		
+		
+
+
 
 
 

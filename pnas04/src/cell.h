@@ -52,6 +52,9 @@ class Cell {
         // construct a matrix of variation condition
         void fitnessVariation(int time);
     
+        //generate regulatory relationships
+        void genRegulatoryRelationships();
+    
         //get nodes vector
         std::vector<Node*>* getNodesVector();
     
@@ -91,6 +94,9 @@ class Cell {
     
         //variation condition matrix of cell
         double** variationCondition;
+
+        //regulatory relationship matrix
+        int** regulatoryMatrix;
     
         //durrent score generated with currData using Score function
         double currScore;

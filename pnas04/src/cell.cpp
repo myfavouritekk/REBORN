@@ -945,7 +945,10 @@ void Cell::description(int time){
             cout << variationCondition[i][j] << "\t";
         }
         cout << endl;
-    }	
+    }
+    
+    cout << "Regulatory Matrix: " << endl;
+    genRegulatoryRelationships();
 }
 
 
@@ -1002,12 +1005,12 @@ void Cell::genRegulatoryRelationships(){
 		if(rlist[l] -> getRtype() == 2){
 			indexOfNewMod = rlist[l] -> getProduct(0) -> getNindex();
 			if(rlist[l] -> getReactant(0) -> getNtype() == 1){
-				indexOfOldMod = rlist[l] -> getReactant(0) -> getNtype();
-		        indexOfTargetProt = rlist[l] -> getReactant(1) -> getNtype();
+				indexOfOldMod = rlist[l] -> getReactant(0) -> getNindex();
+		        indexOfTargetProt = rlist[l] -> getReactant(1) -> getNindex();
 			}
 			else{
-				indexOfOldMod = rlist[l] -> getReactant(1) -> getNtype();
-		        indexOfTargetProt = rlist[l] -> getReactant(0) -> getNtype();
+				indexOfOldMod = rlist[l] -> getReactant(1) -> getNindex();
+		        indexOfTargetProt = rlist[l] -> getReactant(0) -> getNindex();
 			}
 		double forwardrateOfNew;
 		double forwardrateOfOld;
@@ -1025,14 +1028,16 @@ void Cell::genRegulatoryRelationships(){
 		int t = 0; // y
 		// find the possition of selected prot and gene
 		for(int q = 0; q < numOfGene; q++){
-			if(indexOfGene[q] == indexOfOldMod)
-				s = q;
-			break;
+			if(indexOfGene[q] == indexOfOldMod){
+                s = q;
+                break;
+            }
 		}
 		for(int r = 0; r < numOfProtLike; r++){
-			if(indexOfProtLike[r] = indexOfTargetProt)
+			if(indexOfProtLike[r] == indexOfTargetProt){
 				t = r;
-			break;
+                break;
+            }
 		}
 		if(forwardrateOfNew > forwardrateOfOld)
 			regulatoryMatrix[s][t] = 1;
@@ -1040,6 +1045,12 @@ void Cell::genRegulatoryRelationships(){
 			regulatoryMatrix[s][t] = -1;
 		}
 	}
+    for (int i = 0; i < numOfGene ; i++) {
+        for (int j = 0; j < numOfProtLike; j++) {
+            std::cout << regulatoryMatrix[i][j] << "\t";
+        }
+        std::cout << endl;
+    }
 	delete [] indexOfProtLike;
 	delete [] indexOfGene;
 }

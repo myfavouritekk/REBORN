@@ -682,9 +682,9 @@ void Cell::mut_add_postmod () {
 
 #define PROB1 0.5
 #define PROB2 1.0
-#define PROB3 0.00
+#define PROB3 0.02
 #define PROB4 0.5
-#define PROB5 0.00
+#define PROB5 0.025
 
 
 //overall mutation method
@@ -809,9 +809,9 @@ void Cell::generateTimeCourses(double** targetData,int numTargetNodes, int time)
  
  *prerequirements: nodes in the cell's "nodes" vector should be sorted by indice
  */
-#define PARAMETER_NODE_SIZE 1
+#define PARAMETER_NODE_SIZE 0.2
 #define PARAMETER_COMPLEX_SIZE 0
-#define PARAMETER_REACTION_SIZE 1
+#define PARAMETER_REACTION_SIZE 0.1
  
 void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, int time, bool print){
    
@@ -919,7 +919,7 @@ void Cell::description(int time){
         iter_reaction++;
     }
     
-    
+    /*
     //print correlationMatrix and Variation Matrix
     cout << "Correlation Matrix:" << endl;
     int series = nodes.size();
@@ -952,7 +952,7 @@ void Cell::description(int time){
         }
         cout << endl;
     }
-    
+    */
     cout << "Regulatory Matrix: " << endl;
     genRegulatoryRelationships();
 }

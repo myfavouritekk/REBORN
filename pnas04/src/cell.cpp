@@ -847,8 +847,19 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
     }
     
     currScore = totalScore;
+	int complex_size = 0;
+	int node_size = nodes.size();
+	for(int i = 0; i < node_size; i++){
+		if(nodes[i] -> getNtype() == 5)
+			complex_size += ((nodes[i] -> getNsize()) - 2);
+		else
+			if(nodes[i] -> getNtype() == 6)
+				complex_size += ((nodes[i] -> getNsize()) - 3);
+	}
 	currScore += PARAMETER_NODE_SIZE * nodes.size();
 	currScore += PARAMETER_REACTION_SIZE * rlist.size();
+	currScore += PARAMETER_COMPLEX_SIZE * complex_size;
+	
 
     
     if (print) {

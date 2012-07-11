@@ -807,9 +807,12 @@ void Cell::generateTimeCourses(double** targetData,int numTargetNodes, int time)
  *third: assign the score to currScore
  
  
- 
  *prerequirements: nodes in the cell's "nodes" vector should be sorted by indice
  */
+#define PARAMETER_NODE_SIZE 1
+#define PARAMETER_COMPLEX_SIZE 0
+#define PARAMETER_REACTION_SIZE 1
+ 
 void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, int time, bool print){
    
     int size = nodes.size();//  how many nodes in this cell
@@ -844,6 +847,9 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
     }
     
     currScore = totalScore;
+	currScore += PARAMETER_NODE_SIZE * nodes.size();
+	currScore += PARAMETER_REACTION_SIZE * rlist.size();
+
     
     if (print) {
         for (int i = 0; i < numTargetNodes; i++) {

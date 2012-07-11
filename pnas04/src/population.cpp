@@ -66,6 +66,8 @@ void Population::growth(){;
         //mutation phase
         currCell = cells[ncell + i];
         currCell->mutation();
+        currCell->mutation();
+        currCell->mutation();
         
         //get its score
         currCell->getScore(sfunc, ypoints, numind + numprot, numr, false);

@@ -253,7 +253,7 @@ int Node::getNtype () {
     return ntype;
 }
 int Node::getNsize () {
-    return components.size ();
+    return components.size ();  //including situation when components[0] is NULL
 }
 
 Node* Node::getNode (const int& index) {

@@ -116,7 +116,11 @@ void Reaction::setReversible(const bool& rev) {
 void Reaction::modifyForwardRate () {
     //srand((unsigned int)time(NULL));
     double rn = (double)rand() / RAND_MAX * 2.0;
+    
     forwardRate = forwardRate*rn;
+    if ((rtype == 1 || rtype == 0) && forwardRate < 0.1) {//dagaration type
+        forwardRate = 0.1;
+    }
     return;
 }
 

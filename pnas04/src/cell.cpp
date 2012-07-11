@@ -810,7 +810,7 @@ void Cell::generateTimeCourses(double** targetData,int numTargetNodes, int time)
  *prerequirements: nodes in the cell's "nodes" vector should be sorted by indice
  */
 #define PARAMETER_NODE_SIZE 0.2
-#define PARAMETER_COMPLEX_SIZE 0
+#define PARAMETER_COMPLEX_SIZE 0.5
 #define PARAMETER_REACTION_SIZE 0.1
  
 void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, int time, bool print){

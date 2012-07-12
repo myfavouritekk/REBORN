@@ -105,14 +105,14 @@ void Population::mut_parameters(){
         curCell -> getScore(sfunc, ypoints, numind + numprot, numr, false);
         cells[i] -> getScore(sfunc, ypoints, numind + numprot, numr, false);
         
-        if (curCell -> getCurrScore() > cells[i] -> getCurrScore()) {
+        if (curCell -> getCurrScore() < cells[i] -> getCurrScore()) {
             delete cells[i];
             cells[i] = curCell;
         }else {
             delete curCell;
         }
-        
     }
+    evolution--;
 }
 
 
@@ -472,9 +472,9 @@ void Population::output(){
         cout << "Cell " << i+1 << endl;
         currCell = cells[i];
         currCell->generateTimeCourses(ypoints, numind + numprot, numr);
-        currCell->correlationMatrix(numr);
-        currCell->getVariation(numr);
-        currCell->fitnessVariation(numr);
+        //currCell->correlationMatrix(numr);
+        //currCell->getVariation(numr);
+        //currCell->fitnessVariation(numr);
         currCell->description(numr);
         
     }

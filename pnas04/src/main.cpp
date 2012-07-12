@@ -6,33 +6,27 @@ int main (void) {
 
     srand((unsigned int)time(NULL));
     //  initialization
-    // initialize several Populations and run simultaneously
-    
-    Population** myPops = new Population*[5];
-    for (int i = 0; i < 5; i++) {
-        myPops[i] = new Population(20);
-        myPops[i] -> init();
-    }
-    
+    Population myPop(20);
+    myPop.init ();
 
     //  evolution
-    while (!myPops[0] -> isTerminate ()) {
-        for (int i = 0 ; i < 5; i++) {
-            myPops[i] -> growth ();
-            myPops[i] -> selection ();
-
+    while (!myPop.isTerminate ()) {
+        if (myPop.getEvolution() % 100 == 0) {
+            //sort
+            myPop.sort();
+            //  output
+            myPop.output();
+            myPop.mutation();
         }
+        myPop.mut_parameters();
     }
 
-    //myPops.classification();
+    //myPop.classification();
     
     //  output
-    
-    for (int i = 0; i < 5; i++) {
-        myPops[i] -> output();
-
-    }
-    //myPops.genXMLFormat();
+    myPop.sort();
+    myPop.output();
+    //myPop.genXMLFormat();
 
     return 0;
 }

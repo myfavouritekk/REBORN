@@ -118,9 +118,10 @@ void Reaction::modifyForwardRate () {
     double rn = (double)rand() / RAND_MAX * 2.0;
     
     forwardRate = forwardRate*rn;
+    /*
     if ((rtype == 1 || rtype == 0) && forwardRate < 0.01) {//dagaration type
         forwardRate = 0.01;
-    }
+    }*/
     return;
 }
 
@@ -134,9 +135,10 @@ void Reaction::modifyReverseRate () {
 void Reaction::initForwardRateRandomly () {//0-1
     //srand((unsigned int)time(NULL));
     forwardRate = (double)rand()/RAND_MAX;
+    /*
     if ((rtype == 1 || rtype == 0) && forwardRate < 0.01) {//dagaration type
         forwardRate = 0.01;
-    }
+    }*/
 	return;
 }
 

@@ -4,7 +4,7 @@
 
 //constructor, by default it will use score function 1 and evlute 100 generations
 Population::Population (const int& _ncell)
-:ncell(_ncell), numr(0), numind(0), numprot(0), xpoints(NULL), ypoints(NULL), cells(NULL) ,sfunc(ScoreFunc(1)),evolution(100)
+:ncell(_ncell), numr(0), numind(0), numprot(0), xpoints(NULL), ypoints(NULL), cells(NULL) ,sfunc(ScoreFunc(1)),evolution(1000)
 {
 	ncell = ncell <=0 ? 100 : ncell;
 }
@@ -129,7 +129,7 @@ void Population::selection(){
         }
     }
     
-    std::cout << "Finished Evolution: " << 100 - evolution << std::endl;
+    std::cout << "Finished Evolution: " << 1000 - evolution << std::endl;
     std::cout << "BestScore: " << cells[0]->getCurrScore() << std::endl;
 }
 

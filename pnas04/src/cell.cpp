@@ -682,9 +682,9 @@ void Cell::mut_add_postmod () {
 
 #define PROB1 0.5
 #define PROB2 1.0
-#define PROB3 0.02
-#define PROB4 0.5
-#define PROB5 0.025
+#define PROB3 0.002
+#define PROB4 0.025
+#define PROB5 0.00125
 
 
 //overall mutation method
@@ -810,7 +810,7 @@ void Cell::generateTimeCourses(double** targetData,int numTargetNodes, int time)
  *prerequirements: nodes in the cell's "nodes" vector should be sorted by indice
  */
 #define PARAMETER_NODE_SIZE 0.2
-#define PARAMETER_COMPLEX_SIZE 0.5
+#define PARAMETER_COMPLEX_SIZE 0.05
 #define PARAMETER_REACTION_SIZE 0.1
  
 void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, int time, bool print){

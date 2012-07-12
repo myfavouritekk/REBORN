@@ -682,9 +682,32 @@ void Cell::mut_add_postmod () {
 
 #define PROB1 0.5
 #define PROB2 1.0
-#define PROB3 0.002
-#define PROB4 0.025
+#define PROB3 0.6
+#define PROB4 0.2
 #define PROB5 0.00125
+
+void Cell:: mut_parameters(){
+	 if (rand() < RAND_MAX*PROB1) {
+        mut_deg_prot();
+    }
+    if (rand() < RAND_MAX*PROB2) {
+        mut_kin_const();
+	}
+}
+void Cell:: mut_topology(){
+	double prob = rand();
+	if(prob > PROB3){
+		mut_add_gene();
+	}
+	else
+		if(prob > PROB2){
+			mut_add_regu();
+		}
+		else
+			mut_add_postmod();
+}
+	
+
 
 
 //overall mutation method

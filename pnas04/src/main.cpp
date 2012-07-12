@@ -6,12 +6,12 @@ int main (void) {
 
     srand((unsigned int)time(NULL));
     //  initialization
-    Population myPop(20);
+    Population myPop(100);
     myPop.init ();
 
     //  evolution
     while (!myPop.isTerminate ()) {
-        if (myPop.getEvolution() % 100 == 0) {
+        if (myPop.getEvolution() % 200 == 0) {
             //sort
             myPop.sort();
             //  output
@@ -19,6 +19,7 @@ int main (void) {
             myPop.mutation();
         }
         myPop.mut_parameters();
+        std::cout << "Finished Evolution: " << 999 - myPop.getEvolution() << std::endl;
     }
 
     //myPop.classification();

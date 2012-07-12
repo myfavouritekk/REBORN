@@ -152,14 +152,7 @@ Cell::~Cell() {
         iter_reaction++;
     }
 
-    int series = nodes.size();
     if (corMatrix != NULL) {
-        for (int i = 0 ; i < 3; i++) {
-            for (int j = 0; j < series; j++) {
-                delete [] corMatrix[i][j];
-            }
-            delete [] corMatrix[i];
-        }
         delete [] corMatrix;
     }
     
@@ -410,7 +403,7 @@ void Cell::mut_add_gene () {            //	add a gene
 	double random = (double)rand()/RAND_MAX;
 
 	//add dimerization A+B->A:B
-	if(random < 0.25){      
+	if(random < 0.3){      
 
 		int numProt=0;
 		int index=0;
@@ -440,7 +433,7 @@ void Cell::mut_add_gene () {            //	add a gene
 	}
 
 	//add regulation    A+b->A:b
-	if(random >= 0.25 && random < 0.5){ 
+	if(random >= 0.30 && random < 0.6){ 
 		int numGene = 0;
 		int index = 0;
 		vector<int> geneIndice;
@@ -500,9 +493,9 @@ void Cell::mut_add_gene () {            //	add a gene
 
 
 	//add catalystic degradation A+B->A
-	if(random >= 0.5 && random <0.75){
+	if(random >= 0.6 && random <0.9){
 		int numOfSingProt=0;
-		int index;
+		int index = 0;
 		vector<int> indiceOfSingProt;
 
 		std::vector<Node*>::iterator iter1 = nodes.begin();
@@ -532,7 +525,7 @@ void Cell::mut_add_gene () {            //	add a gene
 
 
 	//add partial catalytic degradation A+BC->B
-	if(random >= 0.75){
+	if(random >= 0.9){
 		int index=0;
 		int numOfCompProt=0;
 		vector<int> indiceOfCompProt;
@@ -854,7 +847,7 @@ void Cell:: mut_topology(){
 		mut_add_gene();
 	}
 	else
-		if(prob > PROB2){
+		if(prob > PROB4){
 			mut_add_regu();
 		}
 		else
@@ -1143,6 +1136,11 @@ void Cell::description(int time){
     */
     cout << "Regulatory Matrix: " << endl;
     genRegulatoryRelationships();
+    
+    for (int i = 0; i < nodes.size(); i++) {
+        delete [] currData[i];
+    }
+    delete [] currData;
 }
 
 

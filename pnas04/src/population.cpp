@@ -4,7 +4,7 @@
 
 //constructor, by default it will use score function 1 and evlute 100 generations
 Population::Population (const int& _ncell)
-:ncell(_ncell), numr(0), numind(0), numprot(0), xpoints(NULL), ypoints(NULL), cells(NULL) ,sfunc(ScoreFunc(1)),evolution(1000)
+:ncell(_ncell), numr(0), numind(0), numprot(0), xpoints(NULL), ypoints(NULL), cells(NULL) ,sfunc(ScoreFunc(1)),evolution(999)
 {
 	ncell = ncell <=0 ? 100 : ncell;
 }
@@ -52,6 +52,9 @@ void Population::init(){
    
 }
 
+int Population::getEvolution(){
+    return evolution;
+}
 
 
 //for growth phase
@@ -73,6 +76,43 @@ void Population::growth(){;
         currCell->getScore(sfunc, ypoints, numind + numprot, numr, false);
     }
     evolution--;//evolution once
+}
+
+//mutation only for topology
+void Population::mutation(){
+    Cell* currCell;
+    for(int i = 0; i < ncell; i++){
+        
+        currCell = cells[i];
+        
+        //mutation topology
+        currCell->mut_topology();
+        
+    }
+    evolution--;//evolution once
+}
+
+//mutation only for kinetics
+void Population::mut_parameters(){
+    Cell* curCell;
+    for (int i = 0; i < ncell; i++) {
+        Cell* aCell = new Cell(*(cells[i]));
+        cells[ncell + i] = aCell;
+        
+        curCell = cells[ncell + i];
+        curCell -> mut_parameters();
+        
+        curCell -> getScore(sfunc, ypoints, numind + numprot, numr, false);
+        cells[i] -> getScore(sfunc, ypoints, numind + numprot, numr, false);
+        
+        if (curCell -> getCurrScore() > cells[i] -> getCurrScore()) {
+            delete cells[i];
+            cells[i] = curCell;
+        }else {
+            delete curCell;
+        }
+        
+    }
 }
 
 
@@ -115,7 +155,10 @@ void quickSort(Cell* cells[],int num){
 }
 
 
-
+//sort after changing kinects for 100 generations
+void Population::sort(){
+    quickSort(cells, ncell);
+}
 
 
 //for seclction phase

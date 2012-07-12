@@ -46,8 +46,20 @@ class Population {
         //initializer
         void init();
     
+        //get evolution number
+        int getEvolution();
+    
         //for growth phase
         void growth ();
+    
+        //population mutation for topology
+        void mutation();
+    
+        //pupulation mutation for kinects
+        void mut_parameters();
+    
+        //sort all cells after mutate parameters for 100 generations
+        void sort();
     
         //for selection phase
         void selection ();

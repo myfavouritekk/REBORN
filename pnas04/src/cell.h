@@ -22,6 +22,12 @@ class Cell {
 		//	call for six submutations successively
         void mutation();
 
+        //mutation only changing dynamical parameters
+        void mut_parameters();
+        
+        //mutation only for new nodes or new reactions
+        void mut_topology();
+    
         //  get score and change its own currScore value 
         void getScore (ScoreFunc&, double** targetData,int numNodes, int x, bool print);
     

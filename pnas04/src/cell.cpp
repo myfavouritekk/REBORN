@@ -396,6 +396,7 @@ void Cell::mut_add_gene () {            //	add a gene
 	r1->setReversible(false);
 	r1->initForwardRateRandomly();
 	r1->addReactant(prot);
+
 	if(!existsReaction(*r0) && !existsReaction(*r1)){
 		rlist.push_back(r0);
 		rlist.push_back(r1);
@@ -403,10 +404,163 @@ void Cell::mut_add_gene () {            //	add a gene
 	else{
 		delete r0;
         delete r1;
+		return;
 	}
+		
+	double random = (double)rand()/RAND_MAX;
+
+	//add dimerization A+B->A:B
+	if(random < 0.25){      
+
+		int numProt=0;
+		int index=0;
+		std::vector<Node*>::iterator iter1 = nodes.begin();
+		std::vector<Node*>::iterator iter1_end = nodes.end();
+		vector<int> proIndice;
+		while(iter1 != iter1_end){
+			if((*iter1)->getNtype() == 3||(*iter1)->getNtype() == 6){
+				numProt++;
+				proIndice.push_back(index);
+			}
+			index ++;
+			iter1 ++;
+		}
+
+		int opIndex=proIndice[rand()%numProt];
+		Reaction* dimerization = new Reaction(5);
+		Node* dimer = new Node(nodes.size(),prot, nodes[opIndex]);
+		nodes.push_back(dimer);
+		dimerization->setReversible(false);
+		dimerization->initForwardRateRandomly();
+		dimerization->addReactant(prot);
+		dimerization->addReactant(nodes[opIndex]);
+		dimerization->addProduct(dimer);
+
+		rlist.push_back(dimerization);
+	}
+
+	//add regulation    A+b->A:b
+	if(random >= 0.25 && random < 0.5){ 
+		int numGene = 0;
+		int index = 0;
+		vector<int> geneIndice;
+
+		std::vector<Node*>::iterator iter1 = nodes.begin();
+		std::vector<Node*>::iterator iter1_end = nodes.end();
+		while(iter1 != iter1_end){
+			if((*iter1)->getNtype() == 2||(*iter1)->getNtype() == 5){
+				numGene++;
+				geneIndice.push_back(index);
+			}
+			index ++;
+			iter1 ++;
+		}
+
+		if(!numGene) return;
+		int opIndex = geneIndice[rand()%numGene];
+		Node* exGene = nodes[opIndex]->extractFirstGene();
+		if(exGene == NULL) return;
+
+		Node* exProt = NULL;
+		std::vector<Reaction*>::iterator iter2 = rlist.begin();
+		while (iter2 != rlist.end()) {
+		 if((*iter2)->getRtype() == 0) { //   #0 is gene transcription
+			Node* sr = (*iter2)->getModifier(0);
+			if(sr != NULL && (sr->getNindex() == exGene->getNindex())) {
+				exProt = (*iter2)->getProduct(0);
+				break;
+			}
+		 }
+		  iter2 ++;
+		}
+		if(exProt == NULL) return;
+
+		Node* ncomplex = new Node(nodes.size(), 5, prot, nodes[opIndex]);
+		nodes.push_back(ncomplex);
+
+		//	create reaction 0, transcription
+		Reaction* r0 = new Reaction (0);
+		r0->setReversible(false);
+		r0->initForwardRateRandomly();
+		r0->addModifier(ncomplex);
+		r0->addProduct(exProt);
+
+		//	create reaction 1, binding/unbinding between protein and gene or gene/protein complex
+		Reaction* r1 = new Reaction (2);
+		r1->setReversible(true);
+		r1->initForwardRateRandomly();
+		r1->initReverseRateRandomly();
+		r1->addReactant(prot);
+		r1->addReactant(nodes[opIndex]);
+		r1->addProduct (ncomplex);
+
+		rlist.push_back(r0);
+		rlist.push_back(r1);
+	}
+
+
+	//add catalystic degradation A+B->A
+	if(random >= 0.5 && random <0.75){
+		int numOfSingProt=0;
+		int index;
+		vector<int> indiceOfSingProt;
+
+		std::vector<Node*>::iterator iter1 = nodes.begin();
+		std::vector<Node*>::iterator iter1_end = nodes.end();
+		while(iter1 != iter1_end){
+			if((*iter1)->getNtype() == 3){
+				numOfSingProt++;
+				indiceOfSingProt.push_back(index);
+			}
+			index ++;
+			iter1 ++;
+		}
+
+		int opIndex = indiceOfSingProt[rand()%numOfSingProt];
+		Reaction* catalystic = new Reaction(6);
+		catalystic->setReversible(false);
+		catalystic->initForwardRateRandomly();
+		catalystic->addReactant(prot);
+		catalystic->addReactant(nodes[opIndex]);
+		if(rand()%2 == 0)
+			catalystic->addProduct(prot);
+		else
+			catalystic->addProduct(nodes[opIndex]);
+
+		rlist.push_back(catalystic);
+	}
+
+
+	//add partial catalytic degradation A+BC->B
+	if(random >= 0.75){
+		int index=0;
+		int numOfCompProt=0;
+		vector<int> indiceOfCompProt;
+		std::vector<Node*>::iterator iter1 = nodes.begin();
+		std::vector<Node*>::iterator iter1_end = nodes.end();
+		while(iter1 != iter1_end){
+			if((*iter1)->getNtype() == 3){
+				numOfCompProt++;
+				indiceOfCompProt.push_back(index);
+			}
+			index ++;
+			iter1 ++;
+		}
+
+		int opIndex=indiceOfCompProt[rand()%numOfCompProt];
+		Reaction* compDeg=new Reaction(7);
+		compDeg->setReversible(false);
+		compDeg->initForwardRateRandomly();
+		compDeg->addReactant(prot);
+		compDeg->addReactant(nodes[opIndex]);
+		int randComp=rand()%(nodes[opIndex]->getNsize()-1)+1;
+		compDeg->addProduct(nodes[opIndex]->getNode(randComp));   //choose the protein in the complex
+
+		rlist.push_back(compDeg);
+	}
+
 	return;
 }
-
 
 //mut_add_regu: add interaction
 void Cell::mut_add_regu () {
@@ -682,9 +836,32 @@ void Cell::mut_add_postmod () {
 
 #define PROB1 0.5
 #define PROB2 1.0
-#define PROB3 0.002
-#define PROB4 0.025
+#define PROB3 0.6
+#define PROB4 0.2
 #define PROB5 0.00125
+
+void Cell:: mut_parameters(){
+	 if (rand() < RAND_MAX*PROB1) {
+        mut_deg_prot();
+    }
+    if (rand() < RAND_MAX*PROB2) {
+        mut_kin_const();
+	}
+}
+void Cell:: mut_topology(){
+	double prob = (double) rand()/RAND_MAX;
+	if(prob > PROB3){
+		mut_add_gene();
+	}
+	else
+		if(prob > PROB2){
+			mut_add_regu();
+		}
+		else
+			mut_add_postmod();
+}
+	
+
 
 
 //overall mutation method

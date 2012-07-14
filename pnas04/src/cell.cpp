@@ -429,6 +429,12 @@ void Cell::mut_add_gene () {            //	add a gene
 		dimerization->addReactant(nodes[opIndex]);
 		dimerization->addProduct(dimer);
 
+		Reaction* degrad = new Reaction(1);
+		degrad->setReversible(false);
+		degrad->initForwardRateRandomly();
+		degrad->addReactant(dimer);
+
+		rlist.push_back(degrad);
 		rlist.push_back(dimerization);
 	}
 
@@ -765,18 +771,25 @@ void Cell::mut_add_postmod () {
 				return;
 			}
 			Reaction* dimerization = new Reaction (5);
-			dimerization->setReversible(true);
+			dimerization->setReversible(false);
 			dimerization->initForwardRateRandomly();
-			dimerization->initReverseRateRandomly();
 			dimerization->addReactant(nodes[opIndex1]);
 			dimerization->addReactant(nodes[opIndex2]);
 			dimerization->addProduct(dimer);
-			if(!existsReaction(*dimerization)) {
+
+			Reaction* degrad = new Reaction(1);
+			degrad->setReversible(false);
+			degrad->initForwardRateRandomly();
+			degrad->addReactant(dimer);
+
+			if(!existsReaction(*dimerization) && !existsReaction(*degrad)) {
 				nodes.push_back(dimer);
 				rlist.push_back(dimerization);
+				rlist.push_back(degrad);
 			}
 			else {
 				delete dimer;
+				delete degrad;
 				delete dimerization;
 			}
 		}

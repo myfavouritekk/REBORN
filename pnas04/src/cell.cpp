@@ -740,16 +740,18 @@ void Cell::mut_add_postmod () {
 		vector<Node*>::iterator iter = nodes.begin();
         vector<Node*>::iterator iter_end = nodes.end();
 		while (iter != iter_end) {
-			if((*iter)->getNode(0) == NULL) { 
-				numOfProt++;
-				protIndice.push_back(indexOfProt);
+			if((*iter)->getNode(0) == NULL) { 	
 				if((*iter)->getNtype()==3){
 					numOfSingProt++;
 					singProtIndice.push_back(indexOfProt);
+					numOfProt++;
+					protIndice.push_back(indexOfProt);
 				}
 				if((*iter)->getNtype()==6){
 					numOfCompProt++;
 					compProtIndice.push_back(indexOfProt);
+					numOfProt++;
+					protIndice.push_back(indexOfProt);
 				}
 			}
 			indexOfProt++;
@@ -798,17 +800,14 @@ void Cell::mut_add_postmod () {
 
 		else if(possibility < 2./3) {      
 			if(!numOfSingProt) return;  //no single protein.
-			int opIndex1=singProtIndice[rand()%numOfSingProt];   //single protein 1
+			int opIndex1=protIndice[rand()%numOfProt];   //protein 1
 			int opIndex2=singProtIndice[rand()%numOfSingProt];   //single protein 2
 			Reaction* catalyticDeg = new Reaction (6);
 			catalyticDeg->setReversible(false);
 			catalyticDeg->initForwardRateRandomly();
 			catalyticDeg->addReactant(nodes[opIndex1]);
 			catalyticDeg->addReactant(nodes[opIndex2]);
-			if(rand()%2==0){                               //equally choose a protein to be degraded
-				catalyticDeg->addProduct(nodes[opIndex1]);}
-			else{
-				catalyticDeg->addProduct(nodes[opIndex2]);}
+			catalyticDeg->addProduct(nodes[opIndex2]);
 			if(!existsReaction(*catalyticDeg)){
 			    rlist.push_back(catalyticDeg);}
 			else

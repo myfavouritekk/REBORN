@@ -472,9 +472,6 @@ void Population::output(){
         cout << "Cell " << i+1 << endl;
         currCell = cells[i];
         currCell->generateTimeCourses(ypoints, numind + numprot, numr);
-        //currCell->correlationMatrix(numr);
-        //currCell->getVariation(numr);
-        //currCell->fitnessVariation(numr);
         currCell->description(numr);
         
     }

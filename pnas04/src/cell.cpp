@@ -5,7 +5,7 @@
 /*constructor:
  input: _numind(number of inducers); _numprot(number of proteins)
  */
-Cell::Cell(const int& _numind, const int& _numprot):numInducer(_numind),corMatrix(NULL) {
+Cell::Cell(const int& _numind, const int& _numprot):numInducer(_numind) {
 	int currIndex = nodes.size();
 	int iop = 0;
 	int* indexOfProt = new int[_numprot];
@@ -126,7 +126,6 @@ Cell::Cell(Cell &cell){
     }
     
     inputIndice = cell.inputIndice;
-    corMatrix = NULL;
     
 }
 
@@ -150,10 +149,6 @@ Cell::~Cell() {
     while (iter_reaction != iter_reaction_end) {
         delete (*iter_reaction);
         iter_reaction++;
-    }
-
-    if (corMatrix != NULL) {
-        delete [] corMatrix;
     }
     
 }
@@ -180,99 +175,6 @@ bool Cell::existsReaction (const Reaction& aReaction) {
 	return false;
 }
 
-double Cell::corMatrixElements(double *timecourse1,double *timecourse2,int points)
-{
-	double x = 0,y = 0,interxy = 0,squarex = 0,squarey = 0;
-	for(int i = 0;i < points ;i++){
-		x += timecourse1[i];   
-		y += timecourse2[i];
-		interxy += timecourse1[i] * timecourse2[i];
-		squarex += pow(timecourse1[i],2.);
-		squarey += pow(timecourse2[i],2.);
-	}
-	x = x/points;              //average value of x
-	y = y/points;              //average value of y
-	interxy = interxy / points;  //average value of xy
-	squarex = squarex / points;  //average value of x^2
-	squarey = squarey / points;  //average value of y^2
-	double numerator = (interxy - x * y);
-    double denominator = sqrt((squarex - x * x) * (squarey - y * y));
-    if (denominator == 0.) {
-        return 0;
-    }
-	return numerator / denominator;
-}
-
-
-void Cell::correlationMatrix(int steps){
-	int series = nodes.size();
-    corMatrix = new double**[3];
-    for (int i = 0; i < 3; i++) {
-        corMatrix[i] = new double*[series];
-        for (int j = 0; j < series; j++) {
-            corMatrix[i][j] = new double[series];
-        }
-    }
-    
-	double* tempData1 = new double[steps - 1];
-	double* tempData2 = new double[steps - 1];
-	for(int i = 0;i < 3; i++){
-		for(int j = 0;j < series;j++)
-			corMatrix[i][j][j] = 1;    //diagonal elements are equal to 1
-	} 
-    
-	//for corMatrix[0][][], no time delay, it is a symmetric matrix
-	for(int i = 0;i < series - 1; i++){    
-		for(int j = i + 1;j < series;j++){
-			corMatrix[0][i][j] = corMatrix[0][j][i] = corMatrixElements(this->currData[i],this->currData[j],steps );
-		}
-	}
-    
-	//for corMatrix[1][][], time delay, it is an asymmetric matrix
-    for(int i = 0;i < series;i++){     
-		for(int j = 0;j < series;j++){
-			if(j==i)continue;
-			else{
-				for(int k = 0;k < steps - 1;k++){
-					tempData1[k]=this->currData[i][k];     
-					tempData2[k]=this->currData[j][k+1];   //for the jth node, its time delay is 1
-				}
-				corMatrix[1][i][j] = corMatrixElements(tempData1,tempData2,steps - 1); //only steps - 1 time steps
-			}
-		}
-	}
-	for(int i=0;i<series-1;i++){
-		for(int j=i+1;j<series;j++){
-			corMatrix[2][i][j] = (fabs(corMatrix[0][i][j]) > fabs(corMatrix[1][i][j]))?corMatrix[0][i][j]:corMatrix[1][i][j];
-			corMatrix[2][i][j] = (fabs(corMatrix[2][i][j]) > fabs(corMatrix[1][j][i]))?corMatrix[1][i][j]:corMatrix[1][j][i];
-			corMatrix[2][j][i] = corMatrix[2][i][j];
-		}
-	}
-    
-	delete[] tempData1;
-	delete[] tempData2;
-}
-
-
-void Cell::getVariation(int time){
-	int size = nodes.size();
-	currDataVariation = new int* [size];
-	for(int j = 0; j < size; j++){
-		currDataVariation[j] = new int[time];
-		currDataVariation[j][0] = 0;
-	}
-	for(int j = 0; j < size; j++){
-		for(int k = 1; k < time; k++){
-			if(this->currData[j][k] > this->currData[j][k-1])
-				currDataVariation[j][k] = 1;
-			else
-				if(this->currData[j][k-1] > this->currData[j][k])
-					currDataVariation[j][k] = -1;
-				else
-					currDataVariation[j][k] = 0;
-		}
-	}
-}
 
 
 bool Cell::operator==(Cell& aCell){
@@ -938,8 +840,8 @@ void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int 
             if (data[currSerie][currStep + 1] < 0.) {//in case of negative density
                 data[currSerie][currStep + 1] = 0;
             }
-            if (data[currSerie][currStep + 1] > 100.) {// in case of "infinite" density
-                data[currSerie][currStep + 1] = 100;
+            if (data[currSerie][currStep + 1] > 100000000.) {// in case of "infinite" density
+                data[currSerie][currStep + 1] = 100000000.;
             }
         }	
 			
@@ -1064,29 +966,6 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
 double Cell::getCurrScore(){
     //std::cout << currScore << std::endl;
     return currScore;
-}
-void Cell::fitnessVariation(int time){
-	int size = nodes.size();
-	variationCondition = new double* [size];
-	for(int m = 0; m < size; m++){
-		variationCondition[m] = new double[size];
-	}
-	for(int i = 0; i < size; i++){
-		for(int j = i + 1; j < size; j++){
-			int num_2 = 0;
-			int num_0 = 0;
-			for(int l = 0; l < time; l++){
-				int v = currDataVariation[i][l] + currDataVariation[j][l];
-				if(v == 2 || v == -2)
-					num_2++;
-				else
-					if(v == 0)
-						num_0++;
-			}
-			variationCondition[j][i] = variationCondition[i][j] = (num_2 - num_0) / (time * 1.);
-		}
-        variationCondition[i][i] = 1.;
-	}
 }
 
 

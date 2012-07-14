@@ -369,6 +369,16 @@ double Node::ode(std::vector<Reaction*> reactionList, double *y, double t){
                             productsIter++;
                         }
                         
+                        /* adding modifiers to both reactantMultiply and productsMultiply */
+                        std::vector<Node*>::iterator modifierIter = (*iter)->modifiers.begin();
+                        std::vector<Node*>::iterator modifierIter_end = (*iter)->modifiers.begin();
+                        while (modifierIter != modifierIter_end) {
+                            int index = (*modifierIter)->nindex;
+                            reactantsMultiply *= y[index];
+                            productsMultiply *= y[index];
+                            modifierIter++;
+                        }
+                        
                         double forwardRate = (*iter)->forwardRate;
                         double reverseRate = (*iter)->reverseRate;
                         

@@ -199,42 +199,45 @@ bool Reaction::containNode(Node* aNode){
     return false;
 }
 
-bool Reaction::containNodeAsReactant(Node* aNode){
+int Reaction::containNodeAsReactant(Node* aNode){
     std::vector<Node*>::iterator iter = reactants.begin();
     std::vector<Node*>::iterator iter_end = reactants.end();
+    int counts = 0;
     while (iter != iter_end) {
         if ((*iter) == aNode) {
-            return true;
+            counts++;
         }
         iter++;
     }
-    return false;
+    return counts;
 }
 
 
 
-bool Reaction::containNodeAsModifier(Node* aNode){
+int Reaction::containNodeAsModifier(Node* aNode){
     std::vector<Node*>::iterator iter = modifiers.begin();
     std::vector<Node*>::iterator iter_end = modifiers.end();
+    int counts = 0;
     while (iter != iter_end) {
         if ((*iter) == aNode) {
-            return true;
+            counts++;
         }
         iter++;
     }
-    return false;
+    return counts;
 }
 
-bool Reaction::containNodeAsProduct(Node* aNode){
+int Reaction::containNodeAsProduct(Node* aNode){
     std::vector<Node*>::iterator iter = products.begin();
     std::vector<Node*>::iterator iter_end = products.end();
+    int counts = 0;
     while (iter != iter_end) {
         if ((*iter) == aNode) {
-            return true;
+            counts++;
         }
         iter++;
     }
-    return false;
+    return counts;
 }
 
 

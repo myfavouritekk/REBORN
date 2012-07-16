@@ -743,9 +743,9 @@ void Cell::mut_add_postmod () {
 
 #define PROB1 0.5
 #define PROB2 1.0
-#define PROB3 0.6
-#define PROB4 0.2
-#define PROB5 0.00125
+#define PROB3 0.4
+#define PROB4 0.4
+#define PROB5 0.2
 
 void Cell:: mut_parameters(){
 	 if (rand() < RAND_MAX*PROB1) {
@@ -757,16 +757,16 @@ void Cell:: mut_parameters(){
 }
 void Cell:: mut_topology(){
 	double prob = (double) rand()/RAND_MAX;
-	if(prob > PROB3){
+	if(prob < PROB3){
 		mut_add_gene();
 	}
-	else
-		if(prob > PROB4){
+	else{
+		if(prob < PROB3 + PROB4){
 			mut_add_regu();
 		}
 		else
 			mut_add_postmod();
-
+    }
 }
 	
 

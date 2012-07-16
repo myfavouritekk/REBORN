@@ -347,7 +347,7 @@ double Node::ode(std::vector<Reaction*> reactionList, double *y, double t){
                 default:                //all the rest reaction types could have the same routine
                     
                     /* if this node is in reactants */
-                    if ((*iter)->containNodeAsReactant(this)) {
+                    if (int reactantCounts = (*iter)->containNodeAsReactant(this)) {
                         //this node is a reactant
                         double reactantsMultiply = 1., productsMultiply = 1.;
                         
@@ -382,7 +382,7 @@ double Node::ode(std::vector<Reaction*> reactionList, double *y, double t){
                         double forwardRate = (*iter)->forwardRate;
                         double reverseRate = (*iter)->reverseRate;
                         
-                        result = result -  forwardRate * reactantsMultiply + reverseRate * productsMultiply;
+                        result = result -  forwardRate * reactantsMultiply * reactantCounts + reverseRate * productsMultiply * reactantCounts;
                     }
                     
                     
@@ -390,7 +390,7 @@ double Node::ode(std::vector<Reaction*> reactionList, double *y, double t){
                      *can't include the following block in else of the previous if statement, 
                      *for this node may be in both reactants and products 
                      */
-                    if ((*iter)->containNodeAsProduct(this)) {
+                    if (int productCounts = (*iter)->containNodeAsProduct(this)) {
                             //this node is a reactant
                         double reactantsMultiply = 1., productsMultiply = 1.;
                         
@@ -415,7 +415,7 @@ double Node::ode(std::vector<Reaction*> reactionList, double *y, double t){
                         double forwardRate = (*iter)->forwardRate;
                         double reverseRate = (*iter)->reverseRate;
                         
-                        result = result +  forwardRate * reactantsMultiply - reverseRate * productsMultiply;
+                        result = result +  forwardRate * reactantsMultiply * productCounts - reverseRate * productsMultiply * productCounts;
                     }
                 break;
             }

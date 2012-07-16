@@ -766,6 +766,7 @@ void Cell:: mut_topology(){
 		}
 		else
 			mut_add_postmod();
+
 }
 	
 
@@ -991,40 +992,7 @@ void Cell::description(int time){
         iter_reaction++;
     }
     
-    /*
-    //print correlationMatrix and Variation Matrix
-    cout << "Correlation Matrix:" << endl;
-    int series = nodes.size();
-    for (int i = 0 ; i < series; i++) {
-        for (int j = 0; j < series; j++) {
-            cout << corMatrix[0][i][j] << "\t";
-        }
-        cout << endl << endl;
-    }
     
-    for (int i = 0 ; i < series; i++) {
-        for (int j = 0; j < series; j++) {
-            cout << corMatrix[1][i][j] << "\t";
-        }
-        cout << endl;
-    }
-    
-	for ( int i=0 ; i<series; i++){
-		for(int j=0 ; j<series; j++){
-			cout << corMatrix[2][i][j] << "\t";
-		}
-		cout << endl;
-	}
-
-    //print difference matrix
-    cout << endl << "Variation Condition Matrix:" << endl;
-    for (int i = 0 ; i < series; i++) {
-        for (int j = 0; j < series; j++) {
-            cout << variationCondition[i][j] << "\t";
-        }
-        cout << endl;
-    }
-    */
     cout << "Regulatory Matrix: " << endl;
     genRegulatoryRelationships();
     

@@ -804,7 +804,7 @@ void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int 
     double *k2 = new double[series];
     double *k3 = new double[series];
     double *k4 = new double[series];
-    double *y = new double[series], *tempY = new double[series];
+    double *y = new double[series], *tempY1 = new double[series], *tempY2 = new double[series];
 	
 	
 	
@@ -817,23 +817,23 @@ void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int 
 		for(currSerie = 0; currSerie < series; currSerie++){
 			double delta = (nodes[currSerie]->ode)(rlist,y,currStep);
             k1[currSerie] = (currSerie < numInducers) ? 0. : delta;
-			tempY[currSerie] = (y[currSerie] + k1[currSerie]/2. < 0.) ? 0. : (y[currSerie] + k1[currSerie]/2.);
+			tempY1[currSerie] = (y[currSerie] + k1[currSerie]/2. < 0.) ? 0. : (y[currSerie] + k1[currSerie]/2.);
         }
         for(currSerie = 0; currSerie < series; currSerie++){
             
-			double delta = (nodes[currSerie]->ode)(rlist,tempY,currStep + 0.5);
+			double delta = (nodes[currSerie]->ode)(rlist,tempY1,currStep + 0.5);
             k2[currSerie] = (currSerie < numInducers) ? 0. : delta;
-			tempY[currSerie] = (y[currSerie] + k2[currSerie]/2. < 0.) ? 0. : (y[currSerie] + k2[currSerie]/2.);
+			tempY2[currSerie] = (y[currSerie] + k2[currSerie]/2. < 0.) ? 0. : (y[currSerie] + k2[currSerie]/2.);
         }
         for(currSerie = 0; currSerie < series; currSerie++){
             
-			double delta = (nodes[currSerie]->ode)(rlist,tempY,currStep + 0.5);
+			double delta = (nodes[currSerie]->ode)(rlist,tempY2,currStep + 0.5);
             k3[currSerie] = (currSerie < numInducers) ? 0. : delta;
-			tempY[currSerie] = (y[currSerie] + k3[currSerie] < 0.) ? 0. : (y[currSerie] + k3[currSerie]);
+			tempY1[currSerie] = (y[currSerie] + k3[currSerie] < 0.) ? 0. : (y[currSerie] + k3[currSerie]);
         }
         for(currSerie = 0; currSerie < series; currSerie++){
             
-			double delta = (nodes[currSerie]->ode)(rlist,tempY,currStep + 1.);
+			double delta = (nodes[currSerie]->ode)(rlist,tempY1,currStep + 1.);
             k4[currSerie] = (currSerie < numInducers) ? 0. : delta;
         }
 		for (currSerie = numInducers; currSerie < series; currSerie++) {
@@ -853,7 +853,8 @@ void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int 
     delete [] k3;
     delete [] k4;
     delete [] y;
-    delete [] tempY;
+    delete [] tempY1;
+    delete [] tempY2;
 }
 
 

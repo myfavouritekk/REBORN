@@ -62,9 +62,9 @@ class Reaction{
     
         //adding method to judge whether a node is in this reaction
         bool containNode( Node* aNode);
-        bool containNodeAsReactant( Node* aNode);
-        bool containNodeAsModifier( Node* aNode);
-        bool containNodeAsProduct( Node* aNode);
+        int containNodeAsReactant( Node* aNode);
+        int containNodeAsModifier( Node* aNode);
+        int containNodeAsProduct( Node* aNode);
         
         //	check equality with given reaction
 		bool operator==(const Reaction& r1) const;

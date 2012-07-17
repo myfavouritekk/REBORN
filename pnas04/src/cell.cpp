@@ -756,7 +756,7 @@ void Cell:: mut_parameters(){
 	}
 }
 void Cell:: mut_topology(){
-	double prob = (double) rand()/RAND_MAX;
+	/*double prob = (double) rand()/RAND_MAX;
 	if(prob < PROB3){
 		mut_add_gene();
 	}
@@ -766,7 +766,17 @@ void Cell:: mut_topology(){
 		}
 		else
 			mut_add_postmod();
+    }*/
+    if (rand() < RAND_MAX * PROB3 / 10) {
+        mut_add_gene();
     }
+    if (rand() < RAND_MAX * PROB4 / 10) {
+        mut_add_regu();
+    }
+    if (rand() < RAND_MAX * PROB5 / 10) {
+        mut_add_postmod();
+    }
+
 }
 	
 

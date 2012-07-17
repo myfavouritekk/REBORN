@@ -479,7 +479,11 @@ void Population::output(){
     
     //plot the best result
     currCell = cells[0];
+    cout << "Best Time Courses:" << endl;
     currCell->getScore(sfunc, ypoints, numind + numprot, numr, true);
+    cout << "Best Cell:" << endl;
+    currCell->generateTimeCourses(ypoints, numind + numprot, numr);
+    currCell->description(numr);
     
     
 }

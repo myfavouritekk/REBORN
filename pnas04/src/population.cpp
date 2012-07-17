@@ -181,7 +181,7 @@ void Population::selection(){
 
 
 bool Population::isTerminate(){
-    return !evolution;//if evolution equals 0, then evolution terminates
+    return (evolution <= 0) ? true : false ;//if evolution equals 0, then evolution terminates
 }
 
 

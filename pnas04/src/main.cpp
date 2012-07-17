@@ -18,7 +18,7 @@ int main (void) {
             myPop.mutation();
         }
         myPop.mut_parameters();
-        std::cout << "Finished Evolution: " << 999 - myPop.getEvolution() << std::endl;
+        std::cout << "Finished Evolution: " << TOTAL_EVO - myPop.getEvolution() << std::endl;
     }
 
     

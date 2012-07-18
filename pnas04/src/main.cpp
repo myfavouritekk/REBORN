@@ -4,9 +4,9 @@
 
 int main (void) {
 
-    srand((unsigned int)time(NULL));
+    srand(1);
     //  initialization
-    Population myPop(200, TOTAL_EVO);
+    Population myPop(1000, TOTAL_EVO);
     myPop.init ();
 
     int i = 1;
@@ -21,7 +21,7 @@ int main (void) {
             i++;
             sum += i;
         }
-        myPop.mut_parameters();
+        myPop.mut_parameters_simAnneal();
         std::cout << "Finished Evolution: " << TOTAL_EVO - myPop.getEvolution() << std::endl;
     }
 

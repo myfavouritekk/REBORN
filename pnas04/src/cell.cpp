@@ -943,15 +943,23 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
 	currScore += PARAMETER_COMPLEX_SIZE * complex_size;
 	
 
-    
+    //print the time courses
     if (print) {
+        
+        //print time courses to file
+        std::ofstream timeCoursesFile;
+        timeCoursesFile.open("data.txt");
         for (int i = 0; i < numTargetNodes; i++) {
             for (int j = 0; j < time; j++) {
                 std::cout << this->currData[inputIndice[i]][j] << "\t";
+                timeCoursesFile << this->currData[inputIndice[i]][j] << "\t";
             }
             std::cout << std::endl;
+            timeCoursesFile << std::endl;
         }
+        timeCoursesFile.close();
     }
+
     
     for (int i = 0; i < size; i++) {
         delete [] this->currData[i];

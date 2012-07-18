@@ -25,7 +25,10 @@ class Cell {
 
         //mutation only changing dynamical parameters
         void mut_parameters();
-        
+            
+        //mutation only changing dynamical parameters using simulated annealing algorithm
+        void mut_parameters_simAnneal();
+    
         //mutation only for new nodes or new reactions
         void mut_topology();
     

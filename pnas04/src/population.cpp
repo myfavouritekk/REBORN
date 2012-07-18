@@ -116,6 +116,30 @@ void Population::mut_parameters(){
     evolution--;
 }
 
+//mutation only for kinetics using simulated annealing algorithm
+void Population::mut_parameters_simAnneal(){
+    Cell* curCell;
+    for (int i = 0; i < ncell; i++) {
+        Cell* aCell = new Cell(*(cells[i]));
+        cells[ncell + i] = aCell;
+        
+        curCell = cells[ncell + i];
+        curCell -> mut_parameters_simAnneal();
+        
+        curCell -> getScore(sfunc, ypoints, numind + numprot, numr, false);
+        cells[i] -> getScore(sfunc, ypoints, numind + numprot, numr, false);
+        
+        if (curCell -> getCurrScore() < cells[i] -> getCurrScore()) {
+            delete cells[i];
+            cells[i] = curCell;
+        }else {
+            delete curCell;
+        }
+    }
+    evolution--;
+}
+
+
 
 void quickSort(Cell* cells[],int num){
     

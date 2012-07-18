@@ -55,8 +55,11 @@ class Population {
         //population mutation for topology
         void mutation();
     
-        //pupulation mutation for kinects
+        //population mutation for kinetics
         void mut_parameters();
+    
+        //population mutation for kinetics using simulated annealing algorithm
+        void mut_parameters_simAnneal();
     
         //sort all cells after mutate parameters for 100 generations
         void sort();

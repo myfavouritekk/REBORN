@@ -766,6 +766,25 @@ void Cell:: mut_topology(){
 }
 	
 
+void Cell::mut_parameters_simAnneal(){
+    
+	if(!rlist.size()) return;
+	
+	//	all kinetic constantsto be modified
+	
+    std::vector<Reaction*>::iterator iter_reaction = rlist.begin();
+    std::vector<Reaction*>::iterator iter_reaction_end = rlist.end();
+    while (iter_reaction != iter_reaction_end) {
+        if((*iter_reaction) -> getRtype() != 8){
+            (*iter_reaction)->modifyForwardRate();
+            (*iter_reaction)->modifyReverseRate();
+        }
+        iter_reaction++;
+    }
+    
+	return;
+
+}
 
 
 //overall mutation method
@@ -925,7 +944,7 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
      */
     double totalScore = 0;
     for (int i = 0; i < numTargetNodes; i++) {
-        totalScore += sfunc.getScore(this->currData[inputIndice[i]],targetData[i],time);  //compare the RK data and the input data, using score function.
+        totalScore += sfunc.getScore(targetData[i],this->currData[inputIndice[i]],time);  //compare the RK data and the input data, using score function.
     }
     
     currScore = totalScore;

@@ -1,6 +1,7 @@
 #ifndef NODE_H
 #define NODE_H
 
+#include "consts.h"
 #include <string>
 #include <vector>
 #include <iostream>

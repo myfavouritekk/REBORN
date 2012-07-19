@@ -2,6 +2,7 @@
 #define SCOREFUNC_H
 
 
+#include "consts.h"
 #include <cmath>
 
 

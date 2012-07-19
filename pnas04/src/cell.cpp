@@ -741,26 +741,22 @@ void Cell::mut_add_postmod () {
 	return;
 }
 
-#define PROB1 0.5
-#define PROB2 1.0
-#define PROB3 0.4
-#define PROB4 0.1
-#define PROB5 0.1
+
 
 void Cell:: mut_parameters(){
-    if (rand() < RAND_MAX*PROB1) {
+    if (rand() < RAND_MAX*PROB_MUT_DEG_PROT) {
         mut_deg_prot();
     }
-    if (rand() < RAND_MAX*PROB2) {
+    if (rand() < RAND_MAX*PROB_MUT_KIN_CONST) {
         mut_kin_const();
 	}
 }
 void Cell:: mut_topology(){
     mut_add_regu();         // we want more regulation between genes and proteins, so topology-mutation always adds new regulation
-	if(rand() < PROB3 * RAND_MAX){
+	if(rand() < PROB_MUT_ADD_GENE * RAND_MAX){
 		mut_add_gene();
     }
-    if (rand() < PROB5 * RAND_MAX) {
+    if (rand() < PROB_MUT_ADD_POSTMOD * RAND_MAX) {
         mut_add_postmod();
     }
 }
@@ -790,19 +786,19 @@ void Cell::mut_parameters_simAnneal(){
 //overall mutation method
 void Cell::mutation(){
     //srand((unsigned int)time(NULL));
-    if (rand() < RAND_MAX*PROB1) {
+    if (rand() < RAND_MAX*PROB_MUT_DEG_PROT) {
         mut_deg_prot();
     }
-    if (rand() < RAND_MAX*PROB2) {
+    if (rand() < RAND_MAX*PROB_MUT_KIN_CONST) {
         mut_kin_const();
     }
-    if (rand() < RAND_MAX*PROB3) {
+    if (rand() < RAND_MAX*PROB_MUT_ADD_GENE) {
         mut_add_gene();
     }
     if (rand() < RAND_MAX*PROB4) {
         mut_add_regu();
     }
-    if (rand() < RAND_MAX*PROB5) {
+    if (rand() < RAND_MAX*PROB_MUT_ADD_POSTMOD) {
         mut_add_postmod();
     }
 }
@@ -899,21 +895,17 @@ void Cell::generateTimeCourses(double** targetData,int numTargetNodes, int time)
     runge_kutta(this->currData, nodes, rlist, numInducer, size, time);
     
     
+}ose();
 }
+
 
 
 /*get score using the sfunc as score function and change its own currScore member
  *fist: using Runge-Kutta method to generate the time course and store all them in currData
  *second: using the sfunction as a score function, and passing currData and targetData as parameters to calculate score
  *third: assign the score to currScore
- 
- 
  *prerequirements: nodes in the cell's "nodes" vector should be sorted by indice
  */
-#define PARAMETER_NODE_SIZE 0.2
-#define PARAMETER_COMPLEX_SIZE 0.05
-#define PARAMETER_REACTION_SIZE 0.1
- 
 void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, int time, bool print){
    
     int size = nodes.size();//  how many nodes in this cell

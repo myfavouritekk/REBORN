@@ -1,6 +1,7 @@
 #ifndef CELL_H
 #define CELL_H
 
+#include "consts.h"
 #include "node.h"
 #include "reaction.h"
 #include "scorefunction.h"
@@ -48,6 +49,11 @@ class Cell {
         //generate time courses and put them in currData
         void generateTimeCourses(double** targetData,int numTargetNodes, int x);
         
+    
+        //pring time course to a file with the name of a string parameter
+        void printCurrDataToAFile(std::string name, int time);
+    
+    
         //generate regulatory relationships
         void genRegulatoryRelationships();
     

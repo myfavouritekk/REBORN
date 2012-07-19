@@ -116,7 +116,7 @@ void Reaction::setReversible(const bool& rev) {
 void Reaction::modifyForwardRate () {
     //srand((unsigned int)time(NULL));
     double rn = (double)rand() / RAND_MAX;
-    rn = rn * 0.45 + 0.8; // rn is uniform in [0.8, 1.25]
+    rn = rn * ((1 / RATE_MULTI) - RATE_MULTI) + RATE_MULTI; // rn is uniform in [0.8, 1.25]
     
     forwardRate = forwardRate * rn;
     /*
@@ -130,7 +130,7 @@ void Reaction::modifyReverseRate () {
     //srand((unsigned int)time(NULL));
     double rn = (double)rand()/RAND_MAX;
     
-    rn = rn * 0.45 + 0.8;// rn is uniform in [0.8, 1.25]
+    rn = rn * ((1 / RATE_MULTI) - RATE_MULTI) + RATE_MULTI;// rn is uniform in [0.8, 1.25]
     
     reverseRate = reverseRate * rn;
     return;

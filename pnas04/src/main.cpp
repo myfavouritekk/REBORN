@@ -1,6 +1,6 @@
 #include "population.h"
 #include <ctime>
-#define TOTAL_EVO 750
+#include "consts.h"
 
 int main (void) {
 

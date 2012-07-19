@@ -18,6 +18,7 @@
  */
 
 #include "node.h"
+#include "consts.h"
 
 #include <algorithm>
 #include <vector>

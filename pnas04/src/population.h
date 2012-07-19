@@ -1,6 +1,7 @@
 #ifndef POPULATION_H
 #define POPULATION_H
 
+#include "consts.h"
 #include "cell.h"
 #include "scorefunction.h"
 #include <iostream>

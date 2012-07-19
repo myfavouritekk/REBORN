@@ -497,6 +497,13 @@ void Population::output(){
         cout << "Cell " << i+1 << endl;
         currCell = cells[i];
         currCell->generateTimeCourses(ypoints, numind + numprot, numr);
+        
+        int generation = TOTAL_EVO - evolution + 1;// current generation of whole evolution process
+        int ranking = i + 1; //ranking of this cell
+        std::stringstream name;
+        name << "generation_" << generation << "_cell_" << ranking << ".txt";
+        currCell -> printCurrDataToAFile(name.str(), numr);
+        
         currCell->description(numr);
         
     }

@@ -895,7 +895,25 @@ void Cell::generateTimeCourses(double** targetData,int numTargetNodes, int time)
     runge_kutta(this->currData, nodes, rlist, numInducer, size, time);
     
     
-}ose();
+}
+
+/*function: pring time course to a file with the name of a string parameter
+ *prerequisite: currData must be generated, so use this method after generateTimeCourses method, and before description method
+ *parameter: "name" contains the evolution generation and rankin of this cell, "time" is the total points of each time course
+ */
+ void Cell::printCurrDataToAFile(std::string name, int time){
+    
+    //print time courses to file
+    std::ofstream timeCoursesFile;
+    timeCoursesFile.open(name.c_str());
+    int nodeSize = nodes.size();
+    for (int i = 0; i < nodeSize; i++) {
+        for (int j = 0; j < time; j++) {
+            timeCoursesFile << this->currData[i][j] << "\t";
+        }
+        timeCoursesFile << std::endl;
+    }
+    timeCoursesFile.close();
 }
 
 

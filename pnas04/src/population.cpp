@@ -82,7 +82,7 @@ void Population::growth(){;
 //mutation only for topology
 void Population::mutation(){
     Cell* currCell;
-    for(int i = 0; i < ncell; i++){
+    for(int i = 10; i < ncell; i++){
         
         currCell = cells[i];
         
@@ -380,7 +380,7 @@ void Population::genXMLFormat(){
         }
     }
     xmlKeepBlanksDefault(0);
-    xmlSaveFormatFileEnc("XMLOutput.xml", outputXML, NULL, 1);
+    xmlSaveFormatFileEnc("population.xml", outputXML, NULL, 1);
     xmlFreeDoc(outputXML);
 }
 

@@ -12,6 +12,10 @@
 //Total evolution number of the program
 #define TOTAL_EVO 750
 
+//Total number of cells
+#define POPULATION 100
+
+
 //parameters for mutation in Cell
 #define PROB_MUT_DEG_PROT 0.5
 #define PROB_MUT_KIN_CONST 1.0

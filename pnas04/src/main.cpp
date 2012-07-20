@@ -6,7 +6,7 @@ int main (void) {
 
     srand(1);
     //  initialization
-    Population myPop(1000, TOTAL_EVO);
+    Population myPop(POPULATION, TOTAL_EVO);
     myPop.init ();
 
     int i = 1;

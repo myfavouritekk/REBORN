@@ -126,7 +126,7 @@ Cell::Cell(Cell &cell){
     }
     
     inputIndice = cell.inputIndice;
-    
+    rankings = cell.rankings;
 }
 
 
@@ -200,6 +200,12 @@ bool Cell::operator==(Cell& aCell){
     }
     return true;
 }
+
+//add ranking to the rankings vector
+void Cell::addRanking(int ranking){
+    rankings.push_back(ranking);
+}
+
 
 /*
  *five types of mutation:
@@ -847,7 +853,11 @@ void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int 
 			double delta = (nodes[currSerie]->ode)(rlist,tempY1,currStep + 1.);
             k4[currSerie] = (currSerie < numInducers) ? 0. : delta;
         }
-		for (currSerie = numInducers; currSerie < series; currSerie++) {
+		for (currSerie = 0; currSerie < series; currSerie++) {
+            if (currSerie < numInducers && fabs(data[currSerie][currStep] - 0) < 0.000001) {
+                continue;
+            }
+            
             data[currSerie][currStep + 1] = y[currSerie] + 1 / 6.0 * (k1[currSerie]+ 2 * k2[currSerie] + 2 * k3[currSerie] + k4[currSerie]);
             if (data[currSerie][currStep + 1] < 0.) {//in case of negative density
                 data[currSerie][currStep + 1] = 0;

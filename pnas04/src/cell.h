@@ -62,6 +62,9 @@ class Cell {
     
         //get rlist vector
         std::vector<Reaction*>* getRlistVector();
+        
+        //add ranking to rankings vector
+        void addRanking(int ranking);
     
     private:
 
@@ -104,6 +107,7 @@ class Cell {
         vector<Node*> nodes;//contain all the species within a cell
         vector<Reaction*> rlist;	//	document operations made to develop the network
 		vector<int> inputIndice;   //indice of input sequences, including inducers and proteins, for scoring function
+        std::vector<int> rankings;  //vector to store every ranking of this cell
 };
 
 #endif

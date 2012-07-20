@@ -180,15 +180,22 @@ void quickSort(Cell* cells[],int num){
 }
 
 
-//sort after changing kinects for 100 generations
+//sort after changing kinects for several generations
 void Population::sort(){
     quickSort(cells, ncell);
+    for (int i = 0; i < ncell; i++) {
+        cells[i]->addRanking(i + 1); //add ranking i to the ith cell
+    }
 }
 
 
 //for seclction phase
 void Population::selection(){
     quickSort(cells,ncell*2);
+    
+    for (int i = 0; i < ncell; i++) {
+        cells[i]->addRanking(i + 1); //add ranking i to the ith cell
+    }
     
     //cells with lower score will extinct
     for (int i = ncell; i < 2 * ncell; i++) {
@@ -197,7 +204,7 @@ void Population::selection(){
         }
     }
     
-    std::cout << "Finished Evolution: " << 1000 - evolution << std::endl;
+    std::cout << "Finished Evolution: " << TOTAL_EVO - evolution + 1 << std::endl;
     std::cout << "BestScore: " << cells[0]->getCurrScore() << std::endl;
 }
 

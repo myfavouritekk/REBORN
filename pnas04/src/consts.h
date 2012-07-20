@@ -13,7 +13,7 @@
 #define TOTAL_EVO 750
 
 //Total number of cells
-#define POPULATION 100
+#define POPULATION 1000
 
 
 //parameters for mutation in Cell

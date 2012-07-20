@@ -1019,6 +1019,18 @@ using namespace std;
 //description method
 void Cell::description(int time){
     
+    //print score
+    cout << " Score: " << currScore << endl;
+    
+    //print rankings
+    cout << " Rankings: ";
+    vector<int>::iterator iter_ranking = rankings.begin();
+    while (iter_ranking != rankings.end()) {
+        cout << *iter_ranking << "\t";
+        iter_ranking++;
+    }
+    cout << endl;
+    
     //print nodes
     cout << " Nodes:" << endl;
     vector<Node*>::iterator iter = nodes.begin();

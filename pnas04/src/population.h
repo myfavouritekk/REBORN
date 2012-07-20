@@ -62,7 +62,7 @@ class Population {
         //population mutation for kinetics using simulated annealing algorithm
         void mut_parameters_simAnneal();
     
-        //sort all cells after mutate parameters for 100 generations
+        //sort all cells after mutate parameters for several generations
         void sort();
     
         //for selection phase

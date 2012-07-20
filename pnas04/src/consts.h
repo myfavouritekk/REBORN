@@ -10,7 +10,7 @@
 #define PNAS04Team_consts_h
 
 //Total evolution number of the program
-#define TOTAL_EVO 750
+#define TOTAL_EVO 999
 
 //Total number of cells
 #define POPULATION 1000

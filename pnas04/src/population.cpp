@@ -266,7 +266,38 @@ void Population::readDynamics (const string& fn) {
 void Population::readDynamicsFromConsole(){
     
 }
-
+/*Population::genXMLFormat()
+ *purpose: generate .xml file to store all the information of current Population
+ *details: the xml output reads like this:
+ *<Survivals>
+    <Cell>
+        <Index> cell index </Index>
+        <Nodes>
+            <Node>
+                <Index> node index </Index>
+                <NodeString> node string </NodeString>
+            </Node>
+        </Nodes>
+        <Reaction List>
+            <Reaction>
+                <Type> reaction type </Type>
+                <Reactants>
+                    <Node> node string </Node>
+                </Reactants>
+                <Modifiers>
+                    <Node> node string </Node>
+                </Modifiers>
+                <Products>
+                    <Node> node string </Node>
+                </Products>
+                <Forward Rate> forward rate </Forward Rate>
+                <Reverse Rate> reverse rate </Reverse Rate>
+            </Reaction>
+        </Reaction List>
+    </Cell>
+  </Survivals>
+ *
+ */
 #define BAD_CAST (xmlChar *)
 void Population::genXMLFormat(){
     xmlDocPtr outputXML = xmlNewDoc(BAD_CAST"1.0");

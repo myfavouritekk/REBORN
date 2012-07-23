@@ -555,6 +555,7 @@ void Population::output(){
     
     
 }
+    
 void Population:: genSBMLFormat(){
 	
 	// creat unit
@@ -563,7 +564,7 @@ void Population:: genSBMLFormat(){
 	 for (int i = 0; i < ncell; i++) {
 		 
 		 // declear model
-		 stringstream ss;
+		 std::stringstream ss;
 		 ss << "SBMLMOD" << i;
 		 SBMLDocument* sbmlDoc = new SBMLDocument(3,1);
 	     Model* model = sbmlDoc -> createModel();
@@ -578,7 +579,7 @@ void Population:: genSBMLFormat(){
         
 		// define species for everycell
 		for (int j = 0; iter_node != iter_node_end; j++) {
-			  stringstream ss;
+			  std::stringstream ss;
 			  ss << "nodes" << j;
 			  Species* sp;
 			  sp = model -> createSpecies();
@@ -591,18 +592,18 @@ void Population:: genSBMLFormat(){
 		std::vector<Reaction*>::iterator iter_reaction = cells[i]->getRlistVector()->begin();
         std::vector<Reaction*>::iterator iter_reaction_end = cells[i]->getRlistVector()->end();
 		for(int j = 0; iter_reaction != iter_reaction_end; j++){
-			stringstream reactionName;
+            std::stringstream reactionName;
 			reactionName << "reaction" << j;
 			LIBSBML_CPP_NAMESPACE:: Reaction* reaction;
 			reaction = model -> createReaction();
 			reaction -> setId(reactionName.str());
 			SpeciesReference* spr;
 			ModifierSpeciesReference* mspr;
-			iter_node = (*iter_reaction)->getReactantVector()->begin();
-            iter_node_end = (*iter_reaction)->getReactantVector()->end();
+			iter_node = (*iter_reaction)->getReactantsVector()->begin();
+            iter_node_end = (*iter_reaction)->getReactantsVector()->end();
 			while(iter_node != iter_node_end){
 				spr = reaction -> createReactant();
-				stringstream reactantName;
+				std::stringstream reactantName;
 				reactantName << "nodes" << ((*iter_node) -> getNindex());
 				spr -> setSpecies(reactantName.str());
 				iter_node ++;
@@ -611,7 +612,7 @@ void Population:: genSBMLFormat(){
             iter_node_end = (*iter_reaction)->getModifiersVector()->end();
             while (iter_node != iter_node_end) {
 				mspr = reaction -> createModifier();
-				stringstream modifierName;
+				std::stringstream modifierName;
 				modifierName << "nodes" << ((*iter_node) -> getNindex());
 				mspr -> setSpecies(modifierName.str());
 				iter_node ++;
@@ -620,18 +621,18 @@ void Population:: genSBMLFormat(){
             iter_node_end = (*iter_reaction)->getProductsVector()->end();
             while (iter_node != iter_node_end) {
 				spr = reaction -> createProduct();
-				stringstream productName;
-				productName << "nodes" << ((*iter_node) -> getNindex);
+				std::stringstream productName;
+				productName << "nodes" << ((*iter_node) -> getNindex());
 				spr -> setSpecies(productName.str());
 				iter_node ++;
 			}
 			Parameter* para;
             KineticLaw* kl;
 			
-					
+		}
 
-
-
+     }
+}
 
 
 

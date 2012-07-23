@@ -85,6 +85,10 @@ class Population {
         //generating XML output format
         void genXMLFormat();
        
+    
+        //generating SBML output format
+        void genSBMLFormat();
+        
     private:
 
 		//	dynamics of network nodes

@@ -23,6 +23,8 @@
 #include <algorithm>
 #include <vector>
 
+namespace ustc{
+
 class Reaction{
 
     public:
@@ -93,6 +95,6 @@ class Reaction{
         std::vector<Node*> modifiers;
         std::vector<Node*> products;
 };
-
+} //namespace ustc
 
 #endif

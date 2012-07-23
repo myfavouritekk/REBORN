@@ -1,5 +1,6 @@
 #include "scorefunction.h"
 
+namespace ustc{
 
 //Constructor
 ScoreFunc::ScoreFunc(int _type){
@@ -131,3 +132,6 @@ double ScoreFunc::getScore_5(double* data1, double* data2,int  n){
 }
 
 */
+
+
+}   //namespace ustc

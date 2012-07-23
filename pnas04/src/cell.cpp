@@ -1,6 +1,6 @@
 #include "cell.h"
 
-
+namespace ustc{
 
 /*constructor:
  input: _numind(number of inducers); _numprot(number of proteins)
@@ -1162,7 +1162,7 @@ void Cell::genRegulatoryRelationships(){
 }
 
 
-
+}   //namespace ustc
 				
 		
 		

@@ -6,7 +6,7 @@ int main (void) {
 
     srand(1);
     //  initialization
-    Population myPop(POPULATION, TOTAL_EVO);
+    ustc::Population myPop(POPULATION, TOTAL_EVO);
     myPop.init ();
 
     int i = 1;

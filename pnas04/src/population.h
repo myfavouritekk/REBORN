@@ -13,6 +13,8 @@
 #pragma comment(lib,"libsbml.lib")
 #pragma comment(lib,"libxml2.lib")
 
+namespace ustc{
+
 class Population {
 
     public:
@@ -110,4 +112,6 @@ class Population {
         ScoreFunc sfunc;
 };
 
+}   //namespace ustc
+    
 #endif

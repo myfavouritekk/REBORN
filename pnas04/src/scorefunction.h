@@ -5,6 +5,8 @@
 #include "consts.h"
 #include <cmath>
 
+namespace ustc{
+
 
 class ScoreFunc{
     
@@ -35,6 +37,6 @@ class ScoreFunc{
 	};
 
 
-
+}   //namespace ustc
 
 #endif

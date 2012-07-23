@@ -10,6 +10,8 @@
 #include <cmath>
 #include <fstream>
 
+namespace ustc{
+
 class Cell {
 
     public:
@@ -109,5 +111,5 @@ class Cell {
 		vector<int> inputIndice;   //indice of input sequences, including inducers and proteins, for scoring function
         std::vector<int> rankings;  //vector to store every ranking of this cell
 };
-
+}   //namespace ustc
 #endif

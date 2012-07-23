@@ -1,5 +1,5 @@
 #include "reaction.h"
-
+namespace ustc{
 Reaction::Reaction ()
 {}
 
@@ -339,6 +339,6 @@ void Reaction::description(int reactionIndex){
     
 }
 
-
+}//namespace ustc
 
 

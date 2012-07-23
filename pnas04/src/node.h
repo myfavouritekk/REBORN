@@ -18,6 +18,8 @@ using std::vector;
  * Each one of the six types, Inducer 1, Gene 2, Protein 3, Inducer/Protein Complex 4, Gene/Protein Complex 5, Pure Protein Complex 6, 
  * has one associated number, 1, 2, 3, 4, 5, 6, respectively.
  */
+namespace ustc{
+
 
 class Reaction;
 
@@ -59,4 +61,6 @@ class Node {
 		vector<Node*> components;	//	nodes constituting the complex, the first component, components[0], is a gene or nil
 };
 
+    
+}   //namespace ustc
 #endif

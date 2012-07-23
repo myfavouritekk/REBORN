@@ -1,5 +1,7 @@
 #include "node.h"
+#include "reaction.h"
 
+namespace ustc{
 
 
 void quickSort(vector<Node*> *_components){
@@ -426,5 +428,5 @@ double Node::ode(std::vector<Reaction*> reactionList, double *y, double t){
     return result;
 }
 
-
+}   //namespace ustc
 

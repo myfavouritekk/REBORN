@@ -556,4 +556,41 @@ void Population::output(){
     
     
 }
+void Population:: genSBMLFormat(){
+	
+	// creat unit
+
+	// define sp
+	 for (int i = 0; i < ncell; i++) {
+		 
+		 // declear model
+		 stringstream ss;
+		 ss << "SBMLMOD" << i;
+		 SBMLDocument* sbmlDoc = new SBMLDocument(3,1);
+	     Model* model = sbmlDoc -> createModel();
+	     model -> setId(ss.str());
+		
+		 // creat compartment
+		const string compName = "comp";
+		Compartment* comp = model->createCompartment();
+		comp->setId(compName); 
+		std::vector<Node*>::iterator iter_node = cells[i]->getNodesVector()->begin();
+        std::vector<Node*>::iterator iter_node_end = cells[i]->getNodesVector()->end();
+        
+		// define species for everycell
+		for (int j = 0; iter_node != iter_node_end; j++) {
+			  stringstream ss;
+			  ss << "nodes" << j;
+			  Species* sp;
+			  sp = model -> createSpecies();
+			  sp -> setCompartment(compName);
+			  sp -> setId(ss.str());
+              iter_node++;
+		 }
+
+		// define reaction
+
+
+
+
 

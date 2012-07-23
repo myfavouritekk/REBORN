@@ -9,6 +9,8 @@
 #include <fstream>
 #include <libxml/tree.h>
 #include <libxml/parser.h>
+#include <sbml/SBMLTypes.h>
+#pragma comment(lib,"libsbml.lib")
 #pragma comment(lib,"libxml2.lib")
 
 class Population {

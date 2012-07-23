@@ -2,7 +2,6 @@
 
 #define MAXSTEPS 1000
 
-using namespace std;
 void runge_kutta(double data[][MAXSTEPS], double (*odes[])(double y[],double x), int series, int steps)
 {//100 is steps
 	

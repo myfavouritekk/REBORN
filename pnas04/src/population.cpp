@@ -218,25 +218,24 @@ bool Population::isTerminate(){
 
 
 //reading dynamic data set
-using namespace std;
 void Population::readDynamics (const string& fn) {
 	/*
 	 * READ INDUCER
 	 */
-    ifstream infile;
+    std::ifstream infile;
     infile.open (fn.c_str());
     if (!infile) {
-        cerr << "Error: unable to open input file: " << infile << endl;
+        std::cerr << "Error: unable to open input file: " << infile << std::endl;
 		exit(1);
     }
 
 	//	number of xpoints, inducers and proteins
 	infile >>  numr >> numind >> numprot;
-    cout << numr << endl << numind << endl << numprot << endl;
-    if (infile.bad ()) throw runtime_error ("IO stream corrupted");
-	if (infile.fail ()) throw runtime_error ("bad data");
+    std::cout << numr << std::endl << numind << std::endl << numprot << std::endl;
+    if (infile.bad ()) throw std::runtime_error ("IO stream corrupted");
+	if (infile.fail ()) throw std::runtime_error ("bad data");
 	if (!numr) {
-		cerr << "Error: empty data" << endl;
+		std::cerr << "Error: empty data" << std::endl;
 		exit(1);
 	}
 	
@@ -251,14 +250,14 @@ void Population::readDynamics (const string& fn) {
     }
 	for(int ir = 0; ir < numr; ir++) {
 		infile >> xpoints[ir];
-        cout << xpoints[ir] << "\t";
+        std::cout << xpoints[ir] << "\t";
 		for(int ic = 0; ic < numy; ic++) {
 			infile >> ypoints[ic][ir];
-            cout << ypoints[ic][ir] << "\t";
-			if (infile.bad ()) throw runtime_error ("IO stream corrupted");
-			if (infile.fail ()) throw runtime_error ("bad data");
+            std::cout << ypoints[ic][ir] << "\t";
+			if (infile.bad ()) throw std::runtime_error ("IO stream corrupted");
+			if (infile.fail ()) throw std::runtime_error ("bad data");
 		}
-        cout << endl;
+        std::cout << std::endl;
 	}
 
 	//	for each cell, initialization
@@ -532,7 +531,7 @@ void Population::output(){
     
     Cell* currCell;
     for (int i = 0; i < ncell; i++) {
-        cout << "Cell " << i+1 << endl;
+        std::cout << "Cell " << i+1 << std::endl;
         currCell = cells[i];
         currCell->generateTimeCourses(ypoints, numind + numprot, numr);
         
@@ -548,9 +547,9 @@ void Population::output(){
     
     //plot the best result
     currCell = cells[0];
-    cout << "Best Time Courses:" << endl;
+    std::cout << "Best Time Courses:" << std::endl;
     currCell->getScore(sfunc, ypoints, numind + numprot, numr, true);
-    cout << "Best Cell:" << endl;
+    std::cout << "Best Cell:" << std::endl;
     currCell->generateTimeCourses(ypoints, numind + numprot, numr);
     currCell->description(numr);
     

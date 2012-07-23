@@ -1015,31 +1015,30 @@ double Cell::getCurrScore(){
 
 
 
-using namespace std;
 //description method
 void Cell::description(int time){
     
     //print score
-    cout << " Score: " << currScore << endl;
+    std::cout << " Score: " << currScore << std::endl;
     
     //print rankings
-    cout << " Rankings: ";
+    std::cout << " Rankings: ";
     vector<int>::iterator iter_ranking = rankings.begin();
     while (iter_ranking != rankings.end()) {
-        cout << *iter_ranking << "\t";
+        std::cout << *iter_ranking << "\t";
         iter_ranking++;
     }
-    cout << endl;
+    std::cout << std::endl;
     
     //print nodes
-    cout << " Nodes:" << endl;
+    std::cout << " Nodes:" << std::endl;
     vector<Node*>::iterator iter = nodes.begin();
     while (iter != nodes.end()) {
-        cout << "  Node " << (*iter)->getNindex() << ": " << (*iter)->getNstring() << endl;
+        std::cout << "  Node " << (*iter)->getNindex() << ": " << (*iter)->getNstring() << std::endl;
         iter++;
     }
     
-    cout << endl << endl << " Reactions:" << endl;
+    std::cout << std::endl << std::endl << " Reactions:" << std::endl;
     vector<Reaction*>::iterator iter_reaction = rlist.begin();
     int index = 1;
     while (iter_reaction != rlist.end()) {
@@ -1049,7 +1048,7 @@ void Cell::description(int time){
     }
     
     
-    cout << "Regulatory Matrix: " << endl;
+    std::cout << "Regulatory Matrix: " << std::endl;
     genRegulatoryRelationships();
     
     for (int i = 0; i < nodes.size(); i++) {
@@ -1156,7 +1155,7 @@ void Cell::genRegulatoryRelationships(){
         for (int j = 0; j < numOfProtLike; j++) {
             std::cout << regulatoryMatrix[i][j] << "\t";
         }
-        std::cout << endl;
+        std::cout << std::endl;
     }
 	delete [] indexOfProtLike;
 	delete [] indexOfGene;

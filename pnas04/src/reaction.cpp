@@ -272,70 +272,69 @@ std::vector<Node*>* Reaction::getProductsVector(){
 }
 
 
-using namespace std;
 //output method
 void Reaction::description(int reactionIndex){
     
-    cout << "  Reaction " << reactionIndex << ":" << endl;
+    std::cout << "  Reaction " << reactionIndex << ":" << std::endl;
     
     //Print Type:
-    cout << "   Type: " << "Type " << rtype << "  ";
+    std::cout << "   Type: " << "Type " << rtype << "  ";
     switch (rtype) {
         case 0:
-            cout << "Transcription";
+            std::cout << "Transcription";
             break;
         case 1:
-            cout << "Protein Degradation";
+            std::cout << "Protein Degradation";
             break;
         case 2:
-            cout << "Binding";
+            std::cout << "Binding";
             break;
         case 3:
-            cout << "Modification";
+            std::cout << "Modification";
             break;
         case 4:
-            cout << "Partial Degradation";
+            std::cout << "Partial Degradation";
             break;
         case 5:
-            cout << "Dimerization";
+            std::cout << "Dimerization";
             break;
         case 6:
-            cout << "Catalytic Degradation";
+            std::cout << "Catalytic Degradation";
             break;
         case 7:
-            cout << "Partial Catalytic Degradation";
+            std::cout << "Partial Catalytic Degradation";
             break;
         default:
             break;
     }
-    cout << endl;
+    std::cout << std::endl;
     
     //Print reactant, modifiers and products
-    cout << "   Reactants: ";
+    std::cout << "   Reactants: ";
     vector<Node*>::iterator iter = reactants.begin();
     while (iter != reactants.end()) {
-        cout << (*iter)->getNstring() << "\t";
+        std::cout << (*iter)->getNstring() << "\t";
         iter++;
     }
-    cout << endl;
-    cout << "   Modifiers: ";
+    std::cout << std::endl;
+    std::cout << "   Modifiers: ";
     iter = modifiers.begin();
     while (iter != modifiers.end()) {
-        cout << (*iter)->getNstring() << "\t";
+        std::cout << (*iter)->getNstring() << "\t";
         iter++;
     }
-    cout << endl;
-    cout << "   Products: ";
+    std::cout << std::endl;
+    std::cout << "   Products: ";
     iter = products.begin();
     while (iter != products.end()) {
-        cout << (*iter)->getNstring() << "\t";
+        std::cout << (*iter)->getNstring() << "\t";
         iter++;
     }
-    cout << endl;
+    std::cout << std::endl;
     
     //Print kinect rates
-    cout << "   Forward rate: " << forwardRate << endl;
-    cout << "   Reverse rate: " << reverseRate << endl << endl;
+    std::cout << "   Forward rate: " << forwardRate << std::endl;
+    std::cout << "   Reverse rate: " << reverseRate << std::endl << std::endl;
     
     
 }

@@ -564,136 +564,134 @@ void Population:: genSBMLFormat(){
 	 for (int i = 0; i < ncell; i++) {
 		 
 		 // declear model
-		 std::stringstream sbmlName;
-		 sbmlName << "SBMLMOD_" << i;
+		 std::stringstream ss;
+		 ss << "SBMLMOD" << i;
 		 SBMLDocument* sbmlDoc = new SBMLDocument(3,1);
 	     Model* model = sbmlDoc -> createModel();
-	     model -> setId(sbmlName.str());
-         
+	     model -> setId(ss.str());
+		
 		 // creat compartment
-         const string compName = "cell";
-         Compartment* comp = model->createCompartment();
-         comp->setId(compName);
-         std::vector<Node*>::iterator iter_node = cells[i]->getNodesVector()->begin();
-         std::vector<Node*>::iterator iter_node_end = cells[i]->getNodesVector()->end();
-         
-         // define species for everycell
-         for (int j = 0; iter_node != iter_node_end; j++) {
-             Species* sp;
-             sp = model -> createSpecies();
-             sp -> setCompartment(compName);
-             sp -> setId((*iter_node) -> getNstring());
-             iter_node++;
+		const string compName = "comp";
+		Compartment* comp = model->createCompartment();
+		comp->setId(compName); 
+		std::vector<Node*>::iterator iter_node = cells[i]->getNodesVector()->begin();
+        std::vector<Node*>::iterator iter_node_end = cells[i]->getNodesVector()->end();
+        
+		// define species for everycell
+		for (int j = 0; iter_node != iter_node_end; j++) {
+			  Species* sp;
+			  sp = model -> createSpecies();
+			  sp -> setCompartment(compName);
+			  sp -> setId((*iter_node) -> getNstring());
+              iter_node++;
 		 }
-         
-         // define reaction
-         std::vector<Reaction*>::iterator iter_reaction = cells[i]->getRlistVector()->begin();
-         std::vector<Reaction*>::iterator iter_reaction_end = cells[i]->getRlistVector()->end();
-         for(int j = 0; iter_reaction != iter_reaction_end; j++){
-             std::stringstream reactionName;
-             reactionName << "reaction" << j;
-             LIBSBML_CPP_NAMESPACE:: Reaction* reaction;
-             reaction = model -> createReaction();
-             reaction -> setId(reactionName.str());
-             SpeciesReference* spr;
-             ModifierSpeciesReference* mspr;
-             KineticLaw* k1;
-             k1  = reaction -> createKineticLaw();
-             iter_node = (*iter_reaction)->getReactantsVector()->begin();
-             iter_node_end = (*iter_reaction)->getReactantsVector()->end();
-             while(iter_node != iter_node_end){
-                 spr = reaction -> createReactant();
-                 spr -> setSpecies((*iter_node) -> getNstring());
-                 iter_node ++;
-             }
-             iter_node = (*iter_reaction)->getModifiersVector()->begin();
-             iter_node_end = (*iter_reaction)->getModifiersVector()->end();
-             while (iter_node != iter_node_end) {
-                 mspr = reaction -> createModifier();
-                 mspr -> setSpecies((*iter_node) -> getNstring());
-                 iter_node ++;
-             }
-             iter_node = (*iter_reaction)->getProductsVector()->begin();
-             iter_node_end = (*iter_reaction)->getProductsVector()->end();
-             while (iter_node != iter_node_end) {
-                 spr = reaction -> createProduct();
-                 spr -> setSpecies((*iter_node) -> getNstring());
-                 iter_node ++;
-             }
-             
-             //writing Abstract Syntax Tree to repressent kinetic law
-             int size = (*(*iter_reaction) -> getReactantsVector()).size();
-             iter_node = (*iter_reaction)->getReactantsVector()->begin();
-             ASTNode* temp = new ASTNode(AST_TIMES);
-             ASTNode* reactant = new ASTNode(AST_NAME);
-             reactant -> setName((*iter_node) -> getNstring().c_str());
-             temp -> addChild(reactant);
-             iter_node ++;
-             for (int i = 0; i < (size -1); i++){
-                 ASTNode* reactant = new ASTNode(AST_NAME);
-                 reactant -> setName((*iter_node) -> getNstring().c_str());
-                 temp -> addChild(reactant);
-                 ASTNode* temp2 = new ASTNode(AST_TIMES);
-                 temp2 -> addChild(temp);
-                 temp = temp2;
-             }
-             // exist modifier
-             if((*iter_reaction) -> getModifiersSize()){
-                 ASTNode* modifier = new ASTNode(AST_NAME);
-                 iter_node = (*iter_reaction)->getModifiersVector()->begin();
-                 modifier -> setName((*iter_node) -> getNstring().c_str());
-                 temp -> addChild(modifier);
-                 ASTNode* temp2 = new ASTNode(AST_TIMES);
-                 temp2 -> addChild(temp);
-                 temp = temp2;
-             }
-             ASTNode* Kon = new ASTNode(AST_NAME);
-             Kon -> setName("Kon");
-             temp -> addChild(Kon);
-             // exist reversereaction
-             if((*iter_reaction) -> isReversible()){
-                 int size = (*(*iter_reaction) -> getProductsVector()).size();
-                 iter_node = (*iter_reaction)->getProductsVector()->begin();
-                 ASTNode* temp3 = new ASTNode(AST_TIMES);
-                 ASTNode* product = new ASTNode(AST_NAME);
-                 product -> setName((*iter_node) -> getNstring().c_str());
-                 temp3 -> addChild(product);
-                 iter_node ++;
-                 for (int i = 0; i < (size -1); i++){
-                     ASTNode* product = new ASTNode(AST_NAME);
-                     product -> setName((*iter_node) -> getNstring().c_str());
-                     temp3 -> addChild(reactant);
-                     ASTNode* temp4 = new ASTNode(AST_TIMES);
-                     temp4 -> addChild(temp3);
-                     temp3 = temp4;
-                 }
-                 ASTNode* Koff = new ASTNode(AST_NAME);
-                 Koff -> setName("Koff");
-                 temp3 -> addChild(Koff);
-                 ASTNode* math = new ASTNode(AST_MINUS);
-                 math -> addChild(temp);
-                 math -> addChild(temp3);
-                 k1 -> setMath(math);
-                 delete math;
-             }
-             else{
-                 k1 -> setMath(temp);
-             }
-             delete temp;
-             
-             iter_reaction++;
-         }
-         SBMLWriter sbmlWriter;
-         
-         bool result = sbmlWriter.writeSBML(sbmlDoc,sbmlName.str());
-         
-         if ( result ){
-             std::cout << "Wrote file \"" << sbmlName.str() << "\"" << std:: endl;
-         }
-         else{
-             std::cerr << "Failed to write \"" << sbmlName.str() << "\"" <<std:: endl;
-         }
-         
+
+		// define reaction
+		std::vector<Reaction*>::iterator iter_reaction = cells[i]->getRlistVector()->begin();
+        std::vector<Reaction*>::iterator iter_reaction_end = cells[i]->getRlistVector()->end();
+		for(int j = 0; iter_reaction != iter_reaction_end; j++){
+            std::stringstream reactionName;
+			reactionName << "reaction" << j;
+			LIBSBML_CPP_NAMESPACE:: Reaction* reaction;
+			reaction = model -> createReaction();
+			reaction -> setId(reactionName.str());
+			SpeciesReference* spr;
+			ModifierSpeciesReference* mspr;
+            KineticLaw* k1;
+			k1  = reaction -> createKineticLaw();
+			iter_node = (*iter_reaction)->getReactantsVector()->begin();
+            iter_node_end = (*iter_reaction)->getReactantsVector()->end();
+			while(iter_node != iter_node_end){
+				spr = reaction -> createReactant();
+				spr -> setSpecies((*iter_node) -> getNstring());
+				iter_node ++;
+			}
+			iter_node = (*iter_reaction)->getModifiersVector()->begin();
+            iter_node_end = (*iter_reaction)->getModifiersVector()->end();
+            while (iter_node != iter_node_end) {
+				mspr = reaction -> createModifier();
+				mspr -> setSpecies((*iter_node) -> getNstring());
+				iter_node ++;
+			}
+			iter_node = (*iter_reaction)->getProductsVector()->begin();
+            iter_node_end = (*iter_reaction)->getProductsVector()->end();
+            while (iter_node != iter_node_end) {
+				spr = reaction -> createProduct();
+				spr -> setSpecies((*iter_node) -> getNstring());
+				iter_node ++;
+			}
+			ASTNode* temp = new ASTNode(AST_TIMES);
+			if((*iter_reaction) -> getRtype()){
+				int size = (*(*iter_reaction) -> getReactantsVector()).size();
+				iter_node = (*iter_reaction)->getReactantsVector()->begin();
+				ASTNode* reactant = new ASTNode(AST_NAME);
+				reactant -> setName((*iter_node) -> getNstring().c_str());
+				temp -> addChild(reactant);
+				iter_node ++;
+				for (int i = 0; i < (size -1); i++){
+					ASTNode* reactant = new ASTNode(AST_NAME);
+					reactant -> setName((*iter_node) -> getNstring().c_str());
+					temp -> addChild(reactant);
+					ASTNode* temp2 = new ASTNode(AST_TIMES);
+					temp2 -> addChild(temp);
+					temp = temp2;
+				}
+			}
+			// exist modifier
+			if((*iter_reaction) -> getModifiersSize()){
+				ASTNode* modifier = new ASTNode(AST_NAME);
+				iter_node = (*iter_reaction)->getModifiersVector()->begin();
+				modifier -> setName((*iter_node) -> getNstring().c_str());
+				temp -> addChild(modifier);
+				ASTNode* temp2 = new ASTNode(AST_TIMES);
+				temp2 -> addChild(temp);
+				temp = temp2;
+			}
+			ASTNode* Kon = new ASTNode(AST_NAME);
+			Kon -> setName("Kon");
+			temp -> addChild(Kon);
+			// exist reversereaction
+			if((*iter_reaction) -> isReversible()){
+				int size = (*(*iter_reaction) -> getProductsVector()).size();
+				iter_node = (*iter_reaction)->getProductsVector()->begin();
+				ASTNode* temp3 = new ASTNode(AST_TIMES);
+				ASTNode* product = new ASTNode(AST_NAME);
+				product -> setName((*iter_node) -> getNstring().c_str());
+				temp3 -> addChild(product);
+				iter_node ++;
+				for (int i = 0; i < (size -1); i++){
+					ASTNode* product = new ASTNode(AST_NAME);
+					product -> setName((*iter_node) -> getNstring().c_str());
+					temp3 -> addChild(product);
+					ASTNode* temp4 = new ASTNode(AST_TIMES);
+					temp4 -> addChild(temp3);
+					temp3 = temp4;
+				}
+				ASTNode* Koff = new ASTNode(AST_NAME);
+				Koff -> setName("Koff");
+				temp3 -> addChild(Koff);
+				ASTNode* math = new ASTNode(AST_MINUS);
+				math -> addChild(temp);
+				math -> addChild(temp3);
+				k1 -> setMath(math);
+				delete math;
+			}
+			else{
+				k1 -> setMath(temp);
+			}
+			delete temp;
+		}
+		     SBMLWriter sbmlWriter;
+
+			 bool result = sbmlWriter.writeSBML(sbmlDoc,ss.str());
+
+             if ( result ){
+				 std::cout << "Wrote file \"" << ss.str() << "\"" << std:: endl;
+			}
+			else{
+				std::cerr << "Failed to write \"" << ss.str() << "\"" <<std:: endl;
+			}
+
      }
 }
   

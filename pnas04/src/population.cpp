@@ -603,7 +603,6 @@ void Population:: genSBMLFormat(){
             iter_node_end = (*iter_reaction)->getReactantsVector()->end();
 			while(iter_node != iter_node_end){
 				spr = reaction -> createReactant();
-				ASTNode* reactant = new ASTNode(AST_NAME);
 				spr -> setSpecies((*iter_node) -> getNstring());
 				iter_node ++;
 			}
@@ -621,7 +620,6 @@ void Population:: genSBMLFormat(){
 				spr -> setSpecies((*iter_node) -> getNstring());
 				iter_node ++;
 			}
-			ASTNode *astTimes1 = new ASTNode(AST_TIMES);
 			int size = (*(*iter_reaction) -> getReactantsVector()).size();
 			iter_node = (*iter_reaction)->getReactantsVector()->begin();
 			ASTNode* temp = new ASTNode(AST_TIMES);

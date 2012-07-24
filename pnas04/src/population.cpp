@@ -579,12 +579,10 @@ void Population:: genSBMLFormat(){
         
 		// define species for everycell
 		for (int j = 0; iter_node != iter_node_end; j++) {
-			  std::stringstream ss;
-			  ss << "nodes" << j;
 			  Species* sp;
 			  sp = model -> createSpecies();
 			  sp -> setCompartment(compName);
-			  sp -> setId(ss.str());
+			  sp -> setId((*iter_node) -> getNstring());
               iter_node++;
 		 }
 
@@ -599,45 +597,99 @@ void Population:: genSBMLFormat(){
 			reaction -> setId(reactionName.str());
 			SpeciesReference* spr;
 			ModifierSpeciesReference* mspr;
+            KineticLaw* k1;
+			k1  = reaction -> createKineticLaw();
 			iter_node = (*iter_reaction)->getReactantsVector()->begin();
             iter_node_end = (*iter_reaction)->getReactantsVector()->end();
 			while(iter_node != iter_node_end){
 				spr = reaction -> createReactant();
-				std::stringstream reactantName;
-				reactantName << "nodes" << ((*iter_node) -> getNindex());
-				spr -> setSpecies(reactantName.str());
+				ASTNode* reactant = new ASTNode(AST_NAME);
+				spr -> setSpecies((*iter_node) -> getNstring());
 				iter_node ++;
 			}
 			iter_node = (*iter_reaction)->getModifiersVector()->begin();
             iter_node_end = (*iter_reaction)->getModifiersVector()->end();
             while (iter_node != iter_node_end) {
 				mspr = reaction -> createModifier();
-				std::stringstream modifierName;
-				modifierName << "nodes" << ((*iter_node) -> getNindex());
-				mspr -> setSpecies(modifierName.str());
+				mspr -> setSpecies((*iter_node) -> getNstring());
 				iter_node ++;
 			}
 			iter_node = (*iter_reaction)->getProductsVector()->begin();
             iter_node_end = (*iter_reaction)->getProductsVector()->end();
             while (iter_node != iter_node_end) {
 				spr = reaction -> createProduct();
-				std::stringstream productName;
-				productName << "nodes" << ((*iter_node) -> getNindex());
-				spr -> setSpecies(productName.str());
+				spr -> setSpecies((*iter_node) -> getNstring());
 				iter_node ++;
 			}
-			Parameter* para;
-            KineticLaw* kl;
-			
+			ASTNode *astTimes1 = new ASTNode(AST_TIMES);
+			int size = (*(*iter_reaction) -> getReactantsVector()).size();
+			iter_node = (*iter_reaction)->getReactantsVector()->begin();
+			ASTNode* temp = new ASTNode(AST_TIMES);
+			ASTNode* reactant = new ASTNode(AST_NAME);
+			reactant -> setName((*iter_node) -> getNstring().c_str());
+			temp -> addChild(reactant);
+			iter_node ++;
+			for (int i = 0; i < (size -1); i++){
+				ASTNode* reactant = new ASTNode(AST_NAME);
+				reactant -> setName((*iter_node) -> getNstring().c_str());
+				temp -> addChild(reactant);
+				ASTNode* temp2 = new ASTNode(AST_TIMES);
+				temp2 -> addChild(temp);
+				temp = temp2;
+			}
+			// exist modifier
+			if((*iter_reaction) -> getModifiersSize()){
+				ASTNode* modifier = new ASTNode(AST_NAME);
+				iter_node = (*iter_reaction)->getModifiersVector()->begin();
+				modifier -> setName((*iter_node) -> getNstring().c_str());
+				temp -> addChild(modifier);
+				ASTNode* temp2 = new ASTNode(AST_TIMES);
+				temp2 -> addChild(temp);
+				temp = temp2;
+			}
+			ASTNode* Kon = new ASTNode(AST_NAME);
+			Kon -> setName("Kon");
+			temp -> addChild(Kon);
+			// exist reversereaction
+			if((*iter_reaction) -> isReversible()){
+				int size = (*(*iter_reaction) -> getProductsVector()).size();
+				iter_node = (*iter_reaction)->getProductsVector()->begin();
+				ASTNode* temp3 = new ASTNode(AST_TIMES);
+				ASTNode* product = new ASTNode(AST_NAME);
+				product -> setName((*iter_node) -> getNstring().c_str());
+				temp3 -> addChild(product);
+				iter_node ++;
+				for (int i = 0; i < (size -1); i++){
+					ASTNode* product = new ASTNode(AST_NAME);
+					product -> setName((*iter_node) -> getNstring().c_str());
+					temp3 -> addChild(reactant);
+					ASTNode* temp4 = new ASTNode(AST_TIMES);
+					temp4 -> addChild(temp3);
+					temp3 = temp4;
+				}
+				ASTNode* Koff = new ASTNode(AST_NAME);
+				Koff -> setName("Koff");
+				temp3 -> addChild(Koff);
+				ASTNode* math = new ASTNode(AST_MINUS);
+				math -> addChild(temp);
+				math -> addChild(temp3);
+				k1 -> setMath(math);
+				delete math;
+			}
+			else{
+				k1 -> setMath(temp);
+			}
+			delete temp;
 		}
 
      }
 }
+  
 
 
 
 
 
 
-    
+
 }   //namespace ustc

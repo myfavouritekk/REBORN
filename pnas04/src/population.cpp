@@ -561,17 +561,17 @@ void Population:: genSBMLFormat(){
 	// creat unit
 
 	// define sp
-	 for (int i = 0; i < ncell; i++) {
+	 for (int i = 0; i < 10; i++) {
 		 
 		 // declear model
 		 std::stringstream ss;
-		 ss << "SBMLMOD" << i;
+		 ss << "SBMLModel_" << i;
 		 SBMLDocument* sbmlDoc = new SBMLDocument(3,1);
 	     Model* model = sbmlDoc -> createModel();
 	     model -> setId(ss.str());
 		
 		 // creat compartment
-		const string compName = "comp";
+		const string compName = "cell";
 		Compartment* comp = model->createCompartment();
 		comp->setId(compName); 
 		std::vector<Node*>::iterator iter_node = cells[i]->getNodesVector()->begin();
@@ -591,7 +591,7 @@ void Population:: genSBMLFormat(){
         std::vector<Reaction*>::iterator iter_reaction_end = cells[i]->getRlistVector()->end();
 		for(int j = 0; iter_reaction != iter_reaction_end; j++){
             std::stringstream reactionName;
-			reactionName << "reaction" << j;
+			reactionName << "reaction" << j + 1;
 			LIBSBML_CPP_NAMESPACE:: Reaction* reaction;
 			reaction = model -> createReaction();
 			reaction -> setId(reactionName.str());
@@ -649,12 +649,13 @@ void Population:: genSBMLFormat(){
 					ASTNode* temp2 = new ASTNode(AST_TIMES);
 					temp2 -> addChild(temp);
 					temp = temp2;
+                    iter_node++;
 				}
 			}
 			ASTNode* Kon = new ASTNode(AST_NAME);
 			std:: stringstream k;
-			k<< "Kon" << j;
-			Kon -> setName(k.str);
+			k<< "Kon" << j + 1;
+			Kon -> setName(k.str().c_str());
 			temp -> addChild(Kon);
 			// exist reversereaction
 			if((*iter_reaction) -> isReversible()){
@@ -672,11 +673,12 @@ void Population:: genSBMLFormat(){
 					ASTNode* temp4 = new ASTNode(AST_TIMES);
 					temp4 -> addChild(temp3);
 					temp3 = temp4;
+                    iter_node++;
 				}
 				ASTNode* Koff = new ASTNode(AST_NAME);
 				std:: stringstream k;
-				k << "Koff" << j; 
-				Koff -> setName(k.str);
+				k << "Koff" << j + 1;
+				Koff -> setName(k.str().c_str());
 				temp3 -> addChild(Koff);
 				ASTNode* math = new ASTNode(AST_MINUS);
 				math -> addChild(temp);
@@ -688,18 +690,19 @@ void Population:: genSBMLFormat(){
 				k1 -> setMath(temp);
 			}
 			delete temp;
+            iter_reaction++;
 		}
-		     SBMLWriter sbmlWriter;
-
-			 bool result = sbmlWriter.writeSBML(sbmlDoc,ss.str());
-
-             if ( result ){
-				 std::cout << "Wrote file \"" << ss.str() << "\"" << std:: endl;
-			}
-			else{
-				std::cerr << "Failed to write \"" << ss.str() << "\"" <<std:: endl;
-			}
-
+         SBMLWriter sbmlWriter;
+         
+         bool result = sbmlWriter.writeSBML(sbmlDoc,ss.str());
+         
+         if ( result ){
+             std::cout << "Wrote file \"" << ss.str() << "\"" << std:: endl;
+         }
+         else{
+             std::cerr << "Failed to write \"" << ss.str() << "\"" <<std:: endl;
+         }
+         
      }
 }
   

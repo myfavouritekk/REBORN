@@ -679,6 +679,16 @@ void Population:: genSBMLFormat(){
 			}
 			delete temp;
 		}
+		     SBMLWriter sbmlWriter;
+
+			 bool result = sbmlWriter.writeSBML(sbmlDoc,ss.str());
+
+             if ( result ){
+				 std::cout << "Wrote file \"" << ss.str() << "\"" << std:: endl;
+			}
+			else{
+				std::cerr << "Failed to write \"" << ss.str() << "\"" <<std:: endl;
+			}
 
      }
 }

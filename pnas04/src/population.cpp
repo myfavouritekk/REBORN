@@ -621,8 +621,8 @@ void Population:: genSBMLFormat(){
 				iter_node ++;
 			}
 			ASTNode* temp = new ASTNode(AST_TIMES);
-			if((*iter_reaction) -> getRtype()){
-				int size = (*(*iter_reaction) -> getReactantsVector()).size();
+			if((*iter_reaction) -> getReactantsVector() -> size()){
+				int size = ((*iter_reaction) -> getReactantsVector() -> size());
 				iter_node = (*iter_reaction)->getReactantsVector()->begin();
 				ASTNode* reactant = new ASTNode(AST_NAME);
 				reactant -> setName((*iter_node) -> getNstring().c_str());
@@ -635,20 +635,26 @@ void Population:: genSBMLFormat(){
 					ASTNode* temp2 = new ASTNode(AST_TIMES);
 					temp2 -> addChild(temp);
 					temp = temp2;
+					iter_node ++;
 				}
 			}
 			// exist modifier
 			if((*iter_reaction) -> getModifiersSize()){
-				ASTNode* modifier = new ASTNode(AST_NAME);
+				int size = ((*iter_reaction) -> getReactantsVector() -> size());
 				iter_node = (*iter_reaction)->getModifiersVector()->begin();
-				modifier -> setName((*iter_node) -> getNstring().c_str());
-				temp -> addChild(modifier);
-				ASTNode* temp2 = new ASTNode(AST_TIMES);
-				temp2 -> addChild(temp);
-				temp = temp2;
+				for(int i = 0; i < (size - 1); i ++){
+					ASTNode* modifier = new ASTNode(AST_NAME);
+					modifier -> setName((*iter_node) -> getNstring().c_str());
+					temp -> addChild(modifier);
+					ASTNode* temp2 = new ASTNode(AST_TIMES);
+					temp2 -> addChild(temp);
+					temp = temp2;
+				}
 			}
 			ASTNode* Kon = new ASTNode(AST_NAME);
-			Kon -> setName("Kon");
+			std:: stringstream k;
+			k<< "Kon" << j;
+			Kon -> setName(k.str);
 			temp -> addChild(Kon);
 			// exist reversereaction
 			if((*iter_reaction) -> isReversible()){
@@ -668,7 +674,9 @@ void Population:: genSBMLFormat(){
 					temp3 = temp4;
 				}
 				ASTNode* Koff = new ASTNode(AST_NAME);
-				Koff -> setName("Koff");
+				std:: stringstream k;
+				k << "Koff" << j; 
+				Koff -> setName(k.str);
 				temp3 -> addChild(Koff);
 				ASTNode* math = new ASTNode(AST_MINUS);
 				math -> addChild(temp);

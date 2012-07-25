@@ -578,11 +578,22 @@ void Population:: genSBMLFormat(){
         std::vector<Node*>::iterator iter_node_end = cells[i]->getNodesVector()->end();
         
 		// define species for everycell
+		int sizeOfNode = cells[i] -> getNodesVector() -> size();
+		double* initialValue = new double[sizeOfNode];
+		for(int k = 0; k < sizeOfNode; k ++){
+			initialValue[k] = 1;
+		}
+		int inputIndiceNum = cells[i] -> getinputIndiceVector() -> size();
+		for(int k = 0; k < inputIndiceNum; k ++){
+			int index = (*(cells[i] -> getInputIndiceVector()))[k];
+			initialValue[index] = ypoints[k][0];
+		}
 		for (int j = 0; iter_node != iter_node_end; j++) {
 			  Species* sp;
 			  sp = model -> createSpecies();
 			  sp -> setCompartment(compName);
 			  sp -> setId((*iter_node) -> getNstring());
+			  sp -> setInitialAmount(initialValue[j]);
               iter_node++;
 		 }
 
@@ -599,6 +610,17 @@ void Population:: genSBMLFormat(){
 			ModifierSpeciesReference* mspr;
             KineticLaw* k1;
 			k1  = reaction -> createKineticLaw();
+			Rule* rule;
+			rule = model -> createRateRule();
+			rule -> setName(reactionName.str());
+			// temp formula 
+			std:: stringstream tempFormula;
+			// kon formula
+			std::stringstream konFormula;
+			// koff formula
+			std::stringstream koffFormula;
+			//final Formula
+			std::stringstream FORMULA;
 			iter_node = (*iter_reaction)->getReactantsVector()->begin();
             iter_node_end = (*iter_reaction)->getReactantsVector()->end();
 			while(iter_node != iter_node_end){
@@ -626,11 +648,13 @@ void Population:: genSBMLFormat(){
 				iter_node = (*iter_reaction)->getReactantsVector()->begin();
 				ASTNode* reactant = new ASTNode(AST_NAME);
 				reactant -> setName((*iter_node) -> getNstring().c_str());
+				tempFormula << " * " << ((*iter_node) -> getNstring().c_str());
 				temp -> addChild(reactant);
 				iter_node ++;
 				for (int i = 0; i < (size -1); i++){
 					ASTNode* reactant = new ASTNode(AST_NAME);
 					reactant -> setName((*iter_node) -> getNstring().c_str());
+					tempFormula << " * " << ((*iter_node) -> getNstring().c_str());
 					temp -> addChild(reactant);
 					ASTNode* temp2 = new ASTNode(AST_TIMES);
 					temp2 -> addChild(temp);
@@ -645,6 +669,7 @@ void Population:: genSBMLFormat(){
 				for(int i = 0; i < (size - 1); i ++){
 					ASTNode* modifier = new ASTNode(AST_NAME);
 					modifier -> setName((*iter_node) -> getNstring().c_str());
+					tempFormula << " * " << ((*iter_node) -> getNstring().c_str());
 					temp -> addChild(modifier);
 					ASTNode* temp2 = new ASTNode(AST_TIMES);
 					temp2 -> addChild(temp);
@@ -656,19 +681,23 @@ void Population:: genSBMLFormat(){
 			std:: stringstream k;
 			k<< "Kon" << j + 1;
 			Kon -> setName(k.str().c_str());
+			konFormula << k <<tempFormula;
 			temp -> addChild(Kon);
 			// exist reversereaction
 			if((*iter_reaction) -> isReversible()){
+				std::stringstream tempFormula;
 				int size = (*(*iter_reaction) -> getProductsVector()).size();
 				iter_node = (*iter_reaction)->getProductsVector()->begin();
 				ASTNode* temp3 = new ASTNode(AST_TIMES);
 				ASTNode* product = new ASTNode(AST_NAME);
 				product -> setName((*iter_node) -> getNstring().c_str());
+				tempFormula << " * " << ((*iter_node) -> getNstring().c_str());
 				temp3 -> addChild(product);
 				iter_node ++;
 				for (int i = 0; i < (size -1); i++){
 					ASTNode* product = new ASTNode(AST_NAME);
 					product -> setName((*iter_node) -> getNstring().c_str());
+					tempFormula << " * " << ((*iter_node) -> getNstring().c_str());
 					temp3 -> addChild(product);
 					ASTNode* temp4 = new ASTNode(AST_TIMES);
 					temp4 -> addChild(temp3);
@@ -678,12 +707,15 @@ void Population:: genSBMLFormat(){
 				ASTNode* Koff = new ASTNode(AST_NAME);
 				std:: stringstream k;
 				k << "Koff" << j + 1;
+				koffFormula << k << tempFormula;
 				Koff -> setName(k.str().c_str());
 				temp3 -> addChild(Koff);
 				ASTNode* math = new ASTNode(AST_MINUS);
 				math -> addChild(temp);
 				math -> addChild(temp3);
 				k1 -> setMath(math);
+				FORMULA << konFormula << " - " << koffFormula;
+				rule->setFormula(FORMULA.str());
 				delete math;
 			}
 			else{

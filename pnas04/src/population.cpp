@@ -594,7 +594,7 @@ void Population:: genSBMLFormat(){
 			  sp -> setCompartment(compName);
 			  sp -> setId((*iter_node) -> getNstring());
 			  sp -> setInitialConcentration(initialValue[j]);
-			  sp -> setConstant(0);
+			  sp -> setConstant(0); 
               iter_node++;
 		 }
 		delete [] initialValue;

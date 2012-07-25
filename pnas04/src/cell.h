@@ -64,6 +64,9 @@ class Cell {
     
         //get rlist vector
         std::vector<Reaction*>* getRlistVector();
+
+		//get inputIndice vector
+		std::vector<int>* getInputIndiceVector();
         
         //add ranking to rankings vector
         void addRanking(int ranking);

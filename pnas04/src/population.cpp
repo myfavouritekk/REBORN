@@ -596,6 +596,7 @@ void Population:: genSBMLFormat(){
 			  sp -> setInitialAmount(initialValue[j]);
               iter_node++;
 		 }
+		delete [] initialValue;
 
 		// define reaction
 		std::vector<Reaction*>::iterator iter_reaction = cells[i]->getRlistVector()->begin();
@@ -609,6 +610,7 @@ void Population:: genSBMLFormat(){
 			SpeciesReference* spr;
 			ModifierSpeciesReference* mspr;
             KineticLaw* k1;
+			Parameter* para;
 			k1  = reaction -> createKineticLaw();
 			Rule* rule;
 			rule = model -> createRateRule();
@@ -682,6 +684,9 @@ void Population:: genSBMLFormat(){
 			k<< "Kon" << j + 1;
 			Kon -> setName(k.str().c_str());
 			konFormula << k <<tempFormula;
+			para = k1 -> createParameter();
+			para -> setId(k.str());
+			para -> setValue((*(iter_reaction)) -> getForwardRate());
 			temp -> addChild(Kon);
 			// exist reversereaction
 			if((*iter_reaction) -> isReversible()){
@@ -707,6 +712,9 @@ void Population:: genSBMLFormat(){
 				ASTNode* Koff = new ASTNode(AST_NAME);
 				std:: stringstream k;
 				k << "Koff" << j + 1;
+				para = k1 -> createParameter();
+				para -> setId(k.str());
+				para -> setValue((*(iter_reaction)) -> getReverseRate());
 				koffFormula << k << tempFormula;
 				Koff -> setName(k.str().c_str());
 				temp3 -> addChild(Koff);

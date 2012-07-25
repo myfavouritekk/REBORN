@@ -583,7 +583,7 @@ void Population:: genSBMLFormat(){
 		for(int k = 0; k < sizeOfNode; k ++){
 			initialValue[k] = 1;
 		}
-		int inputIndiceNum = cells[i] -> getinputIndiceVector() -> size();
+		int inputIndiceNum = cells[i] -> getInputIndiceVector() -> size();
 		for(int k = 0; k < inputIndiceNum; k ++){
 			int index = (*(cells[i] -> getInputIndiceVector()))[k];
 			initialValue[index] = ypoints[k][0];

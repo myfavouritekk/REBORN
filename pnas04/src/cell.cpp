@@ -1065,6 +1065,11 @@ std::vector<Node*>* Cell::getNodesVector(){
 std::vector<Reaction*>* Cell::getRlistVector(){
     return &rlist;
 }
+
+std::vector<int>* Cell::getInputIndiceVector(){
+	return &inputIndice;
+}
+
 void Cell::genRegulatoryRelationships(){
 	int numOfProtLike = 0; 
 	int numOfGene = 0;

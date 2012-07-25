@@ -49,7 +49,7 @@ Cell::Cell(const int& _numind, const int& _numprot):numInducer(_numind) {
         
 		Reaction* r8 = new Reaction(8); //reaction type 8 is binding between an inducer and a protein
 		r8->setReversible(true);
-		r8->setForwardRate (40);        //setting forward rate to a relatively large number to ensure the binding
+		r8->initForwardRateRandomly();        //setting forward rate to a relatively large number to ensure the binding
 		r8->initReverseRateRandomly();
 		r8->addReactant(selectedProt);
 		r8->addReactant(selectedInd);
@@ -833,31 +833,31 @@ void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int 
 		}
 		for(currSerie = 0; currSerie < series; currSerie++){
 			double delta = (nodes[currSerie]->ode)(rlist,y,currStep);
-            k1[currSerie] = (currSerie < numInducers && timeOfAddInducers[currSerie] <= currStep) ? 0. : delta; //even if currStep=timeOfAddInducers[currSerie],k=0.
+            k1[currSerie] = (currSerie < numInducers && timeOfAddInducers[currSerie] < currStep) ? 0. : delta; 
 			tempY1[currSerie] =  (y[currSerie] + k1[currSerie]/2.);//(y[currSerie] + k1[currSerie]/2. < 0.) ? 0. : (y[currSerie] + k1[currSerie]/2.);
         }
         for(currSerie = 0; currSerie < series; currSerie++){
             
 			double delta = (nodes[currSerie]->ode)(rlist,tempY1,currStep + 0.5);
-            k2[currSerie] = (currSerie < numInducers && timeOfAddInducers[currSerie] <= currStep) ? 0. : delta;
+            k2[currSerie] = (currSerie < numInducers && timeOfAddInducers[currSerie] < currStep) ? 0. : delta;
 			tempY2[currSerie] = (y[currSerie] + k2[currSerie]/2.);//(y[currSerie] + k2[currSerie]/2. < 0.) ? 0. : (y[currSerie] + k2[currSerie]/2.);
         }
         for(currSerie = 0; currSerie < series; currSerie++){
             
 			double delta = (nodes[currSerie]->ode)(rlist,tempY2,currStep + 0.5);
-            k3[currSerie] = (currSerie < numInducers && timeOfAddInducers[currSerie] <= currStep) ? 0. : delta;
+            k3[currSerie] = (currSerie < numInducers && timeOfAddInducers[currSerie] < currStep) ? 0. : delta;
 			tempY1[currSerie] = (y[currSerie] + k3[currSerie]);//(y[currSerie] + k3[currSerie] < 0.) ? 0. : (y[currSerie] + k3[currSerie]);
         }
         for(currSerie = 0; currSerie < series; currSerie++){
             
 			double delta = (nodes[currSerie]->ode)(rlist,tempY1,currStep + 1.);
-            k4[currSerie] = (currSerie < numInducers && timeOfAddInducers[currSerie] <= currStep) ? 0. : delta;
+            k4[currSerie] = (currSerie < numInducers && timeOfAddInducers[currSerie] < currStep) ? 0. : delta;
         }
 		for (currSerie = 0; currSerie < series; currSerie++) {
-            if (currSerie < numInducers && fabs(data[currSerie][currStep] - 0) < 0.000001) {
-                continue;
-            }
-            
+            if(currSerie<numInducers && currStep <= timeOfAddInducers[currSerie]){//if currSerie>=numInducers, the right term will not be executed, notice"="!!. 
+				continue;
+			}
+
             data[currSerie][currStep + 1] = y[currSerie] + 1 / 6.0 * (k1[currSerie]+ 2 * k2[currSerie] + 2 * k3[currSerie] + k4[currSerie]);
             if (data[currSerie][currStep + 1] < 0.) {//in case of negative density
                 data[currSerie][currStep + 1] = 0;
@@ -881,7 +881,16 @@ void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int 
 
 
 void Cell::generateTimeCourses(double** targetData,int numTargetNodes, int time){
-    
+    int* timeOfAddInducers = new int[numInducer];
+	for(int i = 0; i < numInducer; i++){
+		for(int j = 0; j < time; j++){
+			if(targetData[i][j]>0.0000001){
+				timeOfAddInducers[i]=time;
+				break;
+			}
+		}
+	}
+
     int size = nodes.size();//  how many nodes in this cell
     /* initialization: store the initial value in the first column of
      * currData, and for coloumn with index greater than number of target
@@ -902,8 +911,8 @@ void Cell::generateTimeCourses(double** targetData,int numTargetNodes, int time)
     }
     
     /* runge_kutta method, store the results in currData */
-    runge_kutta(this->currData, nodes, rlist, numInducer, size, time);
-    
+    runge_kutta(this->currData, nodes, rlist, numInducer, size, time,timeOfAddInducers);
+    delete[] timeOfAddInducers;
     
 }
 
@@ -954,6 +963,8 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
 	for (int i = 0; i < size; i++) {
         this->currData[i] = new double[time];
         this->currData[i][0] = 1.;   // the initial value of gene is 1
+		if((*(this->getNodesVector()))[i]->getNtype() == 4)
+			this->currData[i][0]=0;
     }
     for (int i = 0; i < numTargetNodes; i++) {
         this->currData[inputIndice[i]][0] = targetData[i][0];    //the initial value of inducers and proteins are the same as the input data.
@@ -966,7 +977,7 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
 
     /* runge_kutta method, store the results in currData */
     runge_kutta(this->currData, nodes, rlist, numInducer, size, time,timeOfAddInducers);
-    
+    delete[] timeOfAddInducers;
     /* calculate total score uses the ScoreFunc sfunc: only numTargetNodes nodes
      * are calculated because there only those number nodes in targetData
      * therefore, numTargetNodes = numind + numprot

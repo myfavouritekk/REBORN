@@ -813,7 +813,7 @@ void Cell::mutation(){
 /*input requirement: first colomn of data[][] is the initial value
  *
  */
-void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int numInducers, int series, int steps)
+void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int numInducers, int series, int steps,int *timeOfAddInducers)
 {//100 is steps
 	
 	int currSerie,currStep;
@@ -833,25 +833,25 @@ void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int 
 		}
 		for(currSerie = 0; currSerie < series; currSerie++){
 			double delta = (nodes[currSerie]->ode)(rlist,y,currStep);
-            k1[currSerie] = (currSerie < numInducers) ? 0. : delta;
+            k1[currSerie] = (currSerie < numInducers && timeOfAddInducers[currSerie] <= currStep) ? 0. : delta; //even if currStep=timeOfAddInducers[currSerie],k=0.
 			tempY1[currSerie] =  (y[currSerie] + k1[currSerie]/2.);//(y[currSerie] + k1[currSerie]/2. < 0.) ? 0. : (y[currSerie] + k1[currSerie]/2.);
         }
         for(currSerie = 0; currSerie < series; currSerie++){
             
 			double delta = (nodes[currSerie]->ode)(rlist,tempY1,currStep + 0.5);
-            k2[currSerie] = (currSerie < numInducers) ? 0. : delta;
+            k2[currSerie] = (currSerie < numInducers && timeOfAddInducers[currSerie] <= currStep) ? 0. : delta;
 			tempY2[currSerie] = (y[currSerie] + k2[currSerie]/2.);//(y[currSerie] + k2[currSerie]/2. < 0.) ? 0. : (y[currSerie] + k2[currSerie]/2.);
         }
         for(currSerie = 0; currSerie < series; currSerie++){
             
 			double delta = (nodes[currSerie]->ode)(rlist,tempY2,currStep + 0.5);
-            k3[currSerie] = (currSerie < numInducers) ? 0. : delta;
+            k3[currSerie] = (currSerie < numInducers && timeOfAddInducers[currSerie] <= currStep) ? 0. : delta;
 			tempY1[currSerie] = (y[currSerie] + k3[currSerie]);//(y[currSerie] + k3[currSerie] < 0.) ? 0. : (y[currSerie] + k3[currSerie]);
         }
         for(currSerie = 0; currSerie < series; currSerie++){
             
 			double delta = (nodes[currSerie]->ode)(rlist,tempY1,currStep + 1.);
-            k4[currSerie] = (currSerie < numInducers) ? 0. : delta;
+            k4[currSerie] = (currSerie < numInducers && timeOfAddInducers[currSerie] <= currStep) ? 0. : delta;
         }
 		for (currSerie = 0; currSerie < series; currSerie++) {
             if (currSerie < numInducers && fabs(data[currSerie][currStep] - 0) < 0.000001) {
@@ -935,7 +935,16 @@ void Cell::generateTimeCourses(double** targetData,int numTargetNodes, int time)
  *prerequirements: nodes in the cell's "nodes" vector should be sorted by indice
  */
 void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, int time, bool print){
-   
+	int* timeOfAddInducers = new int[numInducer];
+	for(int i = 0; i < numInducer; i++){
+		for(int j = 0; j < time; j++){
+			if(targetData[i][j]>0.0000001){
+				timeOfAddInducers[i]=time;
+				break;
+			}
+		}
+	}
+
     int size = nodes.size();//  how many nodes in this cell
     /* initialization: store the initial value in the first column of
      * currData, and for coloumn with index greater than number of target
@@ -956,7 +965,7 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
     }
 
     /* runge_kutta method, store the results in currData */
-    runge_kutta(this->currData, nodes, rlist, numInducer, size, time);
+    runge_kutta(this->currData, nodes, rlist, numInducer, size, time,timeOfAddInducers);
     
     /* calculate total score uses the ScoreFunc sfunc: only numTargetNodes nodes
      * are calculated because there only those number nodes in targetData

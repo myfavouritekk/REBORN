@@ -593,7 +593,8 @@ void Population:: genSBMLFormat(){
 			  sp = model -> createSpecies();
 			  sp -> setCompartment(compName);
 			  sp -> setId((*iter_node) -> getNstring());
-			  sp -> setInitialAmount(initialValue[j]);
+			  sp -> setInitialConcentration(initialValue[j]);
+			  sp -> setConstant(0);
               iter_node++;
 		 }
 		delete [] initialValue;
@@ -689,7 +690,8 @@ void Population:: genSBMLFormat(){
 			para -> setValue((*(iter_reaction)) -> getForwardRate());
 			temp -> addChild(Kon);
 			// exist reversereaction
-			if((*iter_reaction) -> isReversible()){
+				if((*iter_reaction) -> isReversible()){
+				reaction -> setReversible(1);
 				std::stringstream tempFormula;
 				int size = (*(*iter_reaction) -> getProductsVector()).size();
 				iter_node = (*iter_reaction)->getProductsVector()->begin();
@@ -727,6 +729,7 @@ void Population:: genSBMLFormat(){
 				delete math;
 			}
 			else{
+				reaction -> setReversible(0); 
 				k1 -> setMath(temp);
 			}
 			delete temp;

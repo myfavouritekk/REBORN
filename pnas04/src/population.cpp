@@ -12,7 +12,7 @@ Population::Population (const int& _ncell, const int& _evolution)
 
 //destructor
 Population::~Population () {
-	if(xpoints != NULL) {delete [] xpoints;}
+if(xpoints != NULL) {delete [] xpoints;}
 	if(ypoints != NULL) {
 		for(int ir = 0; ir < numind + numprot; ir++) {
 			if(ypoints[ir] != NULL) {
@@ -49,7 +49,12 @@ void Population::init(){
     
     readDynamics(fn);
     
-    
+    //	for each cell, initialization
+	for (int i = 0; i < ncell; i++) {
+		cells[i] = new Cell(numind, numprot);
+        cells[i]->getScore(sfunc, ypoints, numind + numprot, numr, false);//getScore in initialization
+	}
+
    
 }
 
@@ -260,11 +265,6 @@ void Population::readDynamics (const string& fn) {
         std::cout << std::endl;
 	}
 
-	//	for each cell, initialization
-	for (int i = 0; i < ncell; i++) {
-		cells[i] = new Cell(numind, numprot);
-        cells[i]->getScore(sfunc, ypoints, numind + numprot, numr, false);//getScore in initialization
-	}
 
 	return;
 }
@@ -555,7 +555,7 @@ void Population::output(){
     
     
 }
-    
+  /*  
 void Population:: genSBMLFormat(){
 	
 	// creat unit
@@ -749,7 +749,7 @@ void Population:: genSBMLFormat(){
      }
 }
   
-
+ */ 
 
 
 

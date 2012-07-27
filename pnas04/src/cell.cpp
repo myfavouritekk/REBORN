@@ -862,8 +862,8 @@ void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int 
             if (data[currSerie][currStep + 1] < 0.) {//in case of negative density
                 data[currSerie][currStep + 1] = 0;
             }
-            if (data[currSerie][currStep + 1] > 100000000.) {// in case of "infinite" density
-                data[currSerie][currStep + 1] = 100000000.;
+            if (data[currSerie][currStep + 1] > 1000.) {// in case of "infinite" density
+                data[currSerie][currStep + 1] = 1000.;
             }
         }	
 			
@@ -885,7 +885,7 @@ void Cell::generateTimeCourses(double** targetData,int numTargetNodes, int time)
 	for(int i = 0; i < numInducer; i++){
 		for(int j = 0; j < time; j++){
 			if(targetData[i][j]>0.0000001){
-				timeOfAddInducers[i]=time;
+				timeOfAddInducers[i] = j;
 				break;
 			}
 		}
@@ -950,7 +950,7 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
 	for(int i = 0; i < numInducer; i++){
 		for(int j = 0; j < time; j++){
 			if(targetData[i][j]>0.0000001){
-				timeOfAddInducers[i]=time;
+				timeOfAddInducers[i] = j;
 				break;
 			}
 		}

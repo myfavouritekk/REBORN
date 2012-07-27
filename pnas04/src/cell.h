@@ -35,6 +35,10 @@ class Cell {
         //mutation only for new nodes or new reactions
         void mut_topology();
     
+        //explicitly adding reaction to the cell
+        void addReaction(int _rtype, int firstIndex, int secondIndex);
+        void addReaction(int _rtype, int index);
+    
         //  get score and change its own currScore value 
         void getScore (ScoreFunc&, double** targetData,int numNodes, int x, bool print);
     

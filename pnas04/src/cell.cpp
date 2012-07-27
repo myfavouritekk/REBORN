@@ -40,22 +40,6 @@ Cell::Cell(const int& _numind, const int& _numprot):numInducer(_numind) {
 		rlist.push_back(r0);
 		rlist.push_back(r1);
 	}
-	for(int ioi =  0; ioi < _numind; ioi++){    //adding binding between an inducer and a protein
-		int iopIndex = indexOfProt[rand()% _numprot];
-		Node* selectedProt = nodes[iopIndex];
-		Node* selectedInd = nodes[ioi];
-		Node* complex = new Node(currIndex, 4, selectedProt, selectedInd);
-		nodes.push_back(complex);
-        
-		Reaction* r8 = new Reaction(8); //reaction type 8 is binding between an inducer and a protein
-		r8->setReversible(true);
-		r8->initForwardRateRandomly();        //setting forward rate to a relatively large number to ensure the binding
-		r8->initReverseRateRandomly();
-		r8->addReactant(selectedProt);
-		r8->addReactant(selectedInd);
-		r8->addProduct(complex);
-		rlist.push_back(r8);
-	}
 	delete [] indexOfProt;
 }
 

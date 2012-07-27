@@ -8,7 +8,10 @@ int main (void) {
     //  initialization
     ustc::Population myPop(POPULATION, TOTAL_EVO);
     myPop.init ();
-
+	// ask users if they can input more information about the cell
+	void askInformation(ustc::Population* targetPop);
+	askInformation();
+	
     int i = 1;
     int sum = 1;
     //  evolution
@@ -33,3 +36,10 @@ int main (void) {
 
     return 0;
 }
+
+
+void askInformation(ustc::Population* targetPop){
+	std::cout << "Do you know more information about the reaction? <y/n>" << std::endl;
+	if(getchar() == 'y'){
+		std::cout << targetPop -> cells[0] -> 
+	}

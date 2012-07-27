@@ -1172,7 +1172,33 @@ void Cell::genRegulatoryRelationships(){
 	delete [] indexOfGene;
 }
 
+//void  addReaction(int _rtype,int index)(A -> A*)
+void Cell::addReaction(int _rtype,int index){
 
+	Node* modifiedProt = new Node(nodes.size(),3);
+	Reaction* modification = new Reaction(_rtype);
+
+	modification -> setReversible(false);
+	modification -> initForwardRateRandomly();
+	modification -> addReactant(nodes[index]);
+	modification -> addProduct(modifiedProt);
+
+	Reaction* degradation = new Reaction(1);
+	degradation -> setReversible(false);
+	degradation -> initForwardRateRandomly();
+	degradation -> addReactant(modifiedProt);
+
+	nodes.push_back(modifiedProt);
+	rlist.push_back(modification);
+	rlist.push_back(degradation);
+}
+
+//void addReaction(int _rtype,int firstIndex,int secondIndex)
+void Cell::addReaction(int _rtype,int firstIndex,int secondIndex){
+
+}
+
+ 
 }   //namespace ustc
 				
 		

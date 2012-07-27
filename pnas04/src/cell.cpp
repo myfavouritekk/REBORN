@@ -1278,7 +1278,7 @@ void Cell::addReaction(int _rtype,int firstIndex,int secondIndex){
 		}
 	default:
 		{
-		std::cout<<"Error!";
+		std::cout<<"Error!"<<std::endl;
 		break;
 		}
 	}

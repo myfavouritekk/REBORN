@@ -62,6 +62,10 @@ int Population::getEvolution(){
     return evolution;
 }
 
+//get cells' group
+Cell** Population::getCells(){
+    return cells;
+}
 
 //for growth phase
 void Population::growth(){;

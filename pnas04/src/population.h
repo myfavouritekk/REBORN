@@ -54,6 +54,9 @@ class Population {
         //get evolution number
         int getEvolution();
     
+        //get cells group
+        Cell** getCells();
+    
         //for growth phase
         void growth ();
     

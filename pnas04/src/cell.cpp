@@ -900,6 +900,8 @@ void Cell::generateTimeCourses(double** targetData,int numTargetNodes, int time)
 	for (int i = 0; i < size; i++) {
         this->currData[i] = new double[time];
         this->currData[i][0] = 1.;   // the initial value of gene is 1
+		if((*(this->getNodesVector()))[i]->getNtype() == 4)
+			this->currData[i][0]=0;
     }
     for (int i = 0; i < numTargetNodes; i++) {
         this->currData[inputIndice[i]][0] = targetData[i][0];    //the initial value of inducers and proteins are the same as the input data.

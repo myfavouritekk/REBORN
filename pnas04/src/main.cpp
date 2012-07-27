@@ -32,7 +32,7 @@ int main (void) {
     //  output
     myPop.sort();
     myPop.output();
-    myPop.genSBMLFormat();
+    //myPop.genSBMLFormat();
 
     return 0;
 }
@@ -40,6 +40,7 @@ int main (void) {
 
 void askInformation(ustc::Population* targetPop){
 	int rType = 0;
+    getchar();
 	std::cout << "Do you know more information about the reaction? <y/n>" << std::endl;
 	while(getchar() == 'y'){
 		getchar();
@@ -103,7 +104,8 @@ void askInformation(ustc::Population* targetPop){
 			((targetPop -> getCells())[i]) -> addReaction(rType,index1,index2);
 			}
 		}
-			
+        
+        getchar();
 		std::cout << "Do you know more information about the reaction? <y/n>" << std::endl;
 	}
 }

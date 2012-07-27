@@ -40,65 +40,72 @@ int main (void) {
 
 void askInformation(ustc::Population* targetPop){
 	int rType = 0;
-	
 	std::cout << "Do you know more information about the reaction? <y/n>" << std::endl;
 	while(getchar() == 'y'){
-		if(getchar() == 'y'){
-			//print the types of reaction
-			std::cout<< "1. inducer binds a protein" << std::endl;
-			std::cout<< "2. protein binds protein" << std::endl;
-			std::cout<< "3. protein binds a gene" << std::endl;
-			std::cout<< "4. protein modification" << std::endl;
-			ustc::Cell* aCell = (targetPop -> getCells())[0];
-			//size of nodes
-			int size = (aCell->getNodesVector()) -> size();
-			// print the Nstrings of nodes
-			for(int i = 0; i < size; i++){
-				std::stringstream num;
-				num << (i + 1);
-				std::cout << "index: " << num.str() << (*(aCell -> getNodesVector()))[i] -> getNstring() << std::endl;
+		getchar();
+		
+		//print the types of reaction
+		std::cout<< "1. inducer and protein binding" << std::endl;
+		std::cout<< "2. protein and protein binding" << std::endl;
+		std::cout<< "3. protein and gene binding" << std::endl;
+		std::cout<< "4. protein modification" << std::endl;
+		
+		// print all nodes a cell contains
+		std::cout<< "Species in the cell are:" << std::endl;
+		ustc::Cell* aCell = (targetPop -> getCells())[0];
+		//size of nodes
+		int size = (aCell->getNodesVector()) -> size();
+		// print the Nstrings of nodes
+		for(int i = 0; i < size; i++){
+			std::stringstream num;
+			num << (i + 1);
+			std::cout<< num.str() << (*(aCell -> getNodesVector()))[i] -> getNstring() << std::endl;
+		}
+		// ask the reaction type
+		std::cout<< "please type in the type of reaction(1-4): ";
+		int tempType;
+		std::cin >> tempType;
+		if(tempType == 4){
+			std::cout<< "please type in the index of reactans";
+			int tempIndex = 0;
+			std::cin >> tempIndex;
+			int index = (tempIndex - 1);
+			rType = 3;
+			for(int i = 0; i < POPULATION; i ++){
+			((targetPop -> getCells())[i]) -> addReaction(rType,index);
 			}
-			// ask the reaction type
-			std::cout<< "please type in the type of reaction" << std::endl;
-			if(getchar() == '4'){
-				std::cout<< "please type in the index of reactans";
-				int index = ((int()(getchar()) - 1));
-				rType = 3;
-				for(int i = 0; i < POPULATION; i ++){
-				((targetPop -> getCells())[i]) -> addReaction(rType,index);
-				}
-			}
-			else{
-				if(getchar() == '1'){
-					rType = 8;
-				}
-				else{
-					if(getchar() == '2'){
-						rType = 5;
-					}
-					else{
-						if(getchar() == '3'){
-							rType = 2;
-						}
-					}
-				}
-				int index1 = 0;
-				int index2 = 0;
-				std::cout<< "please type in the index of reactans";
-				index1 = ((int()(getchar()) - 1));
-				std::cout<< "please type in the index of another reactans";
-				index2 = ((int()(getchar()) - 1));
-				for(int i = 0; i < POPULATION; i ++){
-				((targetPop -> getCells())[i]) -> addReaction(rType,index1,index2);
-				}
-			}
-			
 		}
 		else{
-			if(getchar() == 'n'){
-				break;
+			if(tempType == 1){
+				rType = 8;
+			}
+			else{
+				if(tempType == 2){
+					rType = 5;
+				}
+				else{
+					if(tempType == 3){
+						rType = 2;
+					}
+				}
+			}
+			int index1 = 0;
+			int index2 = 0;
+			int tempIndex1 = 0;
+			int tempIndex2 = 0;
+			std::cout<< "please type in the index of reactans";
+			std::cin>> tempIndex1;
+			index1 = (tempIndex1 - 1);
+			std::cout<< "please type in the index of another reactans";
+			std::cin>> tempIndex2;
+			index2 = (tempIndex2 - 1);
+			for(int i = 0; i < POPULATION; i ++){
+			((targetPop -> getCells())[i]) -> addReaction(rType,index1,index2);
 			}
 		}
+			
 		std::cout << "Do you know more information about the reaction? <y/n>" << std::endl;
 	}
 }
+
+

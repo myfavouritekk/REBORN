@@ -1196,6 +1196,93 @@ void Cell::addReaction(int _rtype,int index){
 //void addReaction(int _rtype,int firstIndex,int secondIndex)
 void Cell::addReaction(int _rtype,int firstIndex,int secondIndex){
 
+	switch(_rtype){
+
+	case 8:             //indu + prot -> indu:prot
+		{
+		Reaction* r1=new Reaction(8);
+		Node* induProt=new Node(nodes.size(),4,nodes[firstIndex],nodes[secondIndex]);
+		nodes.push_back(induProt);
+
+		r1->setReversible(true);
+		r1->initForwardRateRandomly();
+		r1->initReverseRateRandomly();
+		r1->addReactant(nodes[firstIndex]);
+		r1->addReactant(nodes[secondIndex]);
+		r1->addProduct(induProt);
+
+		rlist.push_back(r1);
+		break;
+		}
+	case 5:             //prot1 + prot2 -> prot1:prot2
+		{
+		Reaction *r1 = new Reaction(5);
+		Reaction *r2 = new Reaction(1); 
+		Node* dimer = new Node(nodes.size(),6,nodes[firstIndex],nodes[secondIndex]);
+		nodes.push_back(dimer);
+
+		r1->setReversible(false);
+		r1->initForwardRateRandomly();
+		r1->addReactant(nodes[firstIndex]);
+		r1->addReactant(nodes[secondIndex]);
+		r1->addProduct(dimer);
+
+		r2->setReversible(false);
+		r2->initForwardRateRandomly();
+		r2->addReactant(dimer);
+
+		rlist.push_back(r1);
+		rlist.push_back(r2);
+		break;
+		}
+	case 2:             //prot + gene -> gene::prot
+		{
+		Reaction *r1 = new Reaction(2);
+		Reaction *r2 = new Reaction(0);
+		Node * binding = new Node(nodes.size(),5,nodes[firstIndex],nodes[secondIndex]);
+		nodes.push_back(binding);
+
+		r1->setReversible(true);
+		r1->initForwardRateRandomly();
+		r1->initReverseRateRandomly();
+		r1->addReactant(nodes[firstIndex]);
+		r1->addReactant(nodes[secondIndex]);
+		r1->addProduct(binding);
+
+		Node* exGene = binding->extractFirstGene();
+		if(exGene == NULL) return;
+
+		Node* exProt = NULL;
+		std::vector<Reaction*>::iterator iter = rlist.begin();
+		while (iter != rlist.end()) {
+        if((*iter)->getRtype() == 0) { //   #0 is gene transcription
+			Node* sr = (*iter)->getModifier(0);
+			if(sr != NULL && (sr->getNindex() == exGene->getNindex())) {
+				exProt = (*iter)->getProduct(0);
+				break;
+				}
+		 }
+			iter ++;
+		}
+
+		if(exProt == NULL) return;
+
+		r2->setReversible(false);
+		r2->initForwardRateRandomly();
+		r2->addModifier(binding);
+		r2->addProduct(exProt);
+
+		rlist.push_back(r1);
+		rlist.push_back(r2);
+		break;
+		}
+	default:
+		{
+		std::cout<<"Error!"<<std::endl;
+		break;
+		}
+	}
+
 }
 
  

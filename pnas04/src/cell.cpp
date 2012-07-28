@@ -1201,12 +1201,30 @@ void Cell::addReaction(int _rtype,int index){
 		return;
 	}
 
+	vector<Node*>::iterator iter = nodes.begin();
+	int indexOfModifier=0;
+	int numOfModifier=0;
+	vector<int> modifierIndex;
+	while(iter != nodes.end()){     //choose nodes with type 1,3,4,6,then choose one as the modifier
+		int _Ntype=(*iter)->getNtype();
+		if(_Ntype ==1 || _Ntype ==3 || _Ntype==4 || _Ntype == 6){
+			numOfModifier++;
+			modifierIndex.push_back(indexOfModifier);
+		}
+		iter++;
+		indexOfModifier++;
+	}
+	if(!numOfModifier) return;
+
+	int opModifierIndex = modifierIndex[rand()%numOfModifier];  //choose one modifier
+
 	Node* modifiedProt = new Node(nodes.size(),3);
 	Reaction* modification = new Reaction(_rtype);
 
 	modification -> setReversible(false);
 	modification -> initForwardRateRandomly();
 	modification -> addReactant(nodes[index]);
+	modification -> addModifier(nodes[opModifierIndex]);
 	modification -> addProduct(modifiedProt);
 
 	Reaction* degradation = new Reaction(1);

@@ -1129,37 +1129,37 @@ void Cell::genRegulatoryRelationships(){
 				indexOfOldMod = rlist[l] -> getReactant(1) -> getNindex();
 		        indexOfTargetProt = rlist[l] -> getReactant(0) -> getNindex();
 			}
-		double forwardrateOfNew;
-		double forwardrateOfOld;
-		// get the forwardrate of the old and the new
-		for(int p = 0; p < sizeOfReaction; p++){
-			if(rlist[p] -> getRtype() == 0){
-				if(rlist[p] -> getModifier(0) -> getNindex() == indexOfNewMod)
-					forwardrateOfNew = rlist[p] -> getForwardRate();
-				else
-					if(rlist[p] -> getModifier(0) -> getNindex() == indexOfOldMod)
-						forwardrateOfOld = rlist[p] -> getForwardRate();
-			}
-		}
-		int s = 0; // x 
-		int t = 0; // y
-		// find the possition of selected prot and gene
-		for(int q = 0; q < numOfGene; q++){
-			if(indexOfGene[q] == indexOfOldMod){
-                s = q;
-                break;
+            double forwardrateOfNew;
+            double forwardrateOfOld;
+            // get the forwardrate of the old and the new
+            for(int p = 0; p < sizeOfReaction; p++){
+                if(rlist[p] -> getRtype() == 0){
+                    if(rlist[p] -> getModifier(0) -> getNindex() == indexOfNewMod)
+                        forwardrateOfNew = rlist[p] -> getForwardRate();
+                    else
+                        if(rlist[p] -> getModifier(0) -> getNindex() == indexOfOldMod)
+                            forwardrateOfOld = rlist[p] -> getForwardRate();
+                }
             }
-		}
-		for(int r = 0; r < numOfProtLike; r++){
-			if(indexOfProtLike[r] == indexOfTargetProt){
-				t = r;
-                break;
+            int s = 0; // x
+            int t = 0; // y
+            // find the possition of selected prot and gene
+            for(int q = 0; q < numOfGene; q++){
+                if(indexOfGene[q] == indexOfOldMod){
+                    s = q;
+                    break;
+                }
             }
-		}
-		if(forwardrateOfNew > forwardrateOfOld)
-			regulatoryMatrix[s][t] = 1;
-		else
-			regulatoryMatrix[s][t] = -1;
+            for(int r = 0; r < numOfProtLike; r++){
+                if(indexOfProtLike[r] == indexOfTargetProt){
+                    t = r;
+                    break;
+                }
+            }
+            if(forwardrateOfNew > forwardrateOfOld)
+                regulatoryMatrix[s][t] = 1;
+            else
+                regulatoryMatrix[s][t] = -1;
 		}
 	}
     for (int i = 0; i < numOfGene ; i++) {

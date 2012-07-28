@@ -1174,6 +1174,14 @@ void Cell::genRegulatoryRelationships(){
 
 //void  addReaction(int _rtype,int index)(A -> A*)
 void Cell::addReaction(int _rtype,int index){
+	if(_rtype !=3){
+		std::cout<<"Wrong Reaction Type!"<<std::endl;
+		return;
+	}
+	if(!existsNode(*nodes[index])){
+		std::cout<<"No Such Node!"<<std::endl;
+		return;
+	}
 
 	Node* modifiedProt = new Node(nodes.size(),3);
 	Reaction* modification = new Reaction(_rtype);
@@ -1196,6 +1204,11 @@ void Cell::addReaction(int _rtype,int index){
 //void addReaction(int _rtype,int firstIndex,int secondIndex)
 void Cell::addReaction(int _rtype,int firstIndex,int secondIndex){
 
+	if(!existsNode(*nodes[firstIndex]) || !existsNode(*nodes[secondIndex])){
+		std::cout<<"No Such Nodes!"<<std::endl;
+		return;
+	}
+	
 	switch(_rtype){
 
 	case 8:             //indu + prot -> indu:prot
@@ -1278,7 +1291,7 @@ void Cell::addReaction(int _rtype,int firstIndex,int secondIndex){
 		}
 	default:
 		{
-		std::cout<<"Error!"<<std::endl;
+		std::cout<<"Wrong Reaction Type!"<<std::endl;
 		break;
 		}
 	}

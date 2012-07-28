@@ -568,6 +568,23 @@ void Cell::mut_add_postmod () {
 		int opIndex=protIndice[rand()%numOfProt];  //choose a random protein
 		if(nodes[opIndex]->getNtype() == 3)       //if it is a single protein, the reaction type is A->A*
 		{
+			vector<Node*>::iterator iter = nodes.begin();
+			int indexOfModifier=0;
+			int numOfModifier=0;
+			vector<int> modifierIndex;
+			while(iter != nodes.end()){     //choose nodes with type 1,3,4,6,then choose one as the modifier
+				int _Ntype=(*iter)->getNtype();
+				if(_Ntype ==1 || _Ntype ==3 || _Ntype==4 || _Ntype == 6){
+					numOfModifier++;
+					modifierIndex.push_back(indexOfModifier);
+				}
+				iter++;
+				indexOfModifier++;
+			}
+			if(!numOfModifier) return;
+
+			int opModifierIndex = modifierIndex[rand()%numOfModifier];  //choose one modifier
+
 			Node* modProt = new Node(nodes.size(),3);
 			nodes.push_back(modProt);
 
@@ -575,6 +592,7 @@ void Cell::mut_add_postmod () {
 			r0->setReversible(false);
 			r0->initForwardRateRandomly();
 			r0->addReactant(nodes[opIndex]);
+			r0->addModifier(nodes[opModifierIndex]);
 			r0->addProduct(modProt);
 
 			Reaction* r1=new Reaction(1);   //add degradation reaction of the modified protein
@@ -1183,12 +1201,30 @@ void Cell::addReaction(int _rtype,int index){
 		return;
 	}
 
+	vector<Node*>::iterator iter = nodes.begin();
+	int indexOfModifier=0;
+	int numOfModifier=0;
+	vector<int> modifierIndex;
+	while(iter != nodes.end()){     //choose nodes with type 1,3,4,6,then choose one as the modifier
+		int _Ntype=(*iter)->getNtype();
+		if(_Ntype ==1 || _Ntype ==3 || _Ntype==4 || _Ntype == 6){
+			numOfModifier++;
+			modifierIndex.push_back(indexOfModifier);
+		}
+		iter++;
+		indexOfModifier++;
+	}
+	if(!numOfModifier) return;
+
+	int opModifierIndex = modifierIndex[rand()%numOfModifier];  //choose one modifier
+
 	Node* modifiedProt = new Node(nodes.size(),3);
 	Reaction* modification = new Reaction(_rtype);
 
 	modification -> setReversible(false);
 	modification -> initForwardRateRandomly();
 	modification -> addReactant(nodes[index]);
+	modification -> addModifier(nodes[opModifierIndex]);
 	modification -> addProduct(modifiedProt);
 
 	Reaction* degradation = new Reaction(1);

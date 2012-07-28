@@ -1121,7 +1121,7 @@ void Cell::genRegulatoryRelationships(){
 	for(int l = 0; l < sizeOfReaction; l++){
 		if(rlist[l] -> getRtype() == 2){
 			indexOfNewMod = rlist[l] -> getProduct(0) -> getNindex();
-			if(rlist[l] -> getReactant(0) -> getNtype() == 1){
+			if(rlist[l] -> getReactant(0) -> getNtype() == 2){  // type 2 is gene
 				indexOfOldMod = rlist[l] -> getReactant(0) -> getNindex();
 		        indexOfTargetProt = rlist[l] -> getReactant(1) -> getNindex();
 			}

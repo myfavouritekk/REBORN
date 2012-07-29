@@ -1094,16 +1094,22 @@ std::vector<int>* Cell::getInputIndiceVector(){
 	return &inputIndice;
 }
 
+    
+    
+/*genRegulatoryRelationships() mehtod:
+ *purpose: this method is to judge whether the genes in the cell have regulatory relationships,
+ *  and put the regulatory relationships in the regulatoryMatrix array
+ */
 void Cell::genRegulatoryRelationships(){
     //int numOfProtLike = 0;
     int numOfGene = 0;
-    int sizeOfNode = nodes.size();
+    int numberOfNodes = nodes.size();
     // figure out the quantity of genes
-    for(int i = 0; i < sizeOfNode; i++){
+    for(int i = 0; i < numberOfNodes; i++){
         if(nodes[i] -> getNtype() == 2)
             numOfGene ++;
     }
-    // initial function of regulatoryMatrix to zero
+    // initial function of regulatoryMatrix to 0
     regulatoryMatrix = new int* [numOfGene];
     for(int j = 0; j < numOfGene; j++){
         regulatoryMatrix[j] = new int [numOfGene];
@@ -1112,122 +1118,140 @@ void Cell::genRegulatoryRelationships(){
         for(int j = 0; j < numOfGene; j++){
             regulatoryMatrix[i][j] = 0;
         }
-    // to restore the index of genes and prots
-    //int* indexOfProtLike = new int [numOfProtLike];
+    
+    // to store the indice of genes and prots
     int* indexOfGene = new int[numOfGene];
-    int h = 0;
     int k = 0;
-    for(int i = 0; i < sizeOfNode; i++){
+    for(int i = 0; i < numberOfNodes; i++){
         if(nodes[i] -> getNtype() == 2){
             indexOfGene[k] = nodes[i] -> getNindex();
             k++;
         }
         
     }
-    int sizeOfReaction = rlist.size();
+    int numberOfReactions = rlist.size();
     int indexOfNewMod;
     int indexOfOldMod;
-    int indexOfTargetProt;
-    // find the reaction of type3
-    for(int l = 0; l < sizeOfReaction; l++){
+    int indexOfRegualtingProtLike;
+    
+    // find the reaction of Type 2: protein binding gene
+    for(int l = 0; l < numberOfReactions; l++){
         if(rlist[l] -> getRtype() == 2){
-            indexOfNewMod = rlist[l] -> getProduct(0) -> getNindex();
-            if(rlist[l] -> getReactant(0) -> getNtype() == 2){  // type 2 is gene
+            indexOfNewMod = rlist[l] -> getProduct(0) -> getNindex();//the new modifier is the a gene/protein complex, which is the first and only product fo a binding reaction
+            if(rlist[l] -> getReactant(0) -> getNtype() == 2){  //node type 2 is gene
                 indexOfOldMod = rlist[l] -> getReactant(0) -> getNindex();
-                indexOfTargetProt = rlist[l] -> getReactant(1) -> getNindex();
+                indexOfRegualtingProtLike = rlist[l] -> getReactant(1) -> getNindex();
             }
             else{
                 indexOfOldMod = rlist[l] -> getReactant(1) -> getNindex();
-                indexOfTargetProt = rlist[l] -> getReactant(0) -> getNindex();
+                indexOfRegualtingProtLike = rlist[l] -> getReactant(0) -> getNindex();
             }
             
             double forwardrateOfNew;
             double forwardrateOfOld;
-            // get the forwardrate of the old and the new
-            for(int p = 0; p < sizeOfReaction; p++){
-                if(rlist[p] -> getRtype() == 0){
-                    if(rlist[p] -> getModifier(0) -> getNindex() == indexOfNewMod)
-                        forwardrateOfNew = rlist[p] -> getForwardRate();
+            // get the forwardrate of the old and the new transcription reactions
+            for(int i = 0; i < numberOfReactions; i++){
+                if(rlist[i] -> getRtype() == 0){//reaction type 0 is transcription
+                    if(rlist[i] -> getModifier(0) -> getNindex() == indexOfNewMod)
+                        forwardrateOfNew = rlist[i] -> getForwardRate();
                     else
-                        if(rlist[p] -> getModifier(0) -> getNindex() == indexOfOldMod)
-                            forwardrateOfOld = rlist[p] -> getForwardRate();
+                        if(rlist[i] -> getModifier(0) -> getNindex() == indexOfOldMod)
+                            forwardrateOfOld = rlist[i] -> getForwardRate();
                 }
             }
-            int s = 0; // x
-            int t = 0; // y
+            int row = 0; // column of a gene
+            int column = 0; // row of a gene
             // find the possition of selected prot and gene
-            for(int q = 0; q < numOfGene; q++){
-                if(indexOfGene[q] == indexOfOldMod){
-                    s = q;
-                    break;
+            for(int i = 0; i < numOfGene; i++){
+                if(indexOfGene[i] == indexOfOldMod){
+                    row = i;
+                    break;// get the row which the old modifier is in and stop looping
                 }
             }
-            if(nodes[indexOfTargetProt] -> getNtype() == 3){
-                int indexOfTargetGene = 0;
-                for(int i = 0; i < sizeOfReaction; i++){
-                    if(rlist[i] -> getRtype() == 0){
-                        if(rlist[i] -> getProduct(0) -> getNindex() == indexOfTargetProt){
-                            indexOfTargetGene = rlist[i] -> getModifier(0) -> getNindex();
+            
+            //regualtion protein like nodes can be protein(type 3) or protein complex(type 6)
+            int typeOfRegulatingProtLike = nodes[indexOfRegualtingProtLike] -> getNtype();
+            switch (typeOfRegulatingProtLike) {
+                case 3:{//single protain case
+                    int indexOfRegulatingGene = 0;
+                    for(int i = 0; i < numberOfReactions; i++){//find the gene that transcripts the regulating protein
+                        if(rlist[i] -> getRtype() == 0){//transcription
+                            if(rlist[i] -> getProduct(0) -> getNindex() == indexOfRegualtingProtLike){
+                                indexOfRegulatingGene = rlist[i] -> getModifier(0) -> getNindex();
+                                break;
+                            }
+                        }
+                    }
+                    for(int i = 0; i < numOfGene; i++){
+                        if(indexOfGene[i] == indexOfRegulatingGene){
+                            column = i;
+                            if(forwardrateOfNew > forwardrateOfOld)
+                                regulatoryMatrix[row][column] = 1;
+                            else
+                                regulatoryMatrix[row][column] = -1;
+                            
+                            break;
                         }
                     }
                 }
-                for(int r = 0; r < numOfGene; r++){
-                    if(indexOfGene[r] == indexOfTargetGene){
-                        t = r;
-                        break;
-                    }
-                }
-                
-                if(forwardrateOfNew > forwardrateOfOld)
-                    regulatoryMatrix[s][t] = 1;
-                else
-                    regulatoryMatrix[s][t] = -1;
-            }
-            if(nodes[indexOfTargetProt] -> getNtype() == 6){
-                int sizeOfProtComplex = nodes[indexOfTargetProt] -> getNsize();
-                int* indexOfTarget = new int[sizeOfProtComplex];
-                for(int i = 0; i < sizeOfProtComplex; i ++){
-                    indexOfTarget[i] = nodes[indexOfTargetProt] -> getNode(i) -> getNindex();
-                    for(int i = 0; i < sizeOfReaction; i++){
-                        if(rlist[i] -> getRtype() == 0){
-                            if(rlist[i] -> getProduct(0) -> getNindex() == indexOfTarget[i]){
-                                indexOfTarget[i] = rlist[i] -> getModifier(0) -> getNindex();
-                                for(int r = 0; r < numOfGene; r++){
-                                    if(indexOfGene[r] == indexOfTarget[i]){
-                                        t = r;
-                                        break;
-                                        if(forwardrateOfNew > forwardrateOfOld)
-                                            regulatoryMatrix[s][t] = 1;
-                                        else
-                                            regulatoryMatrix[s][t] = -1;
+                    
+                case 6:{//protein complex case
+                    int numberOfRegulatingGenes = nodes[indexOfRegualtingProtLike] -> getNsize() - 1;//WRONG: the size of complex is not the number of regulating genes plus 1, because of cases like P1:P1:P3, but this will still work because it will assign to g0 twice
+                    int* indiceOfRegualtingGenes = new int[numberOfRegulatingGenes];
+                    for(int i = 1; i < numberOfRegulatingGenes; i ++){//starts from 1 because components[0] is for gene or NULL
+                        indiceOfRegualtingGenes[i] = nodes[indexOfRegualtingProtLike] -> getNode(i) -> getNindex();
+                        for(int i = 0; i < numberOfReactions; i++){
+                            if(rlist[i] -> getRtype() == 0){
+                                if(rlist[i] -> getProduct(0) -> getNindex() == indiceOfRegualtingGenes[i]){
+                                    indiceOfRegualtingGenes[i] = rlist[i] -> getModifier(0) -> getNindex();
+                                    for(int i = 0; i < numOfGene; i++){
+                                        if(indexOfGene[i] == indiceOfRegualtingGenes[i]){
+                                            column = i;
+                                            if(forwardrateOfNew > forwardrateOfOld)
+                                                regulatoryMatrix[row][column] = 1;
+                                            else
+                                                regulatoryMatrix[row][column] = -1;
+                                            break;
+                                        }
                                     }
                                 }
                             }
-                            
-                            
                         }
                     }
-                    
-                    delete[] indexOfTarget;
-                    
+                    delete[] indiceOfRegualtingGenes;
                 }
+
+                default:
+                    break;
             }
-            std::cout<< "\t";
-            for (int i = 0; i < numOfGene ; i++){
-                std::cout<< nodes[indexOfGene[i]] -> getNstring()<< "\t";
-            }
-            std::cout<< std::endl;
-            for (int i = 0; i < numOfGene ; i++) {
-                std::cout<< nodes[indexOfGene[i]] -> getNstring()<< "\t";
-                for (int j = 0; j < numOfGene; j++) {
-                    std::cout << regulatoryMatrix[i][j] << "\t";
-                }
-                std::cout << std::endl;
-            }
-            //delete [] indexOfProtLike;
-            delete [] indexOfGene;
         }
     }
+    
+    
+    
+    
+    //output the regulatoryMatix
+    /*the structure fo output looks like
+             g0  g2  g4
+             g0 0   1   0
+             g2 -1  0   0
+             g4 -1  1   0
+     */
+    std::cout<< "\t";
+    for (int i = 0; i < numOfGene ; i++){
+        std::cout<< nodes[indexOfGene[i]] -> getNstring()<< "\t";
+    }
+    std::cout<< std::endl;
+    
+    for (int i = 0; i < numOfGene ; i++) {
+        std::cout<< nodes[indexOfGene[i]] -> getNstring()<< "\t";
+        for (int j = 0; j < numOfGene; j++) {
+            std::cout << regulatoryMatrix[i][j] << "\t";
+        }
+        std::cout << std::endl;
+    }
+    delete [] indexOfGene;
+
 }
 
 

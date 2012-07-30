@@ -1075,6 +1075,13 @@ void Cell::description(int time){
     std::cout << "Regulatory Matrix: " << std::endl;
     genRegulatoryRelationships();
     
+    std::vector<Motif*>::iterator iter_motif = motifs.begin();
+    std::vector<Motif*>::iterator iter_motif_end = motifs.end();
+    while (iter_motif != iter_motif_end) {
+        (*iter_motif) -> description();
+        iter_motif++;
+    }
+    
     for (int i = 0; i < nodes.size(); i++) {
         delete [] currData[i];
     }

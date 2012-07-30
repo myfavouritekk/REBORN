@@ -27,6 +27,10 @@ class Motif{
         //return motif size
         int motifSize();
         
+    
+        //print the basic information of this motif
+        void description();
+    
     private:
         //private method to generate motif type based on the motifMatrix
         void generateMtype();

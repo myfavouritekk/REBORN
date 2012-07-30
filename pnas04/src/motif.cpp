@@ -47,10 +47,10 @@ int Motif::motifSize(){
 
 //private method to generate motif type based on the motifMatrix
 void Motif::generateMtype(){
-int size = motifNodes.size();
+    int size = motifNodes.size();
 	switch (size){ //single gene regulation
 		case 1:{
-			if (motifMatrix[1][1] == 1){
+			if (motifMatrix[0][0] == 1){
 				mtype = 1; // gene promotes itself
 			}
 			else{
@@ -59,7 +59,7 @@ int size = motifNodes.size();
 			break;
 		}
 		case 2:{ // two genes regulation
-			int testValue = (motifMatrix[1][2] + motifMatrix[2][1]);
+			int testValue = (motifMatrix[0][1] + motifMatrix[1][0]);
 			switch (testValue){
 				case 1:{
 					/* 0 1  or  0 0
@@ -114,6 +114,27 @@ int size = motifNodes.size();
 		
 	}
 	    
+}
+
+//print the basic information of this motif
+void Motif::description(){
+    int size = (int)motifNodes.size();
+    std::cout << "Motif:" << std::endl << "\tType: " << mtype << std::endl;
+    std::cout << "\tNodes: ";
+    for (int i = 0; i < size; i++) {
+        std::cout << motifNodes[i] -> getNstring() << "\t";
+    }
+    std::cout << std::endl << "\tMatrix:" << std::endl << "\t\t";
+    for (int i = 0; i < size; i++) {
+        std::cout << motifNodes[i] -> getNstring() << "\t";
+    }
+    for (int i = 0; i < size; i++) {
+        std::cout << std::endl << "\t" << motifNodes[i] -> getNstring() << "\t";
+        for (int j = 0; j < size; j++) {
+            std::cout << motifMatrix[i][j] << "\t";
+        }
+    }
+    std::cout << std::endl;
 }
 
     

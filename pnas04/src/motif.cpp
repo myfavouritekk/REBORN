@@ -31,7 +31,10 @@ Motif::Motif(std::vector<Node*>* constructingNodes, int** relationshipMatrix){
 }
 
 Motif::~Motif(){
-    
+	for(int i = 0;i<motifSize();i++){
+		delete [] motifMatrix[i];
+	}
+	delete [] motifMatrix; 
 }
 
 

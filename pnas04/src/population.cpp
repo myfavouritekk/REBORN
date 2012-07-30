@@ -91,7 +91,7 @@ void Population::growth(){;
 //mutation only for topology
 void Population::mutation(){
     Cell* currCell;
-    for(int i = 10; i < ncell; i++){
+    for(int i = CELLS_UNCHANGED; i < ncell; i++){
         
         currCell = cells[i];
         

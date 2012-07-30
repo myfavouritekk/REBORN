@@ -11,7 +11,23 @@
 namespace ustc {
     
 Motif::Motif(std::vector<Node*>* constructingNodes, int** relationshipMatrix){
-    
+	vector<Node*>::iterator iter = (*constructingNodes).begin();
+	vector<Node*>::iterator iter_end = (*constructingNodes).end();
+	int matrixSize =(*constructingNodes).size();
+	while (iter!=iter_end){
+		motifNodes.push_back(*iter);
+		iter++;
+	}
+	motifMatrix = new int*[matrixSize];
+	for(int i = 0; i<matrixSize;i++){
+		motifMatrix[i] = new int[matrixSize];
+	}
+	for(int i = 0; i<matrixSize; i++){
+		for(int j=0; j<matrixSize; j++){
+			motifMatrix[i][j]=relationshipMatrix[i][j];
+		}
+	}
+	generateMtype();
 }
 
 Motif::~Motif(){

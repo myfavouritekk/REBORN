@@ -32,7 +32,7 @@ int main (void) {
     //  output
     myPop.sort();
     myPop.output();
-    //myPop.genSBMLFormat();
+    myPop.genSBMLFormat();
 
     return 0;
 }

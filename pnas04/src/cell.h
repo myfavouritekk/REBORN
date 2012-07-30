@@ -63,6 +63,18 @@ class Cell {
         //generate regulatory relationships
         void genRegulatoryRelationships();
     
+    
+        //find and print single-gene motifs
+        void findSingleMotifs();
+
+        //find and print two-gene motifs
+        void findDoubleMotifs();
+
+        //find and print three-gene motifs
+        void findTripleMotifs();
+    
+    
+    
         //get nodes vector
         std::vector<Node*>* getNodesVector();
     

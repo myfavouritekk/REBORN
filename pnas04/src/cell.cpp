@@ -1363,11 +1363,11 @@ void Cell::findDoubleMotifs(int numberOfGenes, int* indiceOfGenes){
 void Cell::findTripleMotifs(int numberOfGenes, int* indiceOfGenes){
     	
     for(int i = 0;i < numberOfGenes; i++){
-		for(int j = i + 1; i < numberOfGenes; j ++){
+		for(int j = i + 1; j < numberOfGenes; j ++){
 			if(regulatoryMatrix[i][j] == 0 && regulatoryMatrix[j][i] == 0){
 				continue;
 			}
-			for(int k = j + 1; j < numberOfGenes; j ++){
+			for(int k = j + 1; k < numberOfGenes; k ++){
 				if(regulatoryMatrix[i][k] == 0 && regulatoryMatrix[k][i] == 0 && regulatoryMatrix[j][k] == 0 && regulatoryMatrix[k][j] == 0){
 					continue;
 				}

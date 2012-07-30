@@ -559,7 +559,7 @@ void Population::output(){
     
     
 }
-  /*  
+  
 void Population:: genSBMLFormat(){
 	
 	// creat unit
@@ -753,7 +753,7 @@ void Population:: genSBMLFormat(){
      }
 }
   
- */ 
+ 
 
 
 

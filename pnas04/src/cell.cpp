@@ -1352,7 +1352,27 @@ void Cell::findDoubleMotifs(int numberOfGenes, int* indiceOfGenes){
     
 //find and print three-gene motifs
 void Cell::findTripleMotifs(int numberOfGenes, int* indiceOfGenes){
+    	
+    for(int i = 0;i < numberOfGenes; i++){
+		for(int j = i + 1; i < numberOfGenes; j ++){
+			if(regulatoryMatrix[i][j] == 0 && regulatoryMatrix[j][i] == 0){
+				continue;
+			}
+			for(int k = j + 1; j < numberOfGenes; j ++){
+				if(regulatoryMatrix[i][k] == 0 && regulatoryMatrix[k][i] == 0 && regulatoryMatrix[j][k] == 0 && regulatoryMatrix[k][j] == 0){
+					continue;
+				}
+				else{
+					std::cout << "\t" << nodes[indiceOfGenes[i]] -> getNstring() << "\t" << nodes[indiceOfGenes[j]] -> getNstring() << "\t" << nodes[indiceOfGenes[k]] -> getNstring() << std::endl;
+					std::cout << nodes[indiceOfGenes[i]] -> getNstring() << "\t" <<regulatoryMatrix[i][i] << "\t" << regulatoryMatrix[i][j] << "\t" << regulatoryMatrix[i][k] << std::endl;
+					std::cout << nodes[indiceOfGenes[j]] -> getNstring() << "\t" <<regulatoryMatrix[j][i] << "\t" << regulatoryMatrix[j][j] << "\t" << regulatoryMatrix[j][k] << std::endl;
+					std::cout << nodes[indiceOfGenes[k]] -> getNstring() << "\t" <<regulatoryMatrix[k][i] << "\t" << regulatoryMatrix[k][j] << "\t" << regulatoryMatrix[k][k] << std::endl;
+				}
+			}
+		}
+	}
     
+
 }
 
     

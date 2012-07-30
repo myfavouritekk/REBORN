@@ -1256,6 +1256,34 @@ void Cell::genRegulatoryRelationships(){
 
 }
 
+    
+
+//find motifs consisting 1, 2 or 3 genes
+void Cell::findMotifs(){
+    
+}
+
+    
+//find and print single-gene motifs
+void Cell::findSingleMotifs(int numberOfGenes, int* indiceOfGenes){
+    
+}
+
+    
+//find and print two-gene motifs
+void Cell::findDoubleMotifs(int numberOfGenes, int* indiceOfGenes){
+    
+}
+
+    
+//find and print three-gene motifs
+void Cell::findTripleMotifs(int numberOfGenes, int* indiceOfGenes){
+    
+}
+
+    
+    
+    
 
 //void  addReaction(int _rtype,int index)(A -> A*)
 void Cell::addReaction(int _rtype,int index){

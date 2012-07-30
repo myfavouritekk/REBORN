@@ -650,6 +650,15 @@ void Population:: genSBMLFormat(){
 				iter_node ++;
 			}
 			ASTNode* temp = new ASTNode(AST_TIMES);
+			ASTNode* Kon = new ASTNode(AST_NAME);
+			std:: stringstream k;
+			k<< "Kon" << j + 1;
+			Kon -> setName(k.str().c_str());
+			konFormula << k <<tempFormula;
+			para = k1 -> createParameter();
+			para -> setId(k.str());
+			para -> setValue((*(iter_reaction)) -> getForwardRate());
+			temp -> addChild(Kon);
 			if((*iter_reaction) -> getReactantsVector() -> size()){
 				int size = ((*iter_reaction) -> getReactantsVector() -> size());
 				iter_node = (*iter_reaction)->getReactantsVector()->begin();
@@ -657,6 +666,9 @@ void Population:: genSBMLFormat(){
 				reactant -> setName((*iter_node) -> getNstring().c_str());
 				tempFormula << " * " << ((*iter_node) -> getNstring().c_str());
 				temp -> addChild(reactant);
+				ASTNode* temptemp = new ASTNode(AST_TIMES);
+					temptemp -> addChild(temp);
+					temp = temptemp;
 				iter_node ++;
 				for (int i = 0; i < (size -1); i++){
 					ASTNode* reactant = new ASTNode(AST_NAME);
@@ -684,53 +696,45 @@ void Population:: genSBMLFormat(){
                     iter_node++;
 				}
 			}
-			ASTNode* Kon = new ASTNode(AST_NAME);
-			std:: stringstream k;
-			k<< "Kon" << j + 1;
-			Kon -> setName(k.str().c_str());
-			konFormula << k <<tempFormula;
-			para = k1 -> createParameter();
-			para -> setId(k.str());
-			para -> setValue((*(iter_reaction)) -> getForwardRate());
-			temp -> addChild(Kon);
+			
 			// exist reversereaction
-				if((*iter_reaction) -> isReversible()){
-				reaction -> setReversible(1);
-				std::stringstream tempFormula;
-				int size = (*(*iter_reaction) -> getProductsVector()).size();
-				iter_node = (*iter_reaction)->getProductsVector()->begin();
-				ASTNode* temp3 = new ASTNode(AST_TIMES);
+			if((*iter_reaction) -> isReversible()){
+			reaction -> setReversible(1);
+			std::stringstream tempFormula;
+			int size = (*(*iter_reaction) -> getProductsVector()).size();
+			iter_node = (*iter_reaction)->getProductsVector()->begin();
+			ASTNode* temp3 = new ASTNode(AST_TIMES);
+			ASTNode* product = new ASTNode(AST_NAME);
+			product -> setName((*iter_node) -> getNstring().c_str());
+			tempFormula << " * " << ((*iter_node) -> getNstring().c_str());
+			temp3 -> addChild(product);
+			iter_node ++;
+			for (int i = 0; i < (size -1); i++){
 				ASTNode* product = new ASTNode(AST_NAME);
 				product -> setName((*iter_node) -> getNstring().c_str());
 				tempFormula << " * " << ((*iter_node) -> getNstring().c_str());
 				temp3 -> addChild(product);
-				iter_node ++;
-				for (int i = 0; i < (size -1); i++){
-					ASTNode* product = new ASTNode(AST_NAME);
-					product -> setName((*iter_node) -> getNstring().c_str());
-					tempFormula << " * " << ((*iter_node) -> getNstring().c_str());
-					temp3 -> addChild(product);
-					ASTNode* temp4 = new ASTNode(AST_TIMES);
-					temp4 -> addChild(temp3);
-					temp3 = temp4;
-                    iter_node++;
-				}
-				ASTNode* Koff = new ASTNode(AST_NAME);
-				std:: stringstream k;
-				k << "Koff" << j + 1;
-				para = k1 -> createParameter();
-				para -> setId(k.str());
-				para -> setValue((*(iter_reaction)) -> getReverseRate());
-				koffFormula << k << tempFormula;
-				Koff -> setName(k.str().c_str());
-				temp3 -> addChild(Koff);
-				ASTNode* math = new ASTNode(AST_MINUS);
-				math -> addChild(temp);
-				math -> addChild(temp3);
-				k1 -> setMath(math);
-				FORMULA << konFormula << " - " << koffFormula;
-				rule->setFormula(FORMULA.str());
-				delete math;
+				ASTNode* temp4 = new ASTNode(AST_TIMES);
+				temp4 -> addChild(temp3);
+				temp3 = temp4;
+                iter_node++;
+			}
+			ASTNode* Koff = new ASTNode(AST_NAME);
+			std:: stringstream k;
+			k << "Koff" << j + 1;
+			para = k1 -> createParameter();
+			para -> setId(k.str());
+			para -> setValue((*(iter_reaction)) -> getReverseRate());
+			koffFormula << k << tempFormula;
+			Koff -> setName(k.str().c_str());
+			temp3 -> addChild(Koff);
+			ASTNode* math = new ASTNode(AST_MINUS);
+			math -> addChild(temp);
+			math -> addChild(temp3);
+			k1 -> setMath(math);
+			FORMULA << konFormula << " - " << koffFormula;
+			rule->setFormula(FORMULA.str());
+			delete math;
 			}
 			else{
 				reaction -> setReversible(0); 

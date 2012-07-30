@@ -1193,12 +1193,13 @@ void Cell::genRegulatoryRelationships(){
                             break;
                         }
                     }
+                    break;
                 }
                     
                 case 6:{//protein complex case
                     int numberOfRegulatingGenes = nodes[indexOfRegualtingProtLike] -> getNsize() - 1;//WRONG: the size of complex is not the number of regulating genes plus 1, because of cases like P1:P1:P3, but this will still work because it will assign to g0 twice
                     int* indiceOfRegualtingGenes = new int[numberOfRegulatingGenes];
-                    for(int i = 1; i < numberOfRegulatingGenes; i ++){//starts from 1 because components[0] is for gene or NULL
+                    for(int i = 1; i <= numberOfRegulatingGenes; i ++){//starts from 1 because components[0] is for gene or NULL, and "=" in "<=" is important!
                         indiceOfRegualtingGenes[i] = nodes[indexOfRegualtingProtLike] -> getNode(i) -> getNindex();
                         for(int i = 0; i < numberOfReactions; i++){
                             if(rlist[i] -> getRtype() == 0){
@@ -1219,6 +1220,7 @@ void Cell::genRegulatoryRelationships(){
                         }
                     }
                     delete[] indiceOfRegualtingGenes;
+                    break;
                 }
 
                 default:
@@ -1232,7 +1234,7 @@ void Cell::genRegulatoryRelationships(){
     
     //output the regulatoryMatix
     /*the structure fo output looks like
-             g0  g2  g4
+                g0  g2  g4
              g0 0   1   0
              g2 -1  0   0
              g4 -1  1   0

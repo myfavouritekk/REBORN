@@ -23,6 +23,11 @@ int Motif::getMtype(){
     return mtype;
 }
 
+//return motif size
+int Motif::motifSize(){
+    return (int)motifNodes.size();
+}
+
 
 //private method to generate motif type based on the motifMatrix
 void Motif::generateMtype(){

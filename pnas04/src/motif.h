@@ -24,6 +24,8 @@ class Motif{
         //return the motif type
         int getMtype();
         
+        //return motif size
+        int motifSize();
         
     private:
         //private method to generate motif type based on the motifMatrix

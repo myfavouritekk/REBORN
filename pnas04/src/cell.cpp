@@ -1260,7 +1260,33 @@ void Cell::genRegulatoryRelationships(){
 
 //find motifs consisting 1, 2 or 3 genes
 void Cell::findMotifs(){
+    int numOfGenes = 0;
+    std::vector<Node*>::iterator iter_node = nodes.begin();
+    std::vector<Node*>::iterator iter_node_end = nodes.end();
+    while (iter_node != iter_node_end) {
+        int nodeType = (*iter_node)->getNtype();
+        if (nodeType == 2) {// Type 2 is gene
+            numOfGenes++;
+        }
+        iter_node++;
+    }
     
+    //store the indice of genes
+    int* indiceOfGenes = new int[numOfGenes];
+    for (int i = 0 ; i < numOfGenes; i++) {
+        int nodeType = nodes[i] -> getNtype();
+        if (nodeType == 2) {//Type 2 is gene
+            indiceOfGenes[i] = nodes[i] -> getNindex();
+        }
+    }
+    
+    //find and print motifs consisting of 1, 2 and 3 genes
+    findSingleMotifs(numOfGenes, indiceOfGenes);
+    findDoubleMotifs(numOfGenes, indiceOfGenes);
+    findTripleMotifs(numOfGenes, indiceOfGenes);
+    
+    delete [] indiceOfGenes;
+
 }
 
     

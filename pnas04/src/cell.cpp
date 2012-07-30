@@ -1305,14 +1305,16 @@ void Cell::findSingleMotifs(int numberOfGenes, int* indiceOfGenes){
 			continue;
 		}
 
-		for(int j = i+1; j < numberOfGenes; j++){
-			if(regulatoryMatrix[i][j]!=0 || regulatoryMatrix[j][i]!=0){
+		for(int j = 0; j < numberOfGenes; j++){
+			if(j==i) continue;
+			if(regulatoryMatrix[i][j]!=0 || regulatoryMatrix[j][i]!=0 ){
 				isSingle=0;
 				break;
 			}
 		}
 
 		if(isSingle){
+			std::cout<<"Single Mofif:"<<std::endl;
 			std::cout<<"\t";
 			std::cout<<nodes[indiceOfGenes[i]] -> getNstring()<<"\t";
 			std::cout<<std::endl;
@@ -1334,7 +1336,8 @@ void Cell::findDoubleMotifs(int numberOfGenes, int* indiceOfGenes){
 				continue;
 			}
 
-			for(int k=j+1;k < numberOfGenes; k++){
+			for(int k=0;k < numberOfGenes; k++){
+				if(k==i||k==j) continue;
 				if(regulatoryMatrix[i][k]!=0||regulatoryMatrix[k][i]!=0||regulatoryMatrix[j][k]!=0||regulatoryMatrix[k][j]!=0){
 					isDouble=0;
 					break;
@@ -1342,6 +1345,7 @@ void Cell::findDoubleMotifs(int numberOfGenes, int* indiceOfGenes){
 			}
 
 			if(isDouble){
+				std::cout<<"Double Motif:"<<std::endl;
 				std::cout<<"\t";
 				std::cout<<nodes[indiceOfGenes[i]] -> getNstring()<<"\t";
 				std::cout<<nodes[indiceOfGenes[j]] -> getNstring()<<"\t"<<std::endl;

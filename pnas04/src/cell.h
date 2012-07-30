@@ -4,6 +4,7 @@
 #include "consts.h"
 #include "node.h"
 #include "reaction.h"
+#include "motif.h"
 #include "scorefunction.h"
 #include <vector>
 #include <iostream>
@@ -129,7 +130,9 @@ class Cell {
         //	Global Storage
         vector<Node*> nodes;//contain all the species within a cell
         vector<Reaction*> rlist;	//	document operations made to develop the network
-		vector<int> inputIndice;   //indice of input sequences, including inducers and proteins, for scoring function
+        std::vector<Motif*> motifs;     //contain all motifs within a cell
+    
+        vector<int> inputIndice;   //indice of input sequences, including inducers and proteins, for scoring function
         std::vector<int> rankings;  //vector to store every ranking of this cell
 };
 }   //namespace ustc

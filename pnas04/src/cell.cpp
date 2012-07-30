@@ -1357,6 +1357,15 @@ void Cell::findDoubleMotifs(int numberOfGenes, int* indiceOfGenes){
 			}
 
 			if(isDouble){
+                int** motifMatrix = new int*[2];
+                motifMatrix[0] = new int[2];
+                motifMatrix[1] = new int[2];
+                for (int i = 0; i < 2; i++) {
+                    for (int j = 0;  j < 2; j++) {
+                        motifMatrix[i][j] = 0;
+                    }
+                }
+                
 				std::cout<<"Double Motif:"<<std::endl;
 				std::cout<<"\t";
 				std::cout<<nodes[indiceOfGenes[i]] -> getNstring()<<"\t";
@@ -1365,6 +1374,24 @@ void Cell::findDoubleMotifs(int numberOfGenes, int* indiceOfGenes){
 				std::cout<<std::endl;
 				std::cout<<nodes[indiceOfGenes[j]] -> getNstring()<<"\t"<<regulatoryMatrix[j][i]<<"\t"<<regulatoryMatrix[j][j];
 				std::cout<<std::endl;
+                
+                //store motif matrix
+                motifMatrix[0][0] = regulatoryMatrix[i][i];
+                motifMatrix[0][1] = regulatoryMatrix[i][j];
+                motifMatrix[1][0] = regulatoryMatrix[j][i];
+                motifMatrix[1][1] = regulatoryMatrix[j][j];
+                
+                //constructing a double motif
+                std::vector<Node*> motifNodes;
+                motifNodes.push_back(nodes[indiceOfGenes[i]]);
+                motifNodes.push_back(nodes[indiceOfGenes[j]]);
+                Motif* doubleMotif = new Motif(&motifNodes, motifMatrix);
+                motifs.push_back(doubleMotif);
+                
+                delete [] motifMatrix[0];
+                delete [] motifMatrix[1];
+                delete [] motifMatrix;
+
 			}
 		}
 	}  
@@ -1384,10 +1411,44 @@ void Cell::findTripleMotifs(int numberOfGenes, int* indiceOfGenes){
 					continue;
 				}
 				else{
+                    
+                    int** motifMatrix = new int*[3];
+                    for (int i = 0; i < 3; i++) {
+                        motifMatrix[i] = new int[3];
+                        for (int j = 0; j < 3; j++) {
+                            motifMatrix[i][j] = 0;
+                        }
+                    }
+                    
 					std::cout << "\t" << nodes[indiceOfGenes[i]] -> getNstring() << "\t" << nodes[indiceOfGenes[j]] -> getNstring() << "\t" << nodes[indiceOfGenes[k]] -> getNstring() << std::endl;
 					std::cout << nodes[indiceOfGenes[i]] -> getNstring() << "\t" <<regulatoryMatrix[i][i] << "\t" << regulatoryMatrix[i][j] << "\t" << regulatoryMatrix[i][k] << std::endl;
 					std::cout << nodes[indiceOfGenes[j]] -> getNstring() << "\t" <<regulatoryMatrix[j][i] << "\t" << regulatoryMatrix[j][j] << "\t" << regulatoryMatrix[j][k] << std::endl;
 					std::cout << nodes[indiceOfGenes[k]] -> getNstring() << "\t" <<regulatoryMatrix[k][i] << "\t" << regulatoryMatrix[k][j] << "\t" << regulatoryMatrix[k][k] << std::endl;
+                    
+                    //store motif matrix
+                    int index[3];
+                    index[0] = i;
+                    index[1] = j;
+                    index[2] = k;
+                    for (int m = 0; m < 3; m++) {
+                        for (int n = 0; n < 3; n++) {
+                            motifMatrix[m][n] = regulatoryMatrix[index[m]][index[n]];
+                        }
+                    }
+                    
+                    //constructing a triple motif
+                    std::vector<Node*> motifNodes;
+                    motifNodes.push_back(nodes[indiceOfGenes[i]]);
+                    motifNodes.push_back(nodes[indiceOfGenes[j]]);
+                    motifNodes.push_back(nodes[indiceOfGenes[k]]);
+                    Motif* tripleMotif = new Motif(&motifNodes, motifMatrix);
+                    motifs.push_back(tripleMotif);
+                    
+                    delete [] motifMatrix[0];
+                    delete [] motifMatrix[1];
+                    delete [] motifMatrix[2];
+                    delete [] motifMatrix;
+
 				}
 			}
 		}

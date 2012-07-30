@@ -15,6 +15,8 @@
 //Total number of cells
 #define POPULATION 1000
 
+//Number of cells that do not change topology
+#define CELLS_UNCHANGED 0
 
 //parameters for mutation in Cell
 #define PROB_MUT_DEG_PROT 0.5

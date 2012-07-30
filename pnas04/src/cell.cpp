@@ -1295,7 +1295,7 @@ void Cell::findMotifs(){
 }
 
     
-//find and print single-gene motifs
+//find, store and print single-gene motifs
 void Cell::findSingleMotifs(int numberOfGenes, int* indiceOfGenes){
 
     for(int i = 0; i < numberOfGenes ; i++){
@@ -1314,19 +1314,31 @@ void Cell::findSingleMotifs(int numberOfGenes, int* indiceOfGenes){
 		}
 
 		if(isSingle){
-			std::cout<<"Single Mofif:"<<std::endl;
+			int** motifMatrix = new int*[1];
+            motifMatrix[0] = new int[1];
+            
+            std::cout<<"Single Mofif:"<<std::endl;
 			std::cout<<"\t";
 			std::cout<<nodes[indiceOfGenes[i]] -> getNstring()<<"\t";
 			std::cout<<std::endl;
 			std::cout<<nodes[indiceOfGenes[i]] -> getNstring()<<"\t";
 			std::cout<<regulatoryMatrix[i][i];
+            motifMatrix[0][0] = regulatoryMatrix[i][i];
 			std::cout<<std::endl;
+            
+            std::vector<Node*> motifNodes;
+            motifNodes.push_back(nodes[indiceOfGenes[i]]);
+            Motif* singleMotif = new Motif(&motifNodes, motifMatrix);
+            motifs.push_back(singleMotif);
+            
+            delete [] motifMatrix[0];
+            delete [] motifMatrix;
 		}
 	}
 }
 
     
-//find and print two-gene motifs
+//find, store and print two-gene motifs
 void Cell::findDoubleMotifs(int numberOfGenes, int* indiceOfGenes){
 	for(int i = 0; i < numberOfGenes; i++){
 		for(int j=i+1;j < numberOfGenes; j++){
@@ -1359,7 +1371,7 @@ void Cell::findDoubleMotifs(int numberOfGenes, int* indiceOfGenes){
 }
 
     
-//find and print three-gene motifs
+//find, store and print three-gene motifs
 void Cell::findTripleMotifs(int numberOfGenes, int* indiceOfGenes){
     	
     for(int i = 0;i < numberOfGenes; i++){

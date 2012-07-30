@@ -1272,6 +1272,11 @@ void Cell::genRegulatoryRelationships(){
 
 //find motifs consisting 1, 2 or 3 genes
 void Cell::findMotifs(){
+    
+
+    //in order to store new motifs, old ones should be cleared
+    motifs.clear();
+    
     int numOfGenes = 0;
     std::vector<Node*>::iterator iter_node = nodes.begin();
     std::vector<Node*>::iterator iter_node_end = nodes.end();

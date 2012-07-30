@@ -1254,6 +1254,11 @@ void Cell::genRegulatoryRelationships(){
     }
     delete [] indexOfGene;
 
+    
+    
+    //find and print motifs
+    findMotifs();
+    
 }
 
     

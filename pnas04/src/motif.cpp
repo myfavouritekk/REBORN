@@ -47,7 +47,73 @@ int Motif::motifSize(){
 
 //private method to generate motif type based on the motifMatrix
 void Motif::generateMtype(){
-    
+int size = motifNodes.size();
+	switch (size){ //single gene regulation
+		case 1:{
+			if (motifMatrix[1][1] == 1){
+				mtype = 1; // gene promotes itself
+			}
+			else{
+				mtype = 2; // gene represses itself
+			}
+			break;
+		}
+		case 2:{ // two genes regulation
+			int testValue = (motifMatrix[1][2] + motifMatrix[2][1]);
+			switch (testValue){
+				case 1:{
+					/* 0 1  or  0 0
+					   0 0      1 0
+					*/
+					mtype = 3;
+					break;
+				}
+				case -1:{
+					/* 0 -1  or  0 0
+					   0  0     -1 0
+					*/
+					mtype = 4;
+					break;
+				}
+				case 2:{
+					/* 0 1   
+					   1 0      
+					*/
+					mtype = 5;
+					break;
+				}
+				case -2:{
+					/* 0 -1  
+					  -1  0      
+					*/
+					mtype = 6;
+					break;
+				}
+				case 0:{
+					/* 0 1  or  0 -1
+					  -1 0      1  0
+					*/
+					mtype = 7;
+					break;
+				}
+				default:{
+					std::cout << "wrong input" << std::endl;
+					break;
+				}
+			}
+			break;
+		}
+		case 3:{
+			mtype = 8;
+			break;
+		}
+		default:{
+			std:: cout << "wrong input" << std::endl;
+			break;
+		}
+		
+	}
+	    
 }
 
     

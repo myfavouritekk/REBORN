@@ -1292,13 +1292,61 @@ void Cell::findMotifs(){
     
 //find and print single-gene motifs
 void Cell::findSingleMotifs(int numberOfGenes, int* indiceOfGenes){
-    
+
+    for(int i = 0; i < numberOfGenes ; i++){
+		bool isSingle=1;
+
+		if(regulatoryMatrix[i][i] == 0){
+			continue;
+		}
+
+		for(int j = i+1; j < numberOfGenes; j++){
+			if(regulatoryMatrix[i][j]!=0 || regulatoryMatrix[j][i]!=0){
+				isSingle=0;
+				break;
+			}
+		}
+
+		if(isSingle){
+			std::cout<<"\t";
+			std::cout<<nodes[indiceOfGenes[i]] -> getNstring()<<"\t";
+			std::cout<<std::endl;
+			std::cout<<nodes[indiceOfGenes[i]] -> getNstring()<<"\t";
+			std::cout<<regulatoryMatrix[i][i];
+			std::cout<<std::endl;
+		}
+	}
 }
 
     
 //find and print two-gene motifs
 void Cell::findDoubleMotifs(int numberOfGenes, int* indiceOfGenes){
-    
+	for(int i = 0; i < numberOfGenes; i++){
+		for(int j=i+1;j < numberOfGenes; j++){
+			bool isDouble=1;
+
+			if(regulatoryMatrix[i][j]==0 && regulatoryMatrix[j][i]==0){
+				continue;
+			}
+
+			for(int k=j+1;k < numberOfGenes; k++){
+				if(regulatoryMatrix[i][k]!=0||regulatoryMatrix[k][i]!=0||regulatoryMatrix[j][k]!=0||regulatoryMatrix[k][j]!=0){
+					isDouble=0;
+					break;
+				}
+			}
+
+			if(isDouble){
+				std::cout<<"\t";
+				std::cout<<nodes[indiceOfGenes[i]] -> getNstring()<<"\t";
+				std::cout<<nodes[indiceOfGenes[j]] -> getNstring()<<"\t"<<std::endl;
+				std::cout<<nodes[indiceOfGenes[i]] -> getNstring()<<"\t"<<regulatoryMatrix[i][i]<<"\t"<<regulatoryMatrix[i][j];
+				std::cout<<std::endl;
+				std::cout<<nodes[indiceOfGenes[j]] -> getNstring()<<"\t"<<regulatoryMatrix[j][i]<<"\t"<<regulatoryMatrix[j][j];
+				std::cout<<std::endl;
+			}
+		}
+	}  
 }
 
     

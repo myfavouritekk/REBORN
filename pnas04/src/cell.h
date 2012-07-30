@@ -63,15 +63,17 @@ class Cell {
         //generate regulatory relationships
         void genRegulatoryRelationships();
     
+        //find motifs consisting 1, 2 or 3 genes
+        void findMotifs();
     
         //find and print single-gene motifs
-        void findSingleMotifs();
+        void findSingleMotifs(int numberOfGenes, int* indiceOfGenes);
 
         //find and print two-gene motifs
-        void findDoubleMotifs();
+        void findDoubleMotifs(int numberOfGenes, int* indiceOfGenes);
 
         //find and print three-gene motifs
-        void findTripleMotifs();
+        void findTripleMotifs(int numberOfGenes, int* indiceOfGenes);
     
     
     

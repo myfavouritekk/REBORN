@@ -739,8 +739,8 @@ void Population:: genSBMLFormat(){
 			else{
 				reaction -> setReversible(0); 
 				k1 -> setMath(temp);
+                delete temp;
 			}
-			delete temp;
             iter_reaction++;
 		}
          SBMLWriter sbmlWriter;

@@ -104,7 +104,7 @@ class Population {
 		double*  xpoints; //dynamic array containing the xpoints
 
 		int numind, numprot;    // number of inducers and proteins
-		double** ypoints;       //	 target dynamic data
+		double*** ypoints;       //	 target dynamic data, 3 demension means it contains several 2-d arrays
 
 		int ncell;              //number of cells in the population
         Cell** cells;           //set of pointers of cells

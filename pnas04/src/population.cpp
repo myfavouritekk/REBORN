@@ -240,7 +240,7 @@ void Population::readDynamics (const string& fn) {
 
 	//	number of xpoints, inducers and proteins
 	infile >>  numr >> numind >> numprot>>numInputSets;
-    std::cout << numr << std::endl << numind << std::endl << numprot <<numInputSets<< std::endl;
+    std::cout << numr << std::endl << numind << std::endl << numprot <<std::endl <<numInputSets<< std::endl;
     if (infile.bad ()) throw std::runtime_error ("IO stream corrupted");
 	if (infile.fail ()) throw std::runtime_error ("bad data");
 	if (!numr) {

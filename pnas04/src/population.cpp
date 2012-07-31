@@ -563,21 +563,21 @@ void Population::output(){
 void Population:: genSBMLFormat(){
 	
 	// creat unit
-
+    
 	// define sp
-	 for (int i = 0; i < 10; i++) {
-		 
-		 // declear model
-		 std::stringstream ss;
-		 ss << "SBMLModel_" << i;
-		 SBMLDocument* sbmlDoc = new SBMLDocument(3,1);
-	     Model* model = sbmlDoc -> createModel();
-	     model -> setId(ss.str());
+    for (int i = 0; i < 10; i++) {
+        
+        // declear model
+        std::stringstream ss;
+        ss << "SBMLModel_" << i + 1;
+        SBMLDocument* sbmlDoc = new SBMLDocument(3,1);
+        Model* model = sbmlDoc -> createModel();
+        model -> setId(ss.str());
 		
-		 // creat compartment
+        // creat compartment
 		const string compName = "cell";
 		Compartment* comp = model->createCompartment();
-		comp->setId(compName); 
+		comp->setId(compName);
 		std::vector<Node*>::iterator iter_node = cells[i]->getNodesVector()->begin();
         std::vector<Node*>::iterator iter_node_end = cells[i]->getNodesVector()->end();
         
@@ -593,168 +593,162 @@ void Population:: genSBMLFormat(){
 			initialValue[index] = ypoints[k][0];
 		}
 		for (int j = 0; iter_node != iter_node_end; j++) {
-			  Species* sp;
-			  sp = model -> createSpecies();
-			  sp -> setCompartment(compName);
-			  sp -> setId((*iter_node) -> getNstring());
-			  sp -> setInitialConcentration(initialValue[j]);
-			  sp -> setConstant(0); 
-              iter_node++;
-		 }
+            Species* sp;
+            sp = model -> createSpecies();
+            sp -> setCompartment(compName);
+            sp -> setId((*iter_node) -> getNstring());
+            sp -> setInitialConcentration(initialValue[j]);
+            sp -> setConstant(0);
+            iter_node++;
+        }
 		delete [] initialValue;
-
-		// define reaction
+        
+		// define reaction and for every reaction add a rule and kineticLaw
 		std::vector<Reaction*>::iterator iter_reaction = cells[i]->getRlistVector()->begin();
         std::vector<Reaction*>::iterator iter_reaction_end = cells[i]->getRlistVector()->end();
-		for(int j = 0; iter_reaction != iter_reaction_end; j++){
+        for(int j = 0; iter_reaction != iter_reaction_end; j++, iter_reaction++){
             std::stringstream reactionName;
 			reactionName << "reaction" << j + 1;
-			LIBSBML_CPP_NAMESPACE:: Reaction* reaction;
-			reaction = model -> createReaction();
-			reaction -> setId(reactionName.str());
+			LIBSBML_CPP_NAMESPACE:: Reaction* sbmlReaction;
+			sbmlReaction = model -> createReaction();
+			sbmlReaction -> setId(reactionName.str());
 			SpeciesReference* spr;
 			ModifierSpeciesReference* mspr;
-            KineticLaw* k1;
+            KineticLaw* kineticLaw;
 			Parameter* para;
-			k1  = reaction -> createKineticLaw();
+			kineticLaw  = sbmlReaction -> createKineticLaw();
 			Rule* rule;
 			rule = model -> createRateRule();
 			rule -> setName(reactionName.str());
-			// temp formula 
+            
+            // temp formula
 			std:: stringstream tempFormula;
 			// kon formula
 			std::stringstream konFormula;
 			// koff formula
 			std::stringstream koffFormula;
 			//final Formula
-			std::stringstream FORMULA;
+			std::stringstream finalFormula;
 			iter_node = (*iter_reaction)->getReactantsVector()->begin();
             iter_node_end = (*iter_reaction)->getReactantsVector()->end();
 			while(iter_node != iter_node_end){
-				spr = reaction -> createReactant();
+				spr = sbmlReaction -> createReactant();
 				spr -> setSpecies((*iter_node) -> getNstring());
 				iter_node ++;
 			}
 			iter_node = (*iter_reaction)->getModifiersVector()->begin();
             iter_node_end = (*iter_reaction)->getModifiersVector()->end();
             while (iter_node != iter_node_end) {
-				mspr = reaction -> createModifier();
+				mspr = sbmlReaction -> createModifier();
 				mspr -> setSpecies((*iter_node) -> getNstring());
 				iter_node ++;
 			}
 			iter_node = (*iter_reaction)->getProductsVector()->begin();
             iter_node_end = (*iter_reaction)->getProductsVector()->end();
             while (iter_node != iter_node_end) {
-				spr = reaction -> createProduct();
+				spr = sbmlReaction -> createProduct();
 				spr -> setSpecies((*iter_node) -> getNstring());
 				iter_node ++;
 			}
+            
+            //build kineticLaw for this reaction
 			ASTNode* temp = new ASTNode(AST_TIMES);
-			ASTNode* Kon = new ASTNode(AST_NAME);
+			ASTNode* kon = new ASTNode(AST_NAME);
 			std:: stringstream k;
-			k<< "Kon" << j + 1;
-			Kon -> setName(k.str().c_str());
-			konFormula << k <<tempFormula;
-			para = k1 -> createParameter();
+			k << "kon" << j + 1;
+			kon -> setName(k.str().c_str());
+			tempFormula << k.str();
+			para = kineticLaw -> createParameter();
 			para -> setId(k.str());
 			para -> setValue((*(iter_reaction)) -> getForwardRate());
-			temp -> addChild(Kon);
-			if((*iter_reaction) -> getReactantsVector() -> size()){
-				int size = ((int)(*iter_reaction) -> getReactantsVector() -> size());
-				iter_node = (*iter_reaction)->getReactantsVector()->begin();
-				ASTNode* reactant = new ASTNode(AST_NAME);
-				reactant -> setName((*iter_node) -> getNstring().c_str());
-				tempFormula << " * " << ((*iter_node) -> getNstring().c_str());
-				temp -> addChild(reactant);
-				ASTNode* temptemp = new ASTNode(AST_TIMES);
-					temptemp -> addChild(temp);
-					temp = temptemp;
-				iter_node ++;
-				for (int i = 0; i < (size -1); i++){
-					ASTNode* reactant = new ASTNode(AST_NAME);
-					reactant -> setName((*iter_node) -> getNstring().c_str());
-					tempFormula << " * " << ((*iter_node) -> getNstring().c_str());
-					temp -> addChild(reactant);
-					ASTNode* temp2 = new ASTNode(AST_TIMES);
-					temp2 -> addChild(temp);
-					temp = temp2;
-					iter_node ++;
-				}
-			}
-			// exist modifier
-			if((*iter_reaction) -> getModifiersSize()){
-				int size = ((int)(*iter_reaction) -> getReactantsVector() -> size());
-				iter_node = (*iter_reaction)->getModifiersVector()->begin();
-				for(int i = 0; i < (size - 1); i ++){
-					ASTNode* modifier = new ASTNode(AST_NAME);
-					modifier -> setName((*iter_node) -> getNstring().c_str());
-					tempFormula << " * " << ((*iter_node) -> getNstring().c_str());
-					temp -> addChild(modifier);
-					ASTNode* temp2 = new ASTNode(AST_TIMES);
-					temp2 -> addChild(temp);
-					temp = temp2;
-                    iter_node++;
-				}
-			}
+			temp = kon;
 			
+            int size = ((int)(*iter_reaction) -> getReactantsVector() -> size());
+            iter_node = (*iter_reaction)->getReactantsVector()->begin();
+            for (int i = 0; i < size; i++){
+                ASTNode* reactant = new ASTNode(AST_NAME);
+                reactant -> setName((*iter_node) -> getNstring().c_str());
+                tempFormula << " * " << (*iter_node) -> getNstring();
+                ASTNode* temp2 = new ASTNode(AST_TIMES);
+                temp2 -> addChild(temp);
+                temp2 -> addChild(reactant);
+                temp = temp2;
+                iter_node ++;
+            }
+            
+            // exist modifier
+            size = ((int)(*iter_reaction) -> getModifiersVector() -> size());
+            iter_node = (*iter_reaction)->getModifiersVector()->begin();
+            for(int i = 0; i < size; i ++){
+                ASTNode* modifier = new ASTNode(AST_NAME);
+                modifier -> setName((*iter_node) -> getNstring().c_str());
+                tempFormula << " * " << (*iter_node) -> getNstring();
+                ASTNode* temp2 = new ASTNode(AST_TIMES);
+                temp2 -> addChild(temp);
+                temp2 -> addChild(modifier);
+                temp = temp2;
+                iter_node++;
+            }
+            konFormula << tempFormula.str();
+
+            
 			// exist reversereaction
 			if((*iter_reaction) -> isReversible()){
-			reaction -> setReversible(1);
-			std::stringstream tempFormula;
-			int size = (int)(*(*iter_reaction) -> getProductsVector()).size();
-			iter_node = (*iter_reaction)->getProductsVector()->begin();
-			ASTNode* temp3 = new ASTNode(AST_TIMES);
-			ASTNode* product = new ASTNode(AST_NAME);
-			product -> setName((*iter_node) -> getNstring().c_str());
-			tempFormula << " * " << ((*iter_node) -> getNstring().c_str());
-			temp3 -> addChild(product);
-			iter_node ++;
-			for (int i = 0; i < (size -1); i++){
-				ASTNode* product = new ASTNode(AST_NAME);
-				product -> setName((*iter_node) -> getNstring().c_str());
-				tempFormula << " * " << ((*iter_node) -> getNstring().c_str());
-				temp3 -> addChild(product);
-				ASTNode* temp4 = new ASTNode(AST_TIMES);
-				temp4 -> addChild(temp3);
-				temp3 = temp4;
-                iter_node++;
-			}
-			ASTNode* Koff = new ASTNode(AST_NAME);
-			std:: stringstream k;
-			k << "Koff" << j + 1;
-			para = k1 -> createParameter();
-			para -> setId(k.str());
-			para -> setValue((*(iter_reaction)) -> getReverseRate());
-			koffFormula << k << tempFormula;
-			Koff -> setName(k.str().c_str());
-			temp3 -> addChild(Koff);
-			ASTNode* math = new ASTNode(AST_MINUS);
-			math -> addChild(temp);
-			math -> addChild(temp3);
-			k1 -> setMath(math);
-			FORMULA << konFormula << " - " << koffFormula;
-			rule->setFormula(FORMULA.str());
-			delete math;
+                sbmlReaction -> setReversible(1);
+                std::stringstream tempFormula;
+                int size = (int)(*(*iter_reaction) -> getProductsVector()).size();
+                iter_node = (*iter_reaction)->getProductsVector()->begin();
+                ASTNode* temp3 = new ASTNode(AST_TIMES);
+                for (int i = 0; i < size; i++){
+                    ASTNode* product = new ASTNode(AST_NAME);
+                    product -> setName((*iter_node) -> getNstring().c_str());
+                    tempFormula << " * " << (*iter_node) -> getNstring();
+                    ASTNode* temp2 = new ASTNode(AST_TIMES);
+                    temp2 -> addChild(temp3);
+                    temp2 -> addChild(product);
+                    temp3 = temp2;
+                    iter_node++;
+                }
+                
+                ASTNode* koff = new ASTNode(AST_NAME);
+                std:: stringstream k;
+                k << "koff" << j + 1;
+                para = kineticLaw -> createParameter();
+                para -> setId(k.str());
+                para -> setValue((*(iter_reaction)) -> getReverseRate());
+                koffFormula << k.str() << tempFormula.str();
+                koff -> setName(k.str().c_str());
+                ASTNode* temp2 = new ASTNode(AST_TIMES);
+                temp2 -> addChild(temp3);
+                temp2 -> addChild(koff);
+                temp3 = temp2;
+                ASTNode* math = new ASTNode(AST_MINUS);
+                math -> addChild(temp3);
+                math -> addChild(temp);
+                kineticLaw -> setMath(math);
+                finalFormula << konFormula.str() << " - " << koffFormula.str();
+                rule->setFormula(finalFormula.str());
+                delete math;
 			}
 			else{
-				reaction -> setReversible(0); 
-				k1 -> setMath(temp);
+				sbmlReaction -> setReversible(0);
+                rule -> setFormula(konFormula.str());
+				kineticLaw -> setMath(temp);
                 delete temp;
 			}
-            iter_reaction++;
 		}
-         SBMLWriter sbmlWriter;
-         
-         bool result = sbmlWriter.writeSBML(sbmlDoc,ss.str());
-         
-         if ( result ){
-             std::cout << "Wrote file \"" << ss.str() << "\"" << std:: endl;
-         }
-         else{
-             std::cerr << "Failed to write \"" << ss.str() << "\"" <<std:: endl;
-         }
-         
-     }
+        SBMLWriter sbmlWriter;
+        
+        bool result = sbmlWriter.writeSBML(sbmlDoc,ss.str());
+        
+        if ( result ){
+            std::cout << "Wrote file \"" << ss.str() << "\"" << std:: endl;
+        }
+        else{
+            std::cerr << "Failed to write \"" << ss.str() << "\"" <<std:: endl;
+        }
+        
+    }
 }
   
  

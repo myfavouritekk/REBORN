@@ -621,7 +621,6 @@ void Population:: genSBMLFormat(){
 			rule = model -> createRateRule();
 			rule -> setName(reactionName.str());
             
-
             // temp formula
 			std:: stringstream tempFormula;
 			// kon formula
@@ -649,9 +648,9 @@ void Population:: genSBMLFormat(){
             while (iter_node != iter_node_end) {
 				spr = sbmlReaction -> createProduct();
 				spr -> setSpecies((*iter_node) -> getNstring());
-				iter_node ++;			}
+				iter_node ++;
+			}
             
-  
             //build kineticLaw for this reaction
 			ASTNode* temp = new ASTNode(AST_TIMES);
 			ASTNode* kon = new ASTNode(AST_NAME);
@@ -662,36 +661,35 @@ void Population:: genSBMLFormat(){
 			para = kineticLaw -> createParameter();
 			para -> setId(k.str());
 			para -> setValue((*(iter_reaction)) -> getForwardRate());
-			temp = ko			
+			temp = kon;
+			
             int size = ((int)(*iter_reaction) -> getReactantsVector() -> size());
-());
             iter_node = (*iter_reaction)->getReactantsVector()->begin();
             for (int i = 0; i < size; i++){
                 ASTNode* reactant = new ASTNode(AST_NAME);
                 reactant -> setName((*iter_node) -> getNstring().c_str());
                 tempFormula << " * " << (*iter_node) -> getNstring();
-                ASTNode* temp2 = new ASTNode(AST_TIM                temp2 -> addChild(temp);
-emp);
+                ASTNode* temp2 = new ASTNode(AST_TIMES);
+                temp2 -> addChild(temp);
                 temp2 -> addChild(reactant);
                 temp = temp2;
                 iter_node ++;
             }
-                   // exist modifier
-difier
+            
+            // exist modifier
             size = ((int)(*iter_reaction) -> getModifiersVector() -> size());
             iter_node = (*iter_reaction)->getModifiersVector()->begin();
             for(int i = 0; i < size; i ++){
                 ASTNode* modifier = new ASTNode(AST_NAME);
                 modifier -> setName((*iter_node) -> getNstring().c_str());
                 tempFormula << " * " << (*iter_node) -> getNstring();
-                ASTNode* temp2 = new ASTNode(AST_T                temp2 -> addChild(temp);
-(temp);
+                ASTNode* temp2 = new ASTNode(AST_TIMES);
+                temp2 -> addChild(temp);
                 temp2 -> addChild(modifier);
                 temp = temp2;
                 iter_node++;
-                  konFormula << tempFormula.str();
-
-.str();
+            }
+            konFormula << tempFormula.str();
 
             
 			// exist reversereaction
@@ -705,12 +703,12 @@ difier
                     ASTNode* product = new ASTNode(AST_NAME);
                     product -> setName((*iter_node) -> getNstring().c_str());
                     tempFormula << " * " << (*iter_node) -> getNstring();
-                    ASTNode* temp2 = new ASTNode(AS                    temp2 -> addChild(temp3);
-ld(temp3);
+                    ASTNode* temp2 = new ASTNode(AST_TIMES);
+                    temp2 -> addChild(temp3);
                     temp2 -> addChild(product);
                     temp3 = temp2;
-                    it                }
-          }
+                    iter_node++;
+                }
                 
                 ASTNode* koff = new ASTNode(AST_NAME);
                 std:: stringstream k;
@@ -718,11 +716,11 @@ ld(temp3);
                 para = kineticLaw -> createParameter();
                 para -> setId(k.str());
                 para -> setValue((*(iter_reaction)) -> getReverseRate());
-                koffFormula << k.str() << tempFor                koff -> setName(k.str().c_str());
+                koffFormula << k.str() << tempFormula.str();
+                koff -> setName(k.str().c_str());
                 ASTNode* temp2 = new ASTNode(AST_TIMES);
-e(AST_TIMES);
-                temp2 -> add                temp2 -> addChild(koff);
-ddChild(koff);
+                temp2 -> addChild(temp3);
+                temp2 -> addChild(koff);
                 temp3 = temp2;
                 ASTNode* math = new ASTNode(AST_MINUS);
                 math -> addChild(temp3);
@@ -731,8 +729,9 @@ ddChild(koff);
                 finalFormula << konFormula.str() << " - " << koffFormula.str();
                 rule->setFormula(finalFormula.str());
                 delete math;
+			}
+			else{
 				sbmlReaction -> setReversible(0);
-tReversible(0);
                 rule -> setFormula(konFormula.str());
 				kineticLaw -> setMath(temp);
                 delete temp;

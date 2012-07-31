@@ -882,11 +882,11 @@ void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int 
 
 
 
-void Cell::generateTimeCourses(double** targetData,int numTargetNodes, int time){
+void Cell::generateTimeCourses(double*** targetData,int numTargetNodes, int time){
     int* timeOfAddInducers = new int[numInducer];
 	for(int i = 0; i < numInducer; i++){
 		for(int j = 0; j < time; j++){
-			if(targetData[i][j]>0.0000001){
+			if(targetData[0][i][j]>0.0000001){
 				timeOfAddInducers[i] = j;
 				break;
 			}
@@ -894,30 +894,39 @@ void Cell::generateTimeCourses(double** targetData,int numTargetNodes, int time)
 	}
 
     int size = (int)nodes.size();//  how many nodes in this cell
-
+    
     /* initialization: store the initial value in the first column of
      * currData, and for coloumn with index greater than number of target
      * nodes, initial value is 0
      */
-    this->currData = new double*[size];
-	for (int i = 0; i < size; i++) {
-        this->currData[i] = new double[time];
-        this->currData[i][0] = 1.;   // the initial value of gene is 1
-		if((*(this->getNodesVector()))[i]->getNtype() == 4)
-			this->currData[i][0]=0;
-    }
-    for (int i = 0; i < numTargetNodes; i++) {
-        this->currData[inputIndice[i]][0] = targetData[i][0];    //the initial value of inducers and proteins are the same as the input data.
-    }
-    for (int i = 0; i < numInducer; i++) {
-        for (int j = 0; j < time; j++) {
-            this->currData[i][j] = targetData[i][j];
+    this->currData = new double**[numInputSets];
+    for (int i = 0; i < numInputSets; i++) {
+        currData[i] = new double*[size];
+        for (int j = 0; j < size; j++) {
+            this->currData[i][j] = new double[time];
+            this->currData[i][j][0] = 1.;   // the initial value of gene is 1
+            if((*(this->getNodesVector()))[j]->getNtype() == 4)
+                this->currData[i][j][0]=0;
         }
+
+    }
+    for (int i = 0 ; i < numInputSets; i++) {
+        for (int j = 0; j < numTargetNodes; j++) {
+            this->currData[i][inputIndice[j]][0] = targetData[i][j][0];    //the initial value of inducers and proteins are the same as the input data.
+        }
+
+    }
+    for (int i = 0; i < numInputSets; i++) {
+        for (int j = 0; j < numInducer; j++) {
+            for (int k = 0; k < time; k++) {
+                this->currData[i][j][k] = targetData[i][j][k];
+            }
         }
     }
     
-    /* runge_kutta method, store the results in cu    runge_kutta(this->currData, nodes, rlist, numInducer, size, time,timeOfAddInducers);
-ers);
+    /* runge_kutta method, store the results in currData */
+    for (int i = 0; i < numInputSets; i++) {
+        runge_kutta(this->currData[i], nodes, rlist, numInducer, size, time,timeOfAddInducers);
     }
     delete[] timeOfAddInducers;
     

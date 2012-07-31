@@ -18,7 +18,7 @@ class Cell {
     public:
 
 		//	no default constructor, for construction, number of inducers and proteins should be provided
-		Cell (const int& _numind, const int& _numprot);
+		Cell (const int& _numind, const int& _numprot, const int& _numInputSets);
         Cell (Cell &cell);//copy constructor
 
 		//	deconstructor
@@ -54,7 +54,7 @@ class Cell {
     
     
         //generate time courses and put them in currData
-        void generateTimeCourses(double** targetData,int numTargetNodes, int x);
+        void generateTimeCourses(double*** targetData,int numTargetNodes, int x);
         
     
         //pring time course to a file with the name of a string parameter

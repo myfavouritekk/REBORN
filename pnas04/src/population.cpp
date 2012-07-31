@@ -51,7 +51,7 @@ void Population::init(){
     
     //	for each cell, initialization
 	for (int i = 0; i < ncell; i++) {
-		cells[i] = new Cell(numind, numprot);
+		cells[i] = new Cell(numind, numprot, numInputSets);
         cells[i]->getScore(sfunc, ypoints, numind + numprot, numr, false);//getScore in initialization
 	}
 
@@ -590,7 +590,7 @@ void Population:: genSBMLFormat(){
 		int inputIndiceNum = (int)cells[i] -> getInputIndiceVector() -> size();
 		for(int k = 0; k < inputIndiceNum; k ++){
 			int index = (*(cells[i] -> getInputIndiceVector()))[k];
-			initialValue[index] = ypoints[k][0];
+			initialValue[index] = ypoints[0][k][0];
 		}
 		for (int j = 0; iter_node != iter_node_end; j++) {
             Species* sp;
@@ -621,6 +621,7 @@ void Population:: genSBMLFormat(){
 			rule = model -> createRateRule();
 			rule -> setName(reactionName.str());
             
+
             // temp formula
 			std:: stringstream tempFormula;
 			// kon formula
@@ -648,9 +649,9 @@ void Population:: genSBMLFormat(){
             while (iter_node != iter_node_end) {
 				spr = sbmlReaction -> createProduct();
 				spr -> setSpecies((*iter_node) -> getNstring());
-				iter_node ++;
-			}
+				iter_node ++;			}
             
+  
             //build kineticLaw for this reaction
 			ASTNode* temp = new ASTNode(AST_TIMES);
 			ASTNode* kon = new ASTNode(AST_NAME);
@@ -661,35 +662,36 @@ void Population:: genSBMLFormat(){
 			para = kineticLaw -> createParameter();
 			para -> setId(k.str());
 			para -> setValue((*(iter_reaction)) -> getForwardRate());
-			temp = kon;
-			
+			temp = ko			
             int size = ((int)(*iter_reaction) -> getReactantsVector() -> size());
+());
             iter_node = (*iter_reaction)->getReactantsVector()->begin();
             for (int i = 0; i < size; i++){
                 ASTNode* reactant = new ASTNode(AST_NAME);
                 reactant -> setName((*iter_node) -> getNstring().c_str());
                 tempFormula << " * " << (*iter_node) -> getNstring();
-                ASTNode* temp2 = new ASTNode(AST_TIMES);
-                temp2 -> addChild(temp);
+                ASTNode* temp2 = new ASTNode(AST_TIM                temp2 -> addChild(temp);
+emp);
                 temp2 -> addChild(reactant);
                 temp = temp2;
                 iter_node ++;
             }
-            
-            // exist modifier
+                   // exist modifier
+difier
             size = ((int)(*iter_reaction) -> getModifiersVector() -> size());
             iter_node = (*iter_reaction)->getModifiersVector()->begin();
             for(int i = 0; i < size; i ++){
                 ASTNode* modifier = new ASTNode(AST_NAME);
                 modifier -> setName((*iter_node) -> getNstring().c_str());
                 tempFormula << " * " << (*iter_node) -> getNstring();
-                ASTNode* temp2 = new ASTNode(AST_TIMES);
-                temp2 -> addChild(temp);
+                ASTNode* temp2 = new ASTNode(AST_T                temp2 -> addChild(temp);
+(temp);
                 temp2 -> addChild(modifier);
                 temp = temp2;
                 iter_node++;
-            }
-            konFormula << tempFormula.str();
+                  konFormula << tempFormula.str();
+
+.str();
 
             
 			// exist reversereaction
@@ -703,12 +705,12 @@ void Population:: genSBMLFormat(){
                     ASTNode* product = new ASTNode(AST_NAME);
                     product -> setName((*iter_node) -> getNstring().c_str());
                     tempFormula << " * " << (*iter_node) -> getNstring();
-                    ASTNode* temp2 = new ASTNode(AST_TIMES);
-                    temp2 -> addChild(temp3);
+                    ASTNode* temp2 = new ASTNode(AS                    temp2 -> addChild(temp3);
+ld(temp3);
                     temp2 -> addChild(product);
                     temp3 = temp2;
-                    iter_node++;
-                }
+                    it                }
+          }
                 
                 ASTNode* koff = new ASTNode(AST_NAME);
                 std:: stringstream k;
@@ -716,11 +718,11 @@ void Population:: genSBMLFormat(){
                 para = kineticLaw -> createParameter();
                 para -> setId(k.str());
                 para -> setValue((*(iter_reaction)) -> getReverseRate());
-                koffFormula << k.str() << tempFormula.str();
-                koff -> setName(k.str().c_str());
+                koffFormula << k.str() << tempFor                koff -> setName(k.str().c_str());
                 ASTNode* temp2 = new ASTNode(AST_TIMES);
-                temp2 -> addChild(temp3);
-                temp2 -> addChild(koff);
+e(AST_TIMES);
+                temp2 -> add                temp2 -> addChild(koff);
+ddChild(koff);
                 temp3 = temp2;
                 ASTNode* math = new ASTNode(AST_MINUS);
                 math -> addChild(temp3);
@@ -729,9 +731,8 @@ void Population:: genSBMLFormat(){
                 finalFormula << konFormula.str() << " - " << koffFormula.str();
                 rule->setFormula(finalFormula.str());
                 delete math;
-			}
-			else{
 				sbmlReaction -> setReversible(0);
+tReversible(0);
                 rule -> setFormula(konFormula.str());
 				kineticLaw -> setMath(temp);
                 delete temp;

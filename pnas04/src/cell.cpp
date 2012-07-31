@@ -5,7 +5,7 @@ namespace ustc{
 /*constructor:
  input: _numind(number of inducers); _numprot(number of proteins)
  */
-Cell::Cell(const int& _numind, const int& _numprot):numInducer(_numind) {
+Cell::Cell(const int& _numind, const int& _numprot, const int& _numInputSets):numInducer(_numind),numInputSets(_numInputSets) {
 	int currIndex = (int)nodes.size();
 	int iop = 0;
 	int* indexOfProt = new int[_numprot];
@@ -48,7 +48,7 @@ Cell::Cell(const int& _numind, const int& _numprot):numInducer(_numind) {
 Cell::Cell(Cell &cell){
     
     numInducer = cell.numInducer;
-    
+    numInputSets = cell.numInputSets;
     //copy every node in the cell
     std::vector<Node*>::iterator iter_node = cell.nodes.begin();
     std::vector<Node*>::iterator iter_node_end = cell.nodes.end();
@@ -894,6 +894,7 @@ void Cell::generateTimeCourses(double** targetData,int numTargetNodes, int time)
 	}
 
     int size = (int)nodes.size();//  how many nodes in this cell
+
     /* initialization: store the initial value in the first column of
      * currData, and for coloumn with index greater than number of target
      * nodes, initial value is 0
@@ -912,10 +913,12 @@ void Cell::generateTimeCourses(double** targetData,int numTargetNodes, int time)
         for (int j = 0; j < time; j++) {
             this->currData[i][j] = targetData[i][j];
         }
+        }
     }
     
-    /* runge_kutta method, store the results in currData */
-    runge_kutta(this->currData, nodes, rlist, numInducer, size, time,timeOfAddInducers);
+    /* runge_kutta method, store the results in cu    runge_kutta(this->currData, nodes, rlist, numInducer, size, time,timeOfAddInducers);
+ers);
+    }
     delete[] timeOfAddInducers;
     
 }

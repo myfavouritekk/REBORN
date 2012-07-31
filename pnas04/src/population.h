@@ -96,6 +96,9 @@ class Population {
         
     private:
 
+        //number of input sets, one species may have multiple sets of inputs
+        int numInputSets;
+        
 		//	dynamics of network nodes
 		int numr;               //	number of x points
 		double*  xpoints; //dynamic array containing the xpoints

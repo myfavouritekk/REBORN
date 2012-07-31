@@ -959,13 +959,18 @@ void Cell::generateTimeCourses(double*** targetData,int numTargetNodes, int time
  *third: assign the score to currScore
  *prerequirements: nodes in the cell's "nodes" vector should be sorted by indice
  */
-void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, int time, bool print){
-	int* timeOfAddInducers = new int[numInducer];
-	for(int i = 0; i < numInducer; i++){
-		for(int j = 0; j < time; j++){
-			if(targetData[i][j]>0.0000001){
-				timeOfAddInducers[i] = j;
-				break;
+void Cell::getScore(ScoreFunc& sfunc, double*** targetData, int numTargetNodes, int time, bool print){
+	int** timeOfAddInducers = new int*[numInputSets];
+	for(int i = 0; i < numInputSets; i++){
+		timeOfAddInducers[i] = new int[numInducer];
+	}
+	for(int k = 0; k < numInputSets; k++){
+		for(int i = 0; i < numInducer; i++){
+			for(int j = 0; j < time; j++){
+				if(targetData[k][i][j]>0.0000001){
+					timeOfAddInducers[k][i] = j;
+					break;
+				}
 			}
 		}
 	}

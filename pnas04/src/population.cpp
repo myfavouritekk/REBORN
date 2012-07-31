@@ -239,8 +239,8 @@ void Population::readDynamics (const string& fn) {
     }
 
 	//	number of xpoints, inducers and proteins
-	infile >>  numr >> numind >> numprot;
-    std::cout << numr << std::endl << numind << std::endl << numprot << std::endl;
+	infile >>  numr >> numind >> numprot>>numInputSets;
+    std::cout << numr << std::endl << numind << std::endl << numprot <<numInputSets<< std::endl;
     if (infile.bad ()) throw std::runtime_error ("IO stream corrupted");
 	if (infile.fail ()) throw std::runtime_error ("bad data");
 	if (!numr) {
@@ -253,20 +253,28 @@ void Population::readDynamics (const string& fn) {
 
 	//	read dynamic data
 	xpoints = new double [numr];
-	ypoints = new double*[numy];
-    for (int i = 0; i < numy; i++) {
-        ypoints[i] = new double[numr];
+	ypoints = new double**[numInputSets];
+    for (int i = 0; i < numInputSets; i++) {
+        ypoints[i] = new double*[numy];
+		for(int j=0; j < numy; j++){
+			ypoints[i][j]=new double[numr];
+		}
     }
 	for(int ir = 0; ir < numr; ir++) {
 		infile >> xpoints[ir];
         std::cout << xpoints[ir] << "\t";
-		for(int ic = 0; ic < numy; ic++) {
-			infile >> ypoints[ic][ir];
-            std::cout << ypoints[ic][ir] << "\t";
-			if (infile.bad ()) throw std::runtime_error ("IO stream corrupted");
-			if (infile.fail ()) throw std::runtime_error ("bad data");
+		std::cout << std::endl;
+	}
+	for(int ir=0;ir<numr;ir++){
+		for(int iinput=0;iinput<numInputSets;iinput++){
+			for(int ic=0;ic < numy;ic++){
+				infile >> ypoints[iinput][ic][ir];
+				std::cout << ypoints[iinput][ic][ir];
+				if (infile.bad ()) throw std::runtime_error ("IO stream corrupted");
+				if (infile.fail ()) throw std::runtime_error ("bad data");
+			}
 		}
-        std::cout << std::endl;
+		std::cout<<std::endl;
 	}
 
 

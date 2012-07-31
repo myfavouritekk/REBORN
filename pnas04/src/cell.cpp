@@ -965,6 +965,8 @@ void Cell::generateTimeCourses(double*** targetData,int numTargetNodes, int time
  *prerequirements: nodes in the cell's "nodes" vector should be sorted by indice
  */
 void Cell::getScore(ScoreFunc& sfunc, double*** targetData, int numTargetNodes, int time, bool print){
+	
+	double score = 0;
 	int** timeOfAddInducers = new int*[numInputSets];
 	for(int i = 0; i < numInputSets; i++){
 		timeOfAddInducers[i] = new int[numInducer];
@@ -979,41 +981,56 @@ void Cell::getScore(ScoreFunc& sfunc, double*** targetData, int numTargetNodes, 
 			}
 		}
 	}
+	int size = (int)nodes.size();//  how many nodes in this cell
+	/* initialization: store the initial value in the first column of
+		* currData, and for coloumn with index greater than number of target
+		* nodes, initial value is 0
+		*/
+	this -> currData = new double**[numInputSets];
+	for(int i = 0; i < numInputSets; i ++){
+		this->currData[i] = new double*[size];
+		for(int j = 0; j < size; j ++){
+			this -> currData[i][j] = new double[time];
+			this->currData[i][j][0] = 1.;   // the initial value of gene is 1
+			if((*(this->getNodesVector()))[i]->getNtype() == 4)
+			this->currData[i][j][0]=0;
+		}
+	}
+	for(int i = 0; i < numInputSets; i ++){
+		for (int j = 0; j < numTargetNodes; j++) {
+			this->currData[i][inputIndice[j]][0] = targetData[i][j][0];    //the initial value of inducers and proteins are the same as the input data.
+		}
 
-    int size = (int)nodes.size();//  how many nodes in this cell
-    /* initialization: store the initial value in the first column of
-     * currData, and for coloumn with index greater than number of target
-     * nodes, initial value is 0
-     */
-    this->currData = new double*[size];
-	for (int i = 0; i < size; i++) {
-        this->currData[i] = new double[time];
-        this->currData[i][0] = 1.;   // the initial value of gene is 1
-		if((*(this->getNodesVector()))[i]->getNtype() == 4)
-			this->currData[i][0]=0;
-    }
-    for (int i = 0; i < numTargetNodes; i++) {
-        this->currData[inputIndice[i]][0] = targetData[i][0];    //the initial value of inducers and proteins are the same as the input data.
-    }
-    for (int i = 0; i < numInducer; i++) {
-        for (int j = 0; j < time; j++) {
-            this->currData[i][j] = targetData[i][j];
-        }
-    }
+	}
+	for (int i = 0; i < numInducer; i++){
+		for (int j = 0; j < numInducer; j++) {
+			for (int k = 0; k < time; k++) {
+				this->currData[i][j][k] = targetData[i][j][k];
+			}
+		}
+	}
 
-    /* runge_kutta method, store the results in currData */
-    runge_kutta(this->currData, nodes, rlist, numInducer, size, time,timeOfAddInducers);
-    delete[] timeOfAddInducers;
-    /* calculate total score uses the ScoreFunc sfunc: only numTargetNodes nodes
-     * are calculated because there only those number nodes in targetData
-     * therefore, numTargetNodes = numind + numprot
-     */
-    double totalScore = 0;
-    for (int i = 0; i < numTargetNodes; i++) {
-        totalScore += sfunc.getScore(targetData[i],this->currData[inputIndice[i]],time);  //compare the RK data and the input data, using score function.
-    }
+	/* runge_kutta method, store the results in currData */
+	for (int i = 0; i < numInputSets; i++){
+		runge_kutta(this->currData[i], nodes, rlist, numInducer, size, time,timeOfAddInducers);
+	}
+	delete[] timeOfAddInducers;
+	/* calculate total score uses the ScoreFunc sfunc: only numTargetNodes nodes
+		* are calculated because there only those number nodes in targetData
+		* therefore, numTargetNodes = numind + numprot
+		*/
+	for (int i = 0; i < numInputSets; i++){
+		double totalScore = 0;
+		for (int j = 0; j < numTargetNodes; j++) {
+			totalScore += sfunc.getScore(targetData[i][j],this->currData[i][inputIndice[i]],time);  //compare the RK data and the input data, using score function.
+		}
+		if (totalScore > score){
+			score = totalScore;
+		}
+	}
+
     
-    currScore = totalScore;
+	currScore = score;
 	int complex_size = 0;
 	int node_size = (int)nodes.size();
 	for(int i = 0; i < node_size; i++){
@@ -1027,6 +1044,7 @@ void Cell::getScore(ScoreFunc& sfunc, double*** targetData, int numTargetNodes, 
 	currScore += PARAMETER_REACTION_SIZE * rlist.size();
 	currScore += PARAMETER_COMPLEX_SIZE * complex_size;
 	
+	
 
     //print the time courses
     if (print) {
@@ -1034,21 +1052,25 @@ void Cell::getScore(ScoreFunc& sfunc, double*** targetData, int numTargetNodes, 
         //print time courses to file
         std::ofstream timeCoursesFile;
         timeCoursesFile.open("data.txt");
-        for (int i = 0; i < numTargetNodes; i++) {
-            for (int j = 0; j < time; j++) {
-                std::cout << this->currData[inputIndice[i]][j] << "\t";
-                timeCoursesFile << this->currData[inputIndice[i]][j] << "\t";
-            }
-            std::cout << std::endl;
-            timeCoursesFile << std::endl;
-        }
-        timeCoursesFile.close();
+		for (int i = 0; i < numInputSets; i++){
+			for (int j = 0; j < numTargetNodes; j++) {
+				for (int k = 0; k < time; k++) {
+					std::cout << this->currData[i][inputIndice[j]][k] << "\t";
+					timeCoursesFile << this->currData[i][inputIndice[j]][k] << "\t";
+				}
+				std::cout << std::endl;
+				timeCoursesFile << std::endl;
+			}
+		}
+		timeCoursesFile.close();
     }
 
-    
-    for (int i = 0; i < size; i++) {
-        delete [] this->currData[i];
-    }
+	for (int i = 0; i < numInputSets; i++){
+		for (int j = 0; j < size; j++) {
+			delete [] this->currData[i][j];
+		}
+		delete [] this -> currData[i];
+	}
     delete [] this->currData;
 }
 
@@ -1057,6 +1079,10 @@ void Cell::getScore(ScoreFunc& sfunc, double*** targetData, int numTargetNodes, 
 double Cell::getCurrScore(){
     //std::cout << currScore << std::endl;
     return currScore;
+		}
+	}
+
+    
 }
 
 

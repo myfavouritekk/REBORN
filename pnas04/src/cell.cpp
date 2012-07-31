@@ -6,7 +6,7 @@ namespace ustc{
  input: _numind(number of inducers); _numprot(number of proteins)
  */
 Cell::Cell(const int& _numind, const int& _numprot):numInducer(_numind) {
-	int currIndex = nodes.size();
+	int currIndex = (int)nodes.size();
 	int iop = 0;
 	int* indexOfProt = new int[_numprot];
 	for(int im = 0; im < _numind; im++) {
@@ -61,7 +61,7 @@ Cell::Cell(Cell &cell){
     /*constructing the relationships of these cells, 
      *that is implementing components vector in each cell
      */
-    int nodesSize = cell.nodes.size();
+    int nodesSize = (int)cell.nodes.size();
     for (int indexNinCell = 0; indexNinCell < nodesSize; indexNinCell++) {
         int componentsSize = cell.nodes[indexNinCell]->getNsize();
         for (int componentIndex = 0; componentIndex < componentsSize; componentIndex++) {
@@ -261,7 +261,7 @@ void Cell::mut_kin_const () {
 void Cell::mut_add_gene () {            //	add a gene
 	
 	//	create new nodes representing this gene and its protein
-	int currNI = nodes.size();
+	int currNI = (int)nodes.size();
 
 	Node* gene = new Node(currNI,2);	//	gene
 	nodes.push_back(gene);
@@ -313,7 +313,7 @@ void Cell::mut_add_gene () {            //	add a gene
 
 		int opIndex=proIndice[rand()%numProt];
 		Reaction* dimerization = new Reaction(5);
-		Node* dimer = new Node(nodes.size(),prot, nodes[opIndex]);
+		Node* dimer = new Node((int)nodes.size(),prot, nodes[opIndex]);
 		nodes.push_back(dimer);
 		dimerization->setReversible(false);
 		dimerization->initForwardRateRandomly();
@@ -366,7 +366,7 @@ void Cell::mut_add_gene () {            //	add a gene
 		}
 		if(exProt == NULL) return;
 
-		Node* ncomplex = new Node(nodes.size(), 5, prot, nodes[opIndex]);
+		Node* ncomplex = new Node((int)nodes.size(), 5, prot, nodes[opIndex]);
 		nodes.push_back(ncomplex);
 
 		//	create reaction 0, transcription
@@ -506,7 +506,7 @@ void Cell::mut_add_regu () {
 	if(exProt == NULL) return;
 
 	//	create a new node as the product
-	Node* ncomplex = new Node(nodes.size(), 5, nodes[opIndex1], nodes[opIndex2]);
+	Node* ncomplex = new Node((int)nodes.size(), 5, nodes[opIndex1], nodes[opIndex2]);
 	if(existsNode(*ncomplex)){
 		delete ncomplex;
 		return;
@@ -585,7 +585,7 @@ void Cell::mut_add_postmod () {
 
 			int opModifierIndex = modifierIndex[rand()%numOfModifier];  //choose one modifier
 
-			Node* modProt = new Node(nodes.size(),3);
+			Node* modProt = new Node((int)nodes.size(),3);
 			nodes.push_back(modProt);
 
 			Reaction* r0=new Reaction(3);    //add modification reaction
@@ -677,7 +677,7 @@ void Cell::mut_add_postmod () {
 		if(possibility < 1./3) {
 			int opIndex1 = protIndice[rand()%numOfProt];	//	protein 1
 		    int opIndex2 = protIndice[rand()%numOfProt];	//	protein 2
-			Node* dimer = new Node (nodes.size(), nodes[opIndex1], nodes[opIndex2]);
+			Node* dimer = new Node ((int)nodes.size(), nodes[opIndex1], nodes[opIndex2]);
 			if(existsNode(*dimer)){
 				delete dimer;
 				return;
@@ -893,7 +893,7 @@ void Cell::generateTimeCourses(double** targetData,int numTargetNodes, int time)
 		}
 	}
 
-    int size = nodes.size();//  how many nodes in this cell
+    int size = (int)nodes.size();//  how many nodes in this cell
     /* initialization: store the initial value in the first column of
      * currData, and for coloumn with index greater than number of target
      * nodes, initial value is 0
@@ -929,7 +929,7 @@ void Cell::generateTimeCourses(double** targetData,int numTargetNodes, int time)
     //print time courses to file
     std::ofstream timeCoursesFile;
     timeCoursesFile.open(name.c_str());
-    int nodeSize = nodes.size();
+    int nodeSize = (int)nodes.size();
     for (int i = 0; i < nodeSize; i++) {
         for (int j = 0; j < time; j++) {
             timeCoursesFile << this->currData[i][j] << "\t";
@@ -958,7 +958,7 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
 		}
 	}
 
-    int size = nodes.size();//  how many nodes in this cell
+    int size = (int)nodes.size();//  how many nodes in this cell
     /* initialization: store the initial value in the first column of
      * currData, and for coloumn with index greater than number of target
      * nodes, initial value is 0
@@ -993,7 +993,7 @@ void Cell::getScore(ScoreFunc& sfunc, double** targetData, int numTargetNodes, i
     
     currScore = totalScore;
 	int complex_size = 0;
-	int node_size = nodes.size();
+	int node_size = (int)nodes.size();
 	for(int i = 0; i < node_size; i++){
 		if(nodes[i] -> getNtype() == 5)
 			complex_size += ((nodes[i] -> getNsize()) - 2);
@@ -1110,7 +1110,7 @@ std::vector<int>* Cell::getInputIndiceVector(){
 void Cell::genRegulatoryRelationships(){
     //int numOfProtLike = 0;
     int numOfGene = 0;
-    int numberOfNodes = nodes.size();
+    int numberOfNodes = (int)nodes.size();
     // figure out the quantity of genes
     for(int i = 0; i < numberOfNodes; i++){
         if(nodes[i] -> getNtype() == 2)
@@ -1136,7 +1136,7 @@ void Cell::genRegulatoryRelationships(){
         }
         
     }
-    int numberOfReactions = rlist.size();
+    int numberOfReactions = (int)rlist.size();
     int indexOfNewMod;
     int indexOfOldMod;
     int indexOfRegualtingProtLike;
@@ -1501,7 +1501,7 @@ void Cell::addReaction(int _rtype,int index){
 
 	int opModifierIndex = modifierIndex[rand()%numOfModifier];  //choose one modifier
 
-	Node* modifiedProt = new Node(nodes.size(),3);
+	Node* modifiedProt = new Node((int)nodes.size(),3);
 	Reaction* modification = new Reaction(_rtype);
 
 	modification -> setReversible(false);
@@ -1533,7 +1533,7 @@ void Cell::addReaction(int _rtype,int firstIndex,int secondIndex){
 	case 8:             //indu + prot -> indu:prot
 		{
 		Reaction* r1=new Reaction(8);
-		Node* induProt=new Node(nodes.size(),4,nodes[firstIndex],nodes[secondIndex]);
+		Node* induProt=new Node((int)nodes.size(),4,nodes[firstIndex],nodes[secondIndex]);
 		nodes.push_back(induProt);
 
 		r1->setReversible(true);
@@ -1550,7 +1550,7 @@ void Cell::addReaction(int _rtype,int firstIndex,int secondIndex){
 		{
 		Reaction *r1 = new Reaction(5);
 		Reaction *r2 = new Reaction(1); 
-		Node* dimer = new Node(nodes.size(),6,nodes[firstIndex],nodes[secondIndex]);
+		Node* dimer = new Node((int)nodes.size(),6,nodes[firstIndex],nodes[secondIndex]);
 		nodes.push_back(dimer);
 
 		r1->setReversible(false);
@@ -1571,7 +1571,7 @@ void Cell::addReaction(int _rtype,int firstIndex,int secondIndex){
 		{
 		Reaction *r1 = new Reaction(2);
 		Reaction *r2 = new Reaction(0);
-		Node * binding = new Node(nodes.size(),5,nodes[firstIndex],nodes[secondIndex]);
+		Node * binding = new Node((int)nodes.size(),5,nodes[firstIndex],nodes[secondIndex]);
 		nodes.push_back(binding);
 
 		r1->setReversible(true);

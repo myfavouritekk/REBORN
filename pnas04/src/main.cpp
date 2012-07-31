@@ -55,7 +55,7 @@ void askInformation(ustc::Population* targetPop){
 		std::cout<< "Species in the cell are:" << std::endl;
 		ustc::Cell* aCell = (targetPop -> getCells())[0];
 		//size of nodes
-		int size = (aCell->getNodesVector()) -> size();
+		int size = (int)((aCell->getNodesVector()) -> size());
 		// print the Nstrings of nodes
 		for(int i = 0; i < size; i++){
 			std::stringstream num;

@@ -246,17 +246,17 @@ int Reaction::containNodeAsProduct(Node* aNode){
 
 
 int Reaction::getReactantsSize(){
-    return reactants.size();
+    return (int)reactants.size();
 }
 
 
 int Reaction::getModifiersSize(){
-    return modifiers.size();
+    return (int)modifiers.size();
 }
 
 
 int Reaction::getProductsSize(){
-    return products.size();
+    return (int)products.size();
 }
 
 std::vector<Node*>* Reaction::getReactantsVector(){

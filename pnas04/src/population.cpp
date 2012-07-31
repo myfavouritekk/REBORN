@@ -582,12 +582,12 @@ void Population:: genSBMLFormat(){
         std::vector<Node*>::iterator iter_node_end = cells[i]->getNodesVector()->end();
         
 		// define species for everycell
-		int sizeOfNode = cells[i] -> getNodesVector() -> size();
+		int sizeOfNode = (int)cells[i] -> getNodesVector() -> size();
 		double* initialValue = new double[sizeOfNode];
 		for(int k = 0; k < sizeOfNode; k ++){
 			initialValue[k] = 1;
 		}
-		int inputIndiceNum = cells[i] -> getInputIndiceVector() -> size();
+		int inputIndiceNum = (int)cells[i] -> getInputIndiceVector() -> size();
 		for(int k = 0; k < inputIndiceNum; k ++){
 			int index = (*(cells[i] -> getInputIndiceVector()))[k];
 			initialValue[index] = ypoints[k][0];
@@ -660,7 +660,7 @@ void Population:: genSBMLFormat(){
 			para -> setValue((*(iter_reaction)) -> getForwardRate());
 			temp -> addChild(Kon);
 			if((*iter_reaction) -> getReactantsVector() -> size()){
-				int size = ((*iter_reaction) -> getReactantsVector() -> size());
+				int size = ((int)(*iter_reaction) -> getReactantsVector() -> size());
 				iter_node = (*iter_reaction)->getReactantsVector()->begin();
 				ASTNode* reactant = new ASTNode(AST_NAME);
 				reactant -> setName((*iter_node) -> getNstring().c_str());
@@ -683,7 +683,7 @@ void Population:: genSBMLFormat(){
 			}
 			// exist modifier
 			if((*iter_reaction) -> getModifiersSize()){
-				int size = ((*iter_reaction) -> getReactantsVector() -> size());
+				int size = ((int)(*iter_reaction) -> getReactantsVector() -> size());
 				iter_node = (*iter_reaction)->getModifiersVector()->begin();
 				for(int i = 0; i < (size - 1); i ++){
 					ASTNode* modifier = new ASTNode(AST_NAME);
@@ -701,7 +701,7 @@ void Population:: genSBMLFormat(){
 			if((*iter_reaction) -> isReversible()){
 			reaction -> setReversible(1);
 			std::stringstream tempFormula;
-			int size = (*(*iter_reaction) -> getProductsVector()).size();
+			int size = (int)(*(*iter_reaction) -> getProductsVector()).size();
 			iter_node = (*iter_reaction)->getProductsVector()->begin();
 			ASTNode* temp3 = new ASTNode(AST_TIMES);
 			ASTNode* product = new ASTNode(AST_NAME);

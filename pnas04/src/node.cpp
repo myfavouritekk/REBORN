@@ -9,7 +9,7 @@ void quickSort(vector<Node*> *_components){
     vector<Node*> less;                 //Node** less = new Node*[num];
     vector<Node*> greater;              //Node** greater = new Node*[num];
     Node* temp;
-    int num = (*_components).size();
+    int num = (int)(*_components).size();
     
     //end of recursion, no need to sort
     if(num <= 1) return;
@@ -255,7 +255,7 @@ int Node::getNtype () {
     return ntype;
 }
 int Node::getNsize () {
-    return components.size ();  //including situation when components[0] is NULL
+    return (int)components.size ();  //including situation when components[0] is NULL
 }
 
 Node* Node::getNode (const int& index) {

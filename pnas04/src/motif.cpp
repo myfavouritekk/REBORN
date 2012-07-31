@@ -13,7 +13,7 @@ namespace ustc {
 Motif::Motif(std::vector<Node*>* constructingNodes, int** relationshipMatrix){
 	vector<Node*>::iterator iter = (*constructingNodes).begin();
 	vector<Node*>::iterator iter_end = (*constructingNodes).end();
-	int matrixSize =(*constructingNodes).size();
+	int matrixSize =(int)(*constructingNodes).size();
 	while (iter!=iter_end){
 		motifNodes.push_back(*iter);
 		iter++;
@@ -50,7 +50,7 @@ int Motif::motifSize(){
 
 //private method to generate motif type based on the motifMatrix
 void Motif::generateMtype(){
-    int size = motifNodes.size();
+    int size = (int)motifNodes.size();
 	switch (size){ //single gene regulation
 		case 1:{
 			if (motifMatrix[0][0] == 1){

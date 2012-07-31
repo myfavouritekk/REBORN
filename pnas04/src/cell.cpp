@@ -883,12 +883,17 @@ void runge_kutta(double **data,vector<Node*> nodes,vector<Reaction*> rlist ,int 
 
 
 void Cell::generateTimeCourses(double*** targetData,int numTargetNodes, int time){
-    int* timeOfAddInducers = new int[numInducer];
-	for(int i = 0; i < numInducer; i++){
-		for(int j = 0; j < time; j++){
-			if(targetData[0][i][j]>0.0000001){
-				timeOfAddInducers[i] = j;
-				break;
+    int** timeOfAddInducers = new int*[numInputSets];
+	for(int i = 0; i < numInputSets; i++){
+		timeOfAddInducers[i] = new int[numInducer];
+	}
+	for(int k = 0; k < numInputSets; k++){
+		for(int i = 0; i < numInducer; i++){
+			for(int j = 0; j < time; j++){
+				if(targetData[k][i][j]>0.0000001){
+					timeOfAddInducers[k][i] = j;
+					break;
+				}
 			}
 		}
 	}

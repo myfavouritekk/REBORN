@@ -51,7 +51,7 @@ void Population::init(){
     
     //	for each cell, initialization
 	for (int i = 0; i < ncell; i++) {
-		cells[i] = new Cell(numind, numprot);
+		cells[i] = new Cell(numind, numprot,numInputSets);
         cells[i]->getScore(sfunc, ypoints, numind + numprot, numr, false);//getScore in initialization
 	}
 

@@ -942,18 +942,21 @@ void Cell::generateTimeCourses(double*** targetData,int numTargetNodes, int time
  *parameter: "name" contains the evolution generation and rankin of this cell, "time" is the total points of each time course
  */
  void Cell::printCurrDataToAFile(std::string name, int time){
-    
-    //print time courses to file
-    std::ofstream timeCoursesFile;
-    timeCoursesFile.open(name.c_str());
-    int nodeSize = (int)nodes.size();
-    for (int i = 0; i < nodeSize; i++) {
-        for (int j = 0; j < time; j++) {
-            timeCoursesFile << this->currData[i][j] << "\t";
-        }
-        timeCoursesFile << std::endl;
-    }
-    timeCoursesFile.close();
+     
+     //print time courses to file
+     std::ofstream timeCoursesFile;
+     timeCoursesFile.open(name.c_str());
+     int nodeSize = (int)nodes.size();
+     for (int i = 0; i < numInputSets; i++) {
+         for (int j = 0; j < nodeSize; j++) {
+             for (int k = 0; k < time; k++) {
+                 timeCoursesFile << this->currData[i][j][k] << "\t";
+             }
+             timeCoursesFile << std::endl;
+         }
+
+     }
+     timeCoursesFile.close();
 }
 
 
@@ -1128,7 +1131,10 @@ void Cell::description(int time){
         iter_motif++;
     }
     
-    for (int i = 0; i < nodes.size(); i++) {
+    for (int i = 0; i < numInputSets; i++) {
+        for (int j = 0; j < nodes.size(); j++) {
+            delete [] currData[i][j];
+        }
         delete [] currData[i];
     }
     delete [] currData;

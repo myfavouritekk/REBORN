@@ -12,13 +12,16 @@ Population::Population (const int& _ncell, const int& _evolution)
 
 //destructor
 Population::~Population () {
-if(xpoints != NULL) {delete [] xpoints;}
+    if(xpoints != NULL) {delete [] xpoints;}
 	if(ypoints != NULL) {
-		for(int ir = 0; ir < numind + numprot; ir++) {
-			if(ypoints[ir] != NULL) {
-				delete [] (ypoints[ir]);
-			}
-		}
+        for (int i = 0; i < numInputSets; i++) {
+            for(int ir = 0; ir < numind + numprot; ir++) {
+                if(ypoints[ir] != NULL) {
+                    delete [] ypoints[i][ir];
+                }
+            }
+            delete [] ypoints[i];
+        }
 		delete [] ypoints;
 	}
     

@@ -15,6 +15,8 @@
 
 namespace ustc {
 
+enum piece_direction{CLOCKWISE, ANTI_CLOCKWISE};
+    
 class DNAPiece{
     
 private:
@@ -23,6 +25,8 @@ private:
     Part* rbs;
     Part* gene;
     Part* terminator;
+    
+    piece_direction direction;
     
 public:
     
@@ -39,6 +43,11 @@ public:
     Part* getGene();
     Part* getTerminator();
    
+    void setDirection(
+                const piece_direction& _direction
+                );
+    
+    piece_direction getDirection();
     
 };  //  class DNAPiece
     

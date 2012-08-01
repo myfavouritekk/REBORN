@@ -25,7 +25,7 @@ DNAPiece::DNAPiece(
     gene = _gene;
     terminator = _terminator;
     
-    
+    direction = CLOCKWISE;  // default direction
 }
     
 Part* DNAPiece::getPromoter(){
@@ -44,6 +44,12 @@ Part* DNAPiece::getTerminator(){
     return terminator;
 }
     
+void DNAPiece::setDirection(const piece_direction& _direction){
+    direction = _direction;
+}
     
+piece_direction DNAPiece::getDirection(){
+    return direction;
+}
     
 }// namespace ustc

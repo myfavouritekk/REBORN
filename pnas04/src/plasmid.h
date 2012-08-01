@@ -25,6 +25,12 @@ private:
     
 public:
     
+    //  constructor
+    Plasmid();
+    
+    DNAPiece* getDnaPiece(const int& dnaPieceIndex);
+    
+    void addDnaPiece(DNAPiece* newDnaPiece);
     
 };
 

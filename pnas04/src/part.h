@@ -21,10 +21,22 @@ class Part{
 private:
     
     part_Type pType;
+    std::string id;
+    std::string name;
     
 public:
     
+    //  constructor
+    Part(
+            const part_Type& _pType,
+            const std::string& _id,
+            const std::string& _name
+            );
+    
+    
     part_Type getPtype();
+    std::string getId();
+    std::string getName();
     
 };  // class Part
 

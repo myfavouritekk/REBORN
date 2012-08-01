@@ -10,10 +10,10 @@
 #define PNAS04Team_consts_h
 
 //Total evolution number of the program
-#define TOTAL_EVO 250
+#define TOTAL_EVO 1000
 
 //Total number of cells
-#define POPULATION 30
+#define POPULATION 1000
 
 //Number of cells that do not change topology
 #define CELLS_UNCHANGED 10

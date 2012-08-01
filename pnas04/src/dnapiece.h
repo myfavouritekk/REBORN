@@ -26,6 +26,14 @@ private:
     
 public:
     
+    //  constructor
+    DNAPiece(
+                Part* _promoter,
+                Part* _rbs,
+                Part* _gene,
+                Part* _terminater
+                );
+    
     Part* getPromoter();
     Part* getRbs();
     Part* getGene();

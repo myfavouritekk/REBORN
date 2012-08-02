@@ -36,7 +36,18 @@ void Plasmid::readMotifs(const int& cellIndex){
 	ss << "Cell_"<<cellIndex <<"_Motifs.txt";
 	std::ifstream infile;
 	infile.open(ss.str().c_str());
+	if (!infile) {
+        std::cerr << "Error: unable to open input file: " << infile << std::endl;
+		exit(1);
+    }
+
 	infile >> numSingleMotifs >> numDoubleMotifs >> numTripleMotifs;
+	if (infile.bad ()) throw std::runtime_error ("IO stream corrupted");
+	if (infile.fail ()) throw std::runtime_error ("bad data");
+	if (numSingleMotifs + numDoubleMotifs + numTripleMotifs == 0) {
+		std::cerr << "Error: empty data" << std::endl;
+		exit(1);
+	}
 
 	// creat singleMotifMatrice
 	singleMotifsMatrice = new int**[numSingleMotifs];

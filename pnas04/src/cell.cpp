@@ -245,9 +245,7 @@ void Cell::mut_kin_const () {
 	//srand((unsigned int)time(NULL));
 	Reaction* currR = rlist[rand()%rlist.size()];
 	if((double)rand()/RAND_MAX <= 0.5 || !currR->isReversible()) {
-		if(currR -> getRtype() != INDU_PROT_BINDING){
            currR->modifyForwardRate();
-        }
 	}
 	else {
 		currR->modifyReverseRate();
@@ -773,10 +771,8 @@ void Cell::mut_parameters_simAnneal(){
     std::vector<Reaction*>::iterator iter_reaction = rlist.begin();
     std::vector<Reaction*>::iterator iter_reaction_end = rlist.end();
     while (iter_reaction != iter_reaction_end) {
-        if((*iter_reaction) -> getRtype() != INDU_PROT_BINDING){
             (*iter_reaction)->modifyForwardRate();
             (*iter_reaction)->modifyReverseRate();
-        }
         iter_reaction++;
     }
     

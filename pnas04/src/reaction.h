@@ -25,6 +25,18 @@
 
 namespace ustc{
 
+enum reaction_type{
+            TRANSCRIPTION,
+            DEGRADATION,
+            BINDING,
+            MODIFICATION,
+            PARTIAL_DEGRADATION,
+            DIMERIZATION,
+            CATALYTIC_DEGRADATION,
+            PARTIAL_CATALYTIC_DEGRADATION,
+            INDU_PROT_BINDING
+            };
+    
 class Reaction{
 
     public:
@@ -81,7 +93,7 @@ class Reaction{
     private:
 
 		//	reaction type
-		int rtype;
+		reaction_type rtype;
 
         //  reversibility
         bool reversible;

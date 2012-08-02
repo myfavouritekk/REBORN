@@ -23,6 +23,15 @@ private:
     
     std::vector<DNAPiece*> dnaPieces;
     
+    int numSingleMotifs;
+    int numDoubleMotifs;
+    int numTripleMotifs;
+    
+    int*** singleMotifsMatrice;
+    int*** doubleMotifsMatrice;
+    int*** tripleMotifsMatrice;
+    
+    
 public:
     
     //  constructor
@@ -32,6 +41,7 @@ public:
     
     void addDnaPiece(DNAPiece* newDnaPiece);
     
+    void readMotifs(const int& cellIndex);
 };
 
 

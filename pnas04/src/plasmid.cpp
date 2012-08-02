@@ -30,4 +30,56 @@ void Plasmid::addDnaPiece(DNAPiece* newDNAPiece){
 }
     
     
+void Plasmid::readMotifs(const int& cellIndex){
+
+	std::stringstream ss;
+	ss << "Cell_"<<cellIndex <<"_Motifs.txt";
+	std::ifstream infile;
+	infile.open(ss.str().c_str());
+	infile >> numSingleMotifs >> numDoubleMotifs >> numTripleMotifs;
+
+	// creat singleMotifMatrice
+	singleMotifsMatrice = new int**[numSingleMotifs];
+	for(int i = 0; i < numSingleMotifs; i++){
+		singleMotifsMatrice[i] = new int*[1];
+		singleMotifsMatrice[i][0] = new int[1];
+	}
+	
+	// creat doubleMotifsMatrice
+	doubleMotifsMatrice = new int**[numDoubleMotifs];
+	for(int i = 0; i < numDoubleMotifs; i++){
+		doubleMotifsMatrice[i] = new int*[2];
+		for(int j = 0; j < 2; j++){
+			doubleMotifsMatrice[i][j]=new int[2];
+		}
+	}
+
+	// creat tripleMotifsMatrice
+	tripleMotifsMatrice = new int**[numTripleMotifs];
+	for(int i = 0; i < numTripleMotifs; i++){
+		tripleMotifsMatrice[i] = new int*[3];
+		for(int j = 0; j < 3; j++){
+			tripleMotifsMatrice[i][j] = new int[3];
+		}
+	}
+
+	// read singleMotifMatrice
+	for(int i = 0; i < numSingleMotifs; i++){
+		infile >> singleMotifsMatrice[i][0][0];
+	}
+
+	// read doubleMotifMatrice
+	for(int i = 0; i < numDoubleMotifs; i++){
+		infile >> doubleMotifsMatrice[i][0][0] >> doubleMotifsMatrice[i][0][1];
+		infile >> doubleMotifsMatrice[i][1][0] >> doubleMotifsMatrice[i][1][1];
+	}
+	
+	// read tripleMotifMatrice
+	for(int i = 0;i < numTripleMotifs; i++){
+		infile >> tripleMotifsMatrice[i][0][0] >> tripleMotifsMatrice[i][0][1] >> tripleMotifsMatrice[i][0][2];
+		infile >> tripleMotifsMatrice[i][1][0] >> tripleMotifsMatrice[i][1][1] >> tripleMotifsMatrice[i][1][2];
+		infile >> tripleMotifsMatrice[i][2][0] >> tripleMotifsMatrice[i][2][1] >> tripleMotifsMatrice[i][2][2];
+	}
+}
+
 }// namespace ustc

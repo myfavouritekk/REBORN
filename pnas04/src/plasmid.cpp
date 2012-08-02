@@ -91,6 +91,7 @@ void Plasmid::readMotifs(const int& cellIndex){
 		infile >> tripleMotifsMatrice[i][1][0] >> tripleMotifsMatrice[i][1][1] >> tripleMotifsMatrice[i][1][2];
 		infile >> tripleMotifsMatrice[i][2][0] >> tripleMotifsMatrice[i][2][1] >> tripleMotifsMatrice[i][2][2];
 	}
+	infile.close();
 }
 
 }// namespace ustc

@@ -110,15 +110,15 @@ void Plasmid::findCandidates(
 		for(int j = 0; j < numColumn; j ++){
 			for(int k = 0; k < numRow; k ++){
 				if(database[k][j] == singleMotifsMatrice[i][0][0]){
-					MotifCandidate* MC;
-					GeneCandidate* GC;
-					GC -> name = namesOfGenes[j];
-					GC -> itsPromoterStrings.push_back(namesOfPromoters[k]);
-					MC -> size = _1X1;
-					MC -> geneString.push_back(namesOfGenes[j]);
-					MC -> genes.push_back(GC);
-					MC -> promoterStrings.push_back(namesOfPromoters[k]);
-					candidates.push_back(MC);
+					MotifCandidate* mc;
+					GeneCandidate* gc;
+					gc -> name = namesOfGenes[j];
+					gc -> itsPromoterStrings.push_back(namesOfPromoters[k]);
+					mc -> size = _1X1;
+					mc -> geneString.push_back(namesOfGenes[j]);
+					mc -> genes.push_back(gc);
+					mc -> promoterStrings.push_back(namesOfPromoters[k]);
+					candidates.push_back(mc);
 				}
 			}
 		}
@@ -146,21 +146,21 @@ void Plasmid::findCandidates(
 					for(int l = 0; l < numRow; l++){
 						// this will satisfy all condition
 						if(database[l][i] == doubleMotifsMatrice[n][1][0] && database[k][l] == doubleMotifsMatrice[n][1][1]){
-							GeneCandidate* GC1;
-							GeneCandidate* GC2;
-							MotifCandidate* MC;
-							GC1 -> name = namesOfGenes[i];
-							GC1 -> itsPromoterStrings.push_back(namesOfPromoters[j]);
-							GC2 -> name = namesOfGenes[k];
-							GC2 -> itsPromoterStrings.push_back(namesOfPromoters[l]);
-							MC -> size = _2X2;
-							MC -> geneString.push_back(GC1 -> name);
-							MC -> geneString.push_back(GC2 -> name);
-							MC -> promoterStrings.push_back(namesOfPromoters[j]);
-							MC -> promoterStrings.push_back(namesOfPromoters[l]);
-							MC -> genes.push_back(GC1);
-							MC -> genes.push_back(GC2);
-							candidates.push_back(MC);
+							GeneCandidate* gc1;
+							GeneCandidate* gc2;
+							MotifCandidate* mc;
+							gc1 -> name = namesOfGenes[i];
+							gc1 -> itsPromoterStrings.push_back(namesOfPromoters[j]);
+							gc2 -> name = namesOfGenes[k];
+							gc2 -> itsPromoterStrings.push_back(namesOfPromoters[l]);
+							mc -> size = _2X2;
+							mc -> geneString.push_back(gc1 -> name);
+							mc -> geneString.push_back(gc2 -> name);
+							mc -> promoterStrings.push_back(namesOfPromoters[j]);
+							mc -> promoterStrings.push_back(namesOfPromoters[l]);
+							mc -> genes.push_back(gc1);
+							mc -> genes.push_back(gc2);
+							candidates.push_back(mc);
 						}
 					}
 				}
@@ -200,27 +200,27 @@ void Plasmid::findCandidates(
 							for(int q  = 0; q < numRow; q ++){
 								//satisfy all condition
 								if(database[q][i] == tripleMotifsMatrice[n][2][0] && database[q][k] == tripleMotifsMatrice[n][2][1] && database[q][p] == tripleMotifsMatrice[n][2][2]){
-									GeneCandidate* GC1;
-									GeneCandidate* GC2;
-									GeneCandidate* GC3;
-									MotifCandidate* MC;
-									GC1 -> name = namesOfGenes[i];
-									GC1 -> itsPromoterStrings.push_back(namesOfPromoters[j]);
-									GC2 -> name = namesOfGenes[k];
-									GC2 -> itsPromoterStrings.push_back(namesOfPromoters[l]);
-									GC3 -> name = namesOfGenes[p];
-									GC3 -> itsPromoterStrings.push_back(namesOfPromoters[q]);
-									MC -> size = _3X3;
-									MC -> geneString.push_back(GC1 -> name);
-									MC -> geneString.push_back(GC2 -> name);
-									MC -> geneString.push_back(GC3 -> name);
-									MC -> promoterStrings.push_back(namesOfPromoters[j]);
-									MC -> promoterStrings.push_back(namesOfPromoters[l]);
-									MC -> promoterStrings.push_back(namesOfPromoters[q]);
-									MC -> genes.push_back(GC1);
-									MC -> genes.push_back(GC2);
-									MC -> genes.push_back(GC3);
-									candidates.push_back(MC);
+									GeneCandidate* gc1;
+									GeneCandidate* gc2;
+									GeneCandidate* gc3;
+									MotifCandidate* mc;
+									gc1 -> name = namesOfGenes[i];
+									gc1 -> itsPromoterStrings.push_back(namesOfPromoters[j]);
+									gc2 -> name = namesOfGenes[k];
+									gc2 -> itsPromoterStrings.push_back(namesOfPromoters[l]);
+									gc3 -> name = namesOfGenes[p];
+									gc3 -> itsPromoterStrings.push_back(namesOfPromoters[q]);
+									mc -> size = _3X3;
+									mc -> geneString.push_back(gc1 -> name);
+									mc -> geneString.push_back(gc2 -> name);
+									mc -> geneString.push_back(gc3 -> name);
+									mc -> promoterStrings.push_back(namesOfPromoters[j]);
+									mc -> promoterStrings.push_back(namesOfPromoters[l]);
+									mc -> promoterStrings.push_back(namesOfPromoters[q]);
+									mc -> genes.push_back(gc1);
+									mc -> genes.push_back(gc2);
+									mc -> genes.push_back(gc3);
+									candidates.push_back(mc);
 								}
 							}
 						}

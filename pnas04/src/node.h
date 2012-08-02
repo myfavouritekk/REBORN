@@ -20,6 +20,15 @@ using std::vector;
  */
 namespace ustc{
 
+    
+enum node_type{
+            INDUCER = 1,
+            GENE,
+            PROTEIN,
+            INDUCER_PROT_COMPLEX,
+            GENE_PROT_COMPLEX,
+            PROTEIN_COMPLEX
+            };
 
 class Reaction;
 
@@ -27,13 +36,13 @@ class Node {
 
     public:
 
-		Node (int _nindex, int _ntype); //	basic node constructor
+		Node (int _nindex, node_type _ntype); //	basic node constructor
 		Node (int _nindex, Node* _nleft, Node* _nright); //complex node constructor
-        Node (int _nindex, int _ntype, Node* _nleft, Node* _nright);//complex node constructor of certain type
+        Node (int _nindex, node_type _ntype, Node* _nleft, Node* _nright);//complex node constructor of certain type
         Node (Node &node);//copy constructor
         ~Node ();   //deconstructor
 		
-		int getNtype ();	//  return node type 1-6
+		node_type getNtype ();	//  return node type 1-6
 		int getNindex ();	//	return node index
 		int getNsize ();	//	return size of components
 		Node* getNode (const int& index);	//	return the Node with index in the components vector
@@ -56,7 +65,7 @@ class Node {
     private:
 
 		int nindex;	//index in the node vector in the cell
-        int ntype;	//node type
+        node_type ntype;	//node type
 		string nstring;	//	node string
 		vector<Node*> components;	//	nodes constituting the complex, the first component, components[0], is a gene or nil
 };

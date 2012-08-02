@@ -102,8 +102,139 @@ void Plasmid::findCandidates(
                              const std::string* namesOfPromoters,
                              const int** database
                              ){
-    
+
+	//find single motif cadidates
+	// j -> gene
+	// k -> promoter
+    for(int i = 0; i < numSingleMotifs; i ++){
+		for(int j = 0; j < numColumn; j ++){
+			for(int k = 0; k < numRow; k ++){
+				if(database[k][j] == singleMotifsMatrice[i][0][0]){
+					MotifCandidate* MC;
+					GeneCandidate* GC;
+					GC -> name = namesOfGenes[j];
+					GC -> itsPromoterStrings.push_back(namesOfPromoters[k]);
+					MC -> size = _1X1;
+					MC -> geneString.push_back(namesOfGenes[j]);
+					MC -> genes.push_back(GC);
+					MC -> promoterStrings.push_back(namesOfPromoters[k]);
+					candidates.push_back(MC);
+				}
+			}
+		}
+	}
+
+
+
+	//find double motif cadidats
+	//i -> gene1
+	//k -> gene2
+	//j -> promt1
+	//l -> promt2
+	for(int n = 0; n < numDoubleMotifs; n ++){
+		for(int i = 0; i < numColumn; i ++){
+			for(int j = 0; j < numRow; j ++){
+				// promt1 satisfy motifmatrice[n][0][0]
+				if(database[j][i] != doubleMotifsMatrice[n][0][0]){ 
+					continue;
+				}
+				for(int k = 0; k < numColumn; k ++){ 
+					//gene2 != gene1  ||   gene2 satisfy motifmatrice[n][0][1]
+					if(k == i || database[j][k] != doubleMotifsMatrice[n][0][1]){
+						continue;
+					}
+					for(int l = 0; l < numRow; l++){
+						// this will satisfy all condition
+						if(database[l][i] == doubleMotifsMatrice[n][1][0] && database[k][l] == doubleMotifsMatrice[n][1][1]){
+							GeneCandidate* GC1;
+							GeneCandidate* GC2;
+							MotifCandidate* MC;
+							GC1 -> name = namesOfGenes[i];
+							GC1 -> itsPromoterStrings.push_back(namesOfPromoters[j]);
+							GC2 -> name = namesOfGenes[k];
+							GC2 -> itsPromoterStrings.push_back(namesOfPromoters[l]);
+							MC -> size = _2X2;
+							MC -> geneString.push_back(GC1 -> name);
+							MC -> geneString.push_back(GC2 -> name);
+							MC -> promoterStrings.push_back(namesOfPromoters[j]);
+							MC -> promoterStrings.push_back(namesOfPromoters[l]);
+							MC -> genes.push_back(GC1);
+							MC -> genes.push_back(GC2);
+							candidates.push_back(MC);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+
+
+	// find trible motif candidates
+	// i -> gene1
+	// k -> gene2
+	// p -> gene3
+	// j -> promt1
+	// l -> promt2
+	// q -> promt3
+	for(int n = 0; n < numTripleMotifs; n ++){
+		for(int i = 0; i < numColumn; i ++){
+			for(int j = 0; j < numRow; j ++){
+				// promt1 satisfy motifmatrice[n][0][0]
+				if(database[j][i] != tripleMotifsMatrice[n][0][0]){ 
+					continue;
+				}
+				for(int k = 0; k < numColumn; k ++){ 
+					//gene2 != gene1  ||   gene2 satisfy motifmatrice[n][0][1]
+					if(k == i || database[j][k] != tripleMotifsMatrice[n][0][1]){
+						continue;
+					}
+					for(int l = 0; l < numRow; l++){
+						if(database[l][i] != tripleMotifsMatrice[n][1][0] || database[l][k] != tripleMotifsMatrice[n][1][1]){
+							continue;
+						}
+						for(int p = 0; p < numColumn; p ++){
+							if(p ==	k || p == i || database[j][p] != tripleMotifsMatrice[n][0][2] || database[l][p] != tripleMotifsMatrice[n][1][2]){
+								continue;
+							}
+							for(int q  = 0; q < numRow; q ++){
+								//satisfy all condition
+								if(database[q][i] == tripleMotifsMatrice[n][2][0] && database[q][k] == tripleMotifsMatrice[n][2][1] && database[q][p] == tripleMotifsMatrice[n][2][2]){
+									GeneCandidate* GC1;
+									GeneCandidate* GC2;
+									GeneCandidate* GC3;
+									MotifCandidate* MC;
+									GC1 -> name = namesOfGenes[i];
+									GC1 -> itsPromoterStrings.push_back(namesOfPromoters[j]);
+									GC2 -> name = namesOfGenes[k];
+									GC2 -> itsPromoterStrings.push_back(namesOfPromoters[l]);
+									GC3 -> name = namesOfGenes[p];
+									GC3 -> itsPromoterStrings.push_back(namesOfPromoters[q]);
+									MC -> size = _3X3;
+									MC -> geneString.push_back(GC1 -> name);
+									MC -> geneString.push_back(GC2 -> name);
+									MC -> geneString.push_back(GC3 -> name);
+									MC -> promoterStrings.push_back(namesOfPromoters[j]);
+									MC -> promoterStrings.push_back(namesOfPromoters[l]);
+									MC -> promoterStrings.push_back(namesOfPromoters[q]);
+									MC -> genes.push_back(GC1);
+									MC -> genes.push_back(GC2);
+									MC -> genes.push_back(GC3);
+									candidates.push_back(MC);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 }
+
+
+	
+	
     
     
 }// namespace ustc

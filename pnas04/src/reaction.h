@@ -42,7 +42,7 @@ class Reaction{
     public:
         
         Reaction();
-        Reaction(int _rtype);
+        Reaction(reaction_type _rtype);
         Reaction(Reaction &reaction);//copy constructor
         ~Reaction();
 
@@ -59,7 +59,7 @@ class Reaction{
 		void addModifier( Node* sm);//no const
 		void addProduct ( Node* sp);//no const
 
-		int  getRtype ();
+		reaction_type  getRtype ();
 		Node* getReactant(const int& ir);
 		Node* getModifier(const int& im);
 		Node* getProduct (const int& ip);

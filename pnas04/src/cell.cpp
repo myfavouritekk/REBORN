@@ -494,7 +494,7 @@ void Cell::mut_add_regu () {
 	Node* exProt = NULL;
     std::vector<Reaction*>::iterator iter2 = rlist.begin();
     while (iter2 != rlist.end()) {
-        if((*iter2)->getRtype() == 0) { //   #0 is gene transcription
+        if((*iter2)->getRtype() == TRANSCRIPTION) { //   #0 is gene transcription
 			Node* sr = (*iter2)->getModifier(0);
 			if(sr != NULL && (sr->getNindex() == exGene->getNindex())) {
 				exProt = (*iter2)->getProduct(0);
@@ -521,7 +521,7 @@ void Cell::mut_add_regu () {
 	r0->addProduct(exProt);
 
 	//	create reaction 1, binding/unbinding between protein and gene or gene/protein complex
-	Reaction* r1 = new Reaction (BI);
+	Reaction* r1 = new Reaction (BINDING);
 	r1->setReversible(true);
 	r1->initForwardRateRandomly();
 	r1->initReverseRateRandomly();
@@ -779,7 +779,7 @@ void Cell::mut_parameters_simAnneal(){
     std::vector<Reaction*>::iterator iter_reaction = rlist.begin();
     std::vector<Reaction*>::iterator iter_reaction_end = rlist.end();
     while (iter_reaction != iter_reaction_end) {
-        if((*iter_reaction) -> getRtype() != 8){
+        if((*iter_reaction) -> getRtype() != INDU_PROT_BINDING){
             (*iter_reaction)->modifyForwardRate();
             (*iter_reaction)->modifyReverseRate();
         }
@@ -1195,7 +1195,7 @@ void Cell::genRegulatoryRelationships(){
     
     // find the reaction of Type 2: protein binding gene
     for(int l = 0; l < numberOfReactions; l++){
-        if(rlist[l] -> getRtype() == 2){
+        if(rlist[l] -> getRtype() == BINDING){
             indexOfNewMod = rlist[l] -> getProduct(0) -> getNindex();//the new modifier is the a gene/protein complex, which is the first and only product fo a binding reaction
             if(rlist[l] -> getReactant(0) -> getNtype() == 2){  //node type 2 is gene
                 indexOfOldMod = rlist[l] -> getReactant(0) -> getNindex();
@@ -1210,7 +1210,7 @@ void Cell::genRegulatoryRelationships(){
             double forwardrateOfOld;
             // get the forwardrate of the old and the new transcription reactions
             for(int i = 0; i < numberOfReactions; i++){
-                if(rlist[i] -> getRtype() == 0){//reaction type 0 is transcription
+                if(rlist[i] -> getRtype() == TRANSCRIPTION){//reaction type 0 is transcription
                     if(rlist[i] -> getModifier(0) -> getNindex() == indexOfNewMod)
                         forwardrateOfNew = rlist[i] -> getForwardRate();
                     else
@@ -1669,7 +1669,7 @@ void Cell::addReaction(reaction_type _rtype,int firstIndex,int secondIndex){
 		Node* exProt = NULL;
 		std::vector<Reaction*>::iterator iter = rlist.begin();
 		while (iter != rlist.end()) {
-        if((*iter)->getRtype() == 0) { //   #0 is gene transcription
+        if((*iter)->getRtype() == TRANSCRIPTION) { //   #0 is gene transcription
 			Node* sr = (*iter)->getModifier(0);
 			if(sr != NULL && (sr->getNindex() == exGene->getNindex())) {
 				exProt = (*iter)->getProduct(0);

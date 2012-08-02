@@ -618,17 +618,11 @@ void Cell::mut_add_postmod () {
 			int randComp=rand()%(nodes[opIndex]->getNsize()-1)+1;
 		    r2->addProduct(nodes[opIndex]->getNode(randComp));        //randomly choose a node in the complex as the product
 
-			Reaction* r3=new Reaction(DEGRADATION);
-			r3->setReversible(false);
-			r3->initForwardRateRandomly();
-			r3->addReactant(nodes[opIndex]->getNode(randComp));
-			if(!existsReaction(*r2) && !existsReaction(*r3)){
+			if(!existsReaction(*r2)){
 				rlist.push_back(r2);
-				rlist.push_back(r3);
 			}
 			else{
 				delete r2;
-				delete r3;
 			}
 			return;
 

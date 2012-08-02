@@ -94,4 +94,16 @@ void Plasmid::readMotifs(const int& cellIndex){
 	infile.close();
 }
 
+    
+void Plasmid::findCandidates(
+                             const int& numRow,
+                             const int& numColumn,
+                             const std::string* namesOfGenes,
+                             const std::string* namesOfPromoters,
+                             const int** database
+                             ){
+    
+}
+    
+    
 }// namespace ustc

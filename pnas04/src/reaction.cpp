@@ -3,7 +3,7 @@ namespace ustc{
 Reaction::Reaction ()
 {}
 
-Reaction::Reaction(int _rtype):rtype(_rtype)
+Reaction::Reaction(reaction_type _rtype):rtype(_rtype)
 {}
 
 //copy constructor
@@ -97,7 +97,7 @@ bool Reaction::operator==(const Reaction& r1) const {
 	return true;
 }
 
-int Reaction::getRtype () {
+reaction_type Reaction::getRtype () {
 	return rtype;
 }
 
@@ -278,30 +278,30 @@ void Reaction::description(int reactionIndex){
     std::cout << "  Reaction " << reactionIndex << ":" << std::endl;
     
     //Print Type:
-    std::cout << "   Type: " << "Type " << rtype << "  ";
+    std::cout << "   Type: " << "Type " << (int)rtype << "  ";
     switch (rtype) {
-        case 0:
+        case TRANSCRIPTION:
             std::cout << "Transcription";
             break;
-        case 1:
+		case DEGRADATION:
             std::cout << "Protein Degradation";
             break;
-        case 2:
+        case BINDING:
             std::cout << "Binding";
             break;
-        case 3:
+        case MODIFICATION:
             std::cout << "Modification";
             break;
-        case 4:
+        case PARTIAL_DEGRADATION:
             std::cout << "Partial Degradation";
             break;
-        case 5:
+        case DIMERIZATION:
             std::cout << "Dimerization";
             break;
-        case 6:
+        case CATALYTIC_DEGRADATION:
             std::cout << "Catalytic Degradation";
             break;
-        case 7:
+        case PARTIAL_CATALYTIC_DEGRADATION:
             std::cout << "Partial Catalytic Degradation";
             break;
         default:

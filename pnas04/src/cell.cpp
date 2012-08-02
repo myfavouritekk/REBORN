@@ -26,13 +26,13 @@ Cell::Cell(const int& _numind, const int& _numprot, const int& _numInputSets):nu
 		iop++;
 		currIndex++;
 
-		Reaction *r0 = new Reaction(0);         //add transcription reaction
+		Reaction *r0 = new Reaction(TRANSCRIPTION);         //add transcription reaction
 		r0->setReversible(false);
 		r0->initForwardRateRandomly();
 		r0->addModifier(gene);
 		r0->addProduct(prot);
 
-		Reaction* r1 = new Reaction(1);        //add degradation reaction
+		Reaction* r1 = new Reaction(DEGRADATION);        //add degradation reaction
 		r1->setReversible(false);
 		r1->initForwardRateRandomly();
 		r1->addReactant(prot);
@@ -214,7 +214,7 @@ void Cell::mut_deg_prot () {
     std::vector<Reaction*>::iterator iter = rlist.begin();
     std::vector<Reaction*>::iterator iter_end = rlist.end();
     while (iter != iter_end) {
-        if((*iter)->getRtype() == 1) {      //#1 is protein degradation
+        if((*iter)->getRtype() == DEGRADATION) {      //#DEGRADATION is protein degradation
             numOfDegReaction++;
             indice.push_back(indexOfDegReaction);
         }
@@ -245,7 +245,7 @@ void Cell::mut_kin_const () {
 	//srand((unsigned int)time(NULL));
 	Reaction* currR = rlist[rand()%rlist.size()];
 	if((double)rand()/RAND_MAX <= 0.5 || !currR->isReversible()) {
-		if(currR -> getRtype() != 8){
+		if(currR -> getRtype() != INDU_PROT_BINDING){
            currR->modifyForwardRate();
         }
 	}
@@ -270,14 +270,14 @@ void Cell::mut_add_gene () {            //	add a gene
 	nodes.push_back(prot);
 	
 	//	create Reaction r0, transcription
-	Reaction* r0 = new Reaction (0);
+	Reaction* r0 = new Reaction (TRANSCRIPTION);
 	r0->setReversible(false);// irreversible and no reactants
 	r0->initForwardRateRandomly();
 	r0->addModifier(gene);
 	r0->addProduct(prot);
 
 	//	create Reaction r1, protein degradation
-	Reaction* r1 = new Reaction (1);
+	Reaction* r1 = new Reaction (DEGRADATION);
 	r1->setReversible(false);
 	r1->initForwardRateRandomly();
 	r1->addReactant(prot);
@@ -312,7 +312,7 @@ void Cell::mut_add_gene () {            //	add a gene
 		}
 
 		int opIndex=proIndice[rand()%numProt];
-		Reaction* dimerization = new Reaction(5);
+		Reaction* dimerization = new Reaction(DIMERIZATION);
 		Node* dimer = new Node((int)nodes.size(),prot, nodes[opIndex]);
 		nodes.push_back(dimer);
 		dimerization->setReversible(false);
@@ -321,7 +321,7 @@ void Cell::mut_add_gene () {            //	add a gene
 		dimerization->addReactant(nodes[opIndex]);
 		dimerization->addProduct(dimer);
 
-		Reaction* degrad = new Reaction(1);
+		Reaction* degrad = new Reaction(DEGRADATION);
 		degrad->setReversible(false);
 		degrad->initForwardRateRandomly();
 		degrad->addReactant(dimer);
@@ -355,7 +355,7 @@ void Cell::mut_add_gene () {            //	add a gene
 		Node* exProt = NULL;
 		std::vector<Reaction*>::iterator iter2 = rlist.begin();
 		while (iter2 != rlist.end()) {
-		 if((*iter2)->getRtype() == 0) { //   #0 is gene transcription
+		 if((*iter2)->getRtype() == TRANSCRIPTION) { //   #0 is gene transcription
 			Node* sr = (*iter2)->getModifier(0);
 			if(sr != NULL && (sr->getNindex() == exGene->getNindex())) {
 				exProt = (*iter2)->getProduct(0);
@@ -370,14 +370,14 @@ void Cell::mut_add_gene () {            //	add a gene
 		nodes.push_back(ncomplex);
 
 		//	create reaction 0, transcription
-		Reaction* r0 = new Reaction (0);
+		Reaction* r0 = new Reaction (TRANSCRIPTION);
 		r0->setReversible(false);
 		r0->initForwardRateRandomly();
 		r0->addModifier(ncomplex);
 		r0->addProduct(exProt);
 
 		//	create reaction 1, binding/unbinding between protein and gene or gene/protein complex
-		Reaction* r1 = new Reaction (2);
+		Reaction* r1 = new Reaction (BINDING);
 		r1->setReversible(true);
 		r1->initForwardRateRandomly();
 		r1->initReverseRateRandomly();
@@ -408,7 +408,7 @@ void Cell::mut_add_gene () {            //	add a gene
 		}
 
 		int opIndex = indiceOfSingProt[rand()%numOfSingProt];
-		Reaction* catalyticDeg = new Reaction(6);
+		Reaction* catalyticDeg = new Reaction(CATALYTIC_DEGRADATION);
 		catalyticDeg->setReversible(false);
 		catalyticDeg->initForwardRateRandomly();
 		catalyticDeg->addReactant(prot);
@@ -439,7 +439,7 @@ void Cell::mut_add_gene () {            //	add a gene
 		}
 
 		int opIndex=indiceOfCompProt[rand()%numOfCompProt];
-		Reaction* partialDeg=new Reaction(7);
+		Reaction* partialDeg=new Reaction(PARTIAL_CATALYTIC_DEGRADATION);
 		partialDeg->setReversible(false);
 		partialDeg->initForwardRateRandomly();
 		partialDeg->addReactant(prot);
@@ -514,14 +514,14 @@ void Cell::mut_add_regu () {
 	nodes.push_back(ncomplex);
 
 	//	create reaction 0, transcription
-	Reaction* r0 = new Reaction (0);
+	Reaction* r0 = new Reaction (TRANSCRIPTION);
 	r0->setReversible(false);
 	r0->initForwardRateRandomly();
 	r0->addModifier(ncomplex);
 	r0->addProduct(exProt);
 
 	//	create reaction 1, binding/unbinding between protein and gene or gene/protein complex
-	Reaction* r1 = new Reaction (2);
+	Reaction* r1 = new Reaction (BI);
 	r1->setReversible(true);
 	r1->initForwardRateRandomly();
 	r1->initReverseRateRandomly();
@@ -588,14 +588,14 @@ void Cell::mut_add_postmod () {
 			Node* modProt = new Node((int)nodes.size(),3);
 			nodes.push_back(modProt);
 
-			Reaction* r0=new Reaction(3);    //add modification reaction
+			Reaction* r0=new Reaction(MODIFICATION);    //add modification reaction
 			r0->setReversible(false);
 			r0->initForwardRateRandomly();
 			r0->addReactant(nodes[opIndex]);
 			r0->addModifier(nodes[opModifierIndex]);
 			r0->addProduct(modProt);
 
-			Reaction* r1=new Reaction(1);   //add degradation reaction of the modified protein
+			Reaction* r1=new Reaction(DEGRADATION);   //add degradation reaction of the modified protein
 			r1->setReversible(false);
 			r1->initForwardRateRandomly();
 			r1->addReactant(modProt);
@@ -611,14 +611,14 @@ void Cell::mut_add_postmod () {
 			return;
 		}
 		else{                                //if it is a protein complex, the reaction type is AB->A
-			Reaction* r2=new Reaction(4);
+			Reaction* r2=new Reaction(PARTIAL_DEGRADATION);
 			r2->setReversible(false);
 			r2->initForwardRateRandomly();
 			r2->addReactant(nodes[opIndex]);
 			int randComp=rand()%(nodes[opIndex]->getNsize()-1)+1;
 		    r2->addProduct(nodes[opIndex]->getNode(randComp));        //randomly choose a node in the complex as the product
 
-			Reaction* r3=new Reaction(1);
+			Reaction* r3=new Reaction(DEGRADATION);
 			r3->setReversible(false);
 			r3->initForwardRateRandomly();
 			r3->addReactant(nodes[opIndex]->getNode(randComp));
@@ -682,14 +682,14 @@ void Cell::mut_add_postmod () {
 				delete dimer;
 				return;
 			}
-			Reaction* dimerization = new Reaction (5);
+			Reaction* dimerization = new Reaction (DIMERIZATION);
 			dimerization->setReversible(false);
 			dimerization->initForwardRateRandomly();
 			dimerization->addReactant(nodes[opIndex1]);
 			dimerization->addReactant(nodes[opIndex2]);
 			dimerization->addProduct(dimer);
 
-			Reaction* degrad = new Reaction(1);
+			Reaction* degrad = new Reaction(DEGRADATION);
 			degrad->setReversible(false);
 			degrad->initForwardRateRandomly();
 			degrad->addReactant(dimer);
@@ -712,7 +712,7 @@ void Cell::mut_add_postmod () {
 			if(!numOfSingProt) return;  //no single protein.
 			int opIndex1=protIndice[rand()%numOfProt];   //protein 1
 			int opIndex2=singProtIndice[rand()%numOfSingProt];   //single protein 2
-			Reaction* catalyticDeg = new Reaction (6);
+			Reaction* catalyticDeg = new Reaction (CATALYTIC_DEGRADATION);
 			catalyticDeg->setReversible(false);
 			catalyticDeg->initForwardRateRandomly();
 			catalyticDeg->addReactant(nodes[opIndex1]);
@@ -730,7 +730,7 @@ void Cell::mut_add_postmod () {
 			if(!numOfCompProt || !numOfSingProt)  return;  //no protein complex
             int opIndex1=compProtIndice[rand()%numOfCompProt];    //complex protein 1
 			int opIndex2=singProtIndice[rand()%numOfSingProt];    //single protein 2
-			Reaction* partialDeg=new Reaction(7);
+			Reaction* partialDeg=new Reaction(PARTIAL_CATALYTIC_DEGRADATION);
 			partialDeg->setReversible(false);
 			partialDeg->initForwardRateRandomly();
 			partialDeg->addReactant(nodes[opIndex1]);
@@ -1234,7 +1234,7 @@ void Cell::genRegulatoryRelationships(){
                 case 3:{//single protain case
                     int indexOfRegulatingGene = 0;
                     for(int i = 0; i < numberOfReactions; i++){//find the gene that transcripts the regulating protein
-                        if(rlist[i] -> getRtype() == 0){//transcription
+                        if(rlist[i] -> getRtype() == TRANSCRIPTION){//transcription
                             if(rlist[i] -> getProduct(0) -> getNindex() == indexOfRegualtingProtLike){
                                 indexOfRegulatingGene = rlist[i] -> getModifier(0) -> getNindex();
                                 break;
@@ -1261,7 +1261,7 @@ void Cell::genRegulatoryRelationships(){
                     for(int i = 1; i <= numberOfRegulatingGenes; i ++){//starts from 1 because components[0] is for gene or NULL, and "=" in "<=" is important!
                         indiceOfRegualtingGenes[i] = nodes[indexOfRegualtingProtLike] -> getNode(i) -> getNindex();
                         for(int i = 0; i < numberOfReactions; i++){
-                            if(rlist[i] -> getRtype() == 0){
+                            if(rlist[i] -> getRtype() == TRANSCRIPTION){
                                 if(rlist[i] -> getProduct(0) -> getNindex() == indiceOfRegualtingGenes[i]){
                                     indiceOfRegualtingGenes[i] = rlist[i] -> getModifier(0) -> getNindex();
                                     for(int i = 0; i < numOfGene; i++){
@@ -1555,9 +1555,9 @@ std::string Cell::findTripleMotifs(int numberOfGenes, int* indiceOfGenes){
     
     
 
-//void  addReaction(int _rtype,int index)(A -> A*)
-void Cell::addReaction(int _rtype,int index){
-	if(_rtype !=3){
+//void  addReaction(reaction_type _rtype,int index)(A -> A*)
+void Cell::addReaction(reaction_type _rtype,int index){
+	if(_rtype != MODIFICATION){
 		std::cout<<"Wrong Reaction Type!"<<std::endl;
 		return;
 	}
@@ -1592,7 +1592,7 @@ void Cell::addReaction(int _rtype,int index){
 	modification -> addModifier(nodes[opModifierIndex]);
 	modification -> addProduct(modifiedProt);
 
-	Reaction* degradation = new Reaction(1);
+	Reaction* degradation = new Reaction(DEGRADATION);
 	degradation -> setReversible(false);
 	degradation -> initForwardRateRandomly();
 	degradation -> addReactant(modifiedProt);
@@ -1602,8 +1602,8 @@ void Cell::addReaction(int _rtype,int index){
 	rlist.push_back(degradation);
 }
 
-//void addReaction(int _rtype,int firstIndex,int secondIndex)
-void Cell::addReaction(int _rtype,int firstIndex,int secondIndex){
+//void addReaction(reaction_type _rtype,int firstIndex,int secondIndex)
+void Cell::addReaction(reaction_type _rtype,int firstIndex,int secondIndex){
 
 	if(!existsNode(*nodes[firstIndex]) || !existsNode(*nodes[secondIndex])){
 		std::cout<<"No Such Nodes!"<<std::endl;
@@ -1612,9 +1612,9 @@ void Cell::addReaction(int _rtype,int firstIndex,int secondIndex){
 	
 	switch(_rtype){
 
-	case 8:             //indu + prot -> indu:prot
+	case INDU_PROT_BINDING:             //indu + prot -> indu:prot
 		{
-		Reaction* r1=new Reaction(8);
+		Reaction* r1=new Reaction(_rtype);
 		Node* induProt=new Node((int)nodes.size(),4,nodes[firstIndex],nodes[secondIndex]);
 		nodes.push_back(induProt);
 
@@ -1628,10 +1628,10 @@ void Cell::addReaction(int _rtype,int firstIndex,int secondIndex){
 		rlist.push_back(r1);
 		break;
 		}
-	case 5:             //prot1 + prot2 -> prot1:prot2
+	case DIMERIZATION:             //prot1 + prot2 -> prot1:prot2
 		{
-		Reaction *r1 = new Reaction(5);
-		Reaction *r2 = new Reaction(1); 
+		Reaction *r1 = new Reaction(_rtype);
+		Reaction *r2 = new Reaction(DEGRADATION); 
 		Node* dimer = new Node((int)nodes.size(),6,nodes[firstIndex],nodes[secondIndex]);
 		nodes.push_back(dimer);
 
@@ -1649,10 +1649,10 @@ void Cell::addReaction(int _rtype,int firstIndex,int secondIndex){
 		rlist.push_back(r2);
 		break;
 		}
-	case 2:             //prot + gene -> gene::prot
+	case BINDING:             //prot + gene -> gene::prot
 		{
-		Reaction *r1 = new Reaction(2);
-		Reaction *r2 = new Reaction(0);
+		Reaction *r1 = new Reaction(_rtype);
+		Reaction *r2 = new Reaction(TRANSCRIPTION);
 		Node * binding = new Node((int)nodes.size(),5,nodes[firstIndex],nodes[secondIndex]);
 		nodes.push_back(binding);
 

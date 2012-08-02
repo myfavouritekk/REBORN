@@ -37,8 +37,8 @@ class Cell {
         void mut_topology();
     
         //explicitly adding reaction to the cell
-        void addReaction(int _rtype, int firstIndex, int secondIndex);
-        void addReaction(int _rtype, int index);
+        void addReaction(reaction_type _rtype, int firstIndex, int secondIndex);
+        void addReaction(reaction_type _rtype, int index);
     
         //  get score and change its own currScore value 
         void getScore (ScoreFunc&, double*** targetData,int numNodes, int x, bool print);
@@ -67,14 +67,14 @@ class Cell {
         //find motifs consisting 1, 2 or 3 genes
         void findMotifs();
     
-        //find and print single-gene motifs, returning a string containing the motifs' matrice
-        std::string findSingleMotifs(int numberOfGenes, int* indiceOfGenes);
+        //find and print single-gene motifs
+        void findSingleMotifs(int numberOfGenes, int* indiceOfGenes);
 
-        //find and print two-gene motifs, returning a string containing the motifs' matrice
-        std::string findDoubleMotifs(int numberOfGenes, int* indiceOfGenes);
+        //find and print two-gene motifs
+        void findDoubleMotifs(int numberOfGenes, int* indiceOfGenes);
 
-        //find and print three-gene motifs, returning a string containing the motifs' matrice
-        std::string findTripleMotifs(int numberOfGenes, int* indiceOfGenes);
+        //find and print three-gene motifs
+        void findTripleMotifs(int numberOfGenes, int* indiceOfGenes);
     
     
     

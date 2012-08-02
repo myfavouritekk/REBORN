@@ -10,16 +10,16 @@ Cell::Cell(const int& _numind, const int& _numprot, const int& _numInputSets):nu
 	int iop = 0;
 	int* indexOfProt = new int[_numprot];
 	for(int im = 0; im < _numind; im++) {
-		Node* inducer = new Node(currIndex, 1);
+		Node* inducer = new Node(currIndex, INDUCER);
         nodes.push_back(inducer);
 		inputIndice.push_back(currIndex);           //push back inducer's index
        	currIndex++;		
 	}
 	for(int ip = 0; ip < _numprot; ip++) {
-		Node* gene = new Node(currIndex, 2);//Type 2 is gene
+		Node* gene = new Node(currIndex, GENE);// adding a new gene
         nodes.push_back(gene);
         currIndex++;
-		Node* prot = new Node(currIndex, 3);//type 3 is protein
+		Node* prot = new Node(currIndex, PROTEIN);//adding a new protein
         nodes.push_back(prot);
 		inputIndice.push_back(currIndex);             //push back protein's index
         indexOfProt[iop] = currIndex;
@@ -263,10 +263,10 @@ void Cell::mut_add_gene () {            //	add a gene
 	//	create new nodes representing this gene and its protein
 	int currNI = (int)nodes.size();
 
-	Node* gene = new Node(currNI,2);	//	gene
+	Node* gene = new Node(currNI, GENE);	//	gene
 	nodes.push_back(gene);
     
-	Node* prot = new Node(currNI+1,3);	//	protein
+	Node* prot = new Node(currNI+1, PROTEIN);	//	protein
 	nodes.push_back(prot);
 	
 	//	create Reaction r0, transcription
@@ -366,7 +366,7 @@ void Cell::mut_add_gene () {            //	add a gene
 		}
 		if(exProt == NULL) return;
 
-		Node* ncomplex = new Node((int)nodes.size(), 5, prot, nodes[opIndex]);
+		Node* ncomplex = new Node((int)nodes.size(), GENE_PROT_COMPLEX, prot, nodes[opIndex]);
 		nodes.push_back(ncomplex);
 
 		//	create reaction 0, transcription
@@ -506,7 +506,7 @@ void Cell::mut_add_regu () {
 	if(exProt == NULL) return;
 
 	//	create a new node as the product
-	Node* ncomplex = new Node((int)nodes.size(), 5, nodes[opIndex1], nodes[opIndex2]);
+	Node* ncomplex = new Node((int)nodes.size(), GENE_PROT_COMPLEX, nodes[opIndex1], nodes[opIndex2]);
 	if(existsNode(*ncomplex)){
 		delete ncomplex;
 		return;
@@ -585,7 +585,7 @@ void Cell::mut_add_postmod () {
 
 			int opModifierIndex = modifierIndex[rand()%numOfModifier];  //choose one modifier
 
-			Node* modProt = new Node((int)nodes.size(),3);
+			Node* modProt = new Node((int)nodes.size(), PROTEIN);
 			nodes.push_back(modProt);
 
 			Reaction* r0=new Reaction(3);    //add modification reaction
@@ -1583,7 +1583,7 @@ void Cell::addReaction(int _rtype,int index){
 
 	int opModifierIndex = modifierIndex[rand()%numOfModifier];  //choose one modifier
 
-	Node* modifiedProt = new Node((int)nodes.size(),3);
+	Node* modifiedProt = new Node((int)nodes.size(), PROTEIN);
 	Reaction* modification = new Reaction(_rtype);
 
 	modification -> setReversible(false);
@@ -1615,7 +1615,7 @@ void Cell::addReaction(int _rtype,int firstIndex,int secondIndex){
 	case 8:             //indu + prot -> indu:prot
 		{
 		Reaction* r1=new Reaction(8);
-		Node* induProt=new Node((int)nodes.size(),4,nodes[firstIndex],nodes[secondIndex]);
+		Node* induProt=new Node((int)nodes.size(), INDUCER_PROT_COMPLEX,nodes[firstIndex],nodes[secondIndex]);
 		nodes.push_back(induProt);
 
 		r1->setReversible(true);
@@ -1632,7 +1632,7 @@ void Cell::addReaction(int _rtype,int firstIndex,int secondIndex){
 		{
 		Reaction *r1 = new Reaction(5);
 		Reaction *r2 = new Reaction(1); 
-		Node* dimer = new Node((int)nodes.size(),6,nodes[firstIndex],nodes[secondIndex]);
+		Node* dimer = new Node((int)nodes.size(), PROTEIN_COMPLEX,nodes[firstIndex],nodes[secondIndex]);
 		nodes.push_back(dimer);
 
 		r1->setReversible(false);
@@ -1653,7 +1653,7 @@ void Cell::addReaction(int _rtype,int firstIndex,int secondIndex){
 		{
 		Reaction *r1 = new Reaction(2);
 		Reaction *r2 = new Reaction(0);
-		Node * binding = new Node((int)nodes.size(),5,nodes[firstIndex],nodes[secondIndex]);
+		Node * binding = new Node((int)nodes.size(), GENE_PROT_COMPLEX,nodes[firstIndex],nodes[secondIndex]);
 		nodes.push_back(binding);
 
 		r1->setReversible(true);

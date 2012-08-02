@@ -86,25 +86,27 @@ void sort(std::vector<Node*> *_components, int num_of_members[3]){
 
 
 //basic node constructor
-Node::Node(int _nindex, int _ntype):nindex(_nindex),ntype(_ntype){
+Node::Node(int _nindex, node_type _ntype):nindex(_nindex),ntype(_ntype){
     
     std::stringstream ss;
     ss << nindex;
 
     switch (ntype) {
-    case 1:
+    case INDUCER:
         nstring = "indu" + ss.str();
         components.push_back(NULL);
         components.push_back(this);
         break;
-    case 2:
+    case GENE:
         nstring = "g" + ss.str();
         components.push_back(this);
         break;
-    case 3:
+    case PROTEIN:
         nstring = "P" + ss.str();
         components.push_back(NULL);
         components.push_back(this);
+        break;
+    default:
         break;
     }
     
@@ -154,25 +156,25 @@ Node::Node(int _nindex, Node* _nleft, Node* _nright)
     int members[3]={0};
     sort(&components,members);
     
-    ntype = 0;
+
     //assign ntype
     if (members[1]) {               //gene
         if (members[2]) {           //protein
-            ntype = 5;              //gene/protein complex
+            ntype = GENE_PROT_COMPLEX;              //gene/protein complex
         }else {
-            ntype = 2;              //only gene
+            ntype = GENE;              //only gene
         }
     }
     else if (members[2]) {          //protein
             if (members[0]) {       //inducer
-                ntype = 4;          //inducer/protein complex
+                ntype = INDUCER_PROT_COMPLEX;          //inducer/protein complex
             }else if(members[2]>=2) {
-                    ntype = 6;      //pure protein complex    
+                    ntype = PROTEIN_COMPLEX;      //pure protein complex
                 }else {
-                    ntype = 3;      //only protein
+                    ntype = PROTEIN;      //only protein
                 }
          }else {
-            ntype = 1;              //only inducer
+            ntype = INDUCER;              //only inducer
     }
     
     
@@ -182,7 +184,7 @@ Node::Node(int _nindex, Node* _nleft, Node* _nright)
 
 
 //complex node constructon of certain type
-Node::Node(int _nindex, int _ntype, Node* _nleft, Node* _nright):nindex(_nindex){
+Node::Node(int _nindex, node_type _ntype, Node* _nleft, Node* _nright):nindex(_nindex){
     
     //	merge N_left and N_right
     
@@ -251,7 +253,7 @@ int Node::getNindex () {
     return nindex;
 }
 
-int Node::getNtype () {
+node_type Node::getNtype () {
     return ntype;
 }
 int Node::getNsize () {

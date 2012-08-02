@@ -1614,7 +1614,7 @@ void Cell::addReaction(reaction_type _rtype,int firstIndex,int secondIndex){
 
 	case INDU_PROT_BINDING:             //indu + prot -> indu:prot
 		{
-		Reaction* r1=new Reaction(8);
+		Reaction* r1=new Reaction(INDU_PROT_BINDING);
 		Node* induProt=new Node((int)nodes.size(), INDUCER_PROT_COMPLEX,nodes[firstIndex],nodes[secondIndex]);
 		nodes.push_back(induProt);
 
@@ -1630,8 +1630,8 @@ void Cell::addReaction(reaction_type _rtype,int firstIndex,int secondIndex){
 		}
 	case DIMERIZATION:             //prot1 + prot2 -> prot1:prot2
 		{
-		Reaction *r1 = new Reaction(5);
-		Reaction *r2 = new Reaction(1); 
+		Reaction *r1 = new Reaction(DIMERIZATION);
+		Reaction *r2 = new Reaction(DEGRADATION);
 		Node* dimer = new Node((int)nodes.size(), PROTEIN_COMPLEX,nodes[firstIndex],nodes[secondIndex]);
 		nodes.push_back(dimer);
 
@@ -1651,8 +1651,8 @@ void Cell::addReaction(reaction_type _rtype,int firstIndex,int secondIndex){
 		}
 	case BINDING:             //prot + gene -> gene::prot
 		{
-		Reaction *r1 = new Reaction(2);
-		Reaction *r2 = new Reaction(0);
+		Reaction *r1 = new Reaction(BINDING);
+		Reaction *r2 = new Reaction(TRANSCRIPTION);
 		Node * binding = new Node((int)nodes.size(), GENE_PROT_COMPLEX,nodes[firstIndex],nodes[secondIndex]);
 		nodes.push_back(binding);
 

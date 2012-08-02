@@ -68,13 +68,13 @@ class Cell {
         void findMotifs();
     
         //find and print single-gene motifs
-        void findSingleMotifs(int numberOfGenes, int* indiceOfGenes);
+        std::string findSingleMotifs(int numberOfGenes, int* indiceOfGenes);
 
         //find and print two-gene motifs
-        void findDoubleMotifs(int numberOfGenes, int* indiceOfGenes);
+        std::string findDoubleMotifs(int numberOfGenes, int* indiceOfGenes);
 
         //find and print three-gene motifs
-        void findTripleMotifs(int numberOfGenes, int* indiceOfGenes);
+        std::string findTripleMotifs(int numberOfGenes, int* indiceOfGenes);
     
     
     

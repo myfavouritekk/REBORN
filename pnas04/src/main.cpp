@@ -39,7 +39,7 @@ int main (void) {
 
 
 void askInformation(ustc::Population* targetPop){
-	int rType = 0;
+	ustc::reaction_type rType;
     getchar();
 	std::cout << "Do you know more information about the reaction? <y/n>" << std::endl;
 	while(getchar() == 'y'){
@@ -71,22 +71,22 @@ void askInformation(ustc::Population* targetPop){
 			int tempIndex = 0;
 			std::cin >> tempIndex;
 			int index = (tempIndex - 1);
-			rType = 3;
+			rType = ustc::MODIFICATION;
 			for(int i = 0; i < POPULATION; i ++){
 			((targetPop -> getCells())[i]) -> addReaction(rType,index);
 			}
 		}
 		else{
 			if(tempType == 1){
-				rType = 8;
+				rType = ustc::INDU_PROT_BINDING;
 			}
 			else{
 				if(tempType == 2){
-					rType = 5;
+					rType = ustc::DIMERIZATION;
 				}
 				else{
 					if(tempType == 3){
-						rType = 2;
+						rType = ustc::BINDING;
 					}
 				}
 			}

@@ -278,7 +278,7 @@ void Population::readDynamics (const string& fn) {
 		std::cout<<std::endl;
 	}
 
-
+    infile.close();
 	return;
 }
 

@@ -63,6 +63,7 @@ public:
     
     void addDnaPiece(DNAPiece* newDnaPiece);
     
+    //      read motifs from a text file and store them
     void readMotifs(const int& cellIndex);
     
     void findCandidates(

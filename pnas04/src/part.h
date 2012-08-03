@@ -14,7 +14,7 @@
 
 namespace ustc {
 
-enum part_Type{PROMOTER, RBS, GENE, TERMINATOR};
+enum part_Type{PROMOTER, RBS, GENE_PART, TERMINATOR};
     
 class Part{
   

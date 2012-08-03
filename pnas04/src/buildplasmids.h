@@ -10,6 +10,7 @@
 #define __PNAS04Team__buildplasmids__
 
 #include <iostream>
+#include "plasmid.h"
 
 namespace ustc {
     

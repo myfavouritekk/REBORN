@@ -1,5 +1,6 @@
 #include "consts.h"
 #include "networkinference.h"
+#include "buildplasmids.h"
 
 int main (void) {
 
@@ -10,9 +11,20 @@ int main (void) {
     networkInference.reverseEngineering();
     
     time(&end);
-    double duration = difftime(end, start);
+    double NIDuration = difftime(end, start);
     
-    std::cout << "\nIt tooks " << duration << " seconds.\n";
+    std::cout << "\nIt tooks " << NIDuration << " seconds.\n";
+    
+    time(&start);
+    
+    ustc::BuildPlasmids buildingPlasmids;
+    buildingPlasmids.buildProcess();
+    
+    time(&end);
+    double BPDuration = difftime(end, start);
+    
+    std::cout << "\nIt tooks " << BPDuration << " seconds.\n";
+    
     return 0;
 }
 

@@ -576,7 +576,7 @@ void Population:: genSBMLFormat(){
 	// creat unit
     
 	// define sp
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < NUM_SBMLMODEL; i++) {
         
         // declear model
         std::stringstream ss;

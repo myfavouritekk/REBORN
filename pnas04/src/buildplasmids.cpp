@@ -25,7 +25,11 @@ void BuildPlasmids::buildProcess(){
     //      loading data from database
     loadDatabase();
     
-    
+    ustc::Plasmid** plasmids = new Plasmid*[NUM_SBMLMODEL];
+    for (int i = 0; i < NUM_SBMLMODEL; i++) {
+        plasmids[i] = new Plasmid();
+        plasmids[i] -> readMotifs(i);
+    }
     
 }
     

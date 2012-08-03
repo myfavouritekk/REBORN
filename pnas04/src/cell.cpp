@@ -1349,7 +1349,7 @@ void Cell::findMotifs(){
     
     std::ofstream motifFile;
     std::stringstream fileName;
-    fileName << "Cell_" << cellIndex << "_Motifs";
+    fileName << "Cell_" << cellIndex << "_Motifs.txt";
     motifFile.open(fileName.str().c_str());
     motifFile << numOfSingleMotifs << "\t" << numOfDoubleMotifs << "\t" << numOfTripleMotifs << std::endl;
     motifFile << singleString << doubleString << tripleString;

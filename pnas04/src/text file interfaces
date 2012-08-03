@@ -1,0 +1,78 @@
+//
+//  This file serves as the declarations for some interfaces connetcted by
+//  text files
+//
+
+
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+//              Input File of Network Inferences                                //
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+
+example:
+
+machineOsci.txt
+
+            10	0	1	1
+            1	0.816195
+            2	1.00725
+            3	1.1518
+            4	1.42784
+            5	1.79364
+            6	2.02045
+            7	1.99052
+            8	1.87069
+            9	1.74938
+            10	1.64496
+
+1. 10 is number of time stops
+2. 0 is number of inducers
+3. 1 is number of proteins
+4. 1 is number of sets of input time courses
+5. the following is time and densities of every species for every time stop
+
+
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+//              Cell_i_Motifs.txt                                               //
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+
+example:
+
+Cell_20_Motifs.txt
+
+            0	0	2
+            1	0	-1	
+            -1	0	0	
+            0	0	0	
+            1	0	0	
+            -1	0	-1	
+            0	0	0	
+
+1. 20 in the name of the file is the index of the cell
+2. the first line contains the number of single, double and triple motifs,
+    in this case 0 single motif, 0 double motif, and 2 triple motifs
+3. the rest if the matix of every motif, first singles, then doubles, and 
+    finally triples
+    
+    
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+//              Cell_i_Complete.txt                                             //
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+
+
+example:
+
+Cell_1_Complete.txt
+
+            3
+            1   0   -1
+            -1  0   0
+            0   0   0
+            
+1. the 1 in the name of the file is the index of the cell
+2. the first line has only one number, containing the number of genes in this
+    cell
+3. the following is the complete matrix of regulatory relationships among those
+    genes
+

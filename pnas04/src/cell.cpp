@@ -1349,8 +1349,7 @@ void Cell::findMotifs(){
     
     std::ofstream motifFile;
     std::stringstream fileName;
-    int currentRank = rankings.at(rankings.size());
-    fileName << "Cell_" << currentRank << "_Motifs";
+    fileName << "Cell_" << cellIndex << "_Motifs";
     motifFile.open(fileName.str().c_str());
     motifFile << numOfSingleMotifs << "\t" << numOfDoubleMotifs << "\t" << numOfTripleMotifs << std::endl;
     motifFile << singleString << doubleString << tripleString;

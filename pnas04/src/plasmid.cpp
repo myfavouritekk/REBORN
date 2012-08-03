@@ -231,9 +231,40 @@ void Plasmid::findMotifsCandidates(
 
 }
 
+    
+void Plasmid::readCompleteMatrix(const int& cellIndex){
+    std::stringstream fileName;
+    fileName << "Cell_" << cellIndex << "_Complete.txt";
+    std::fstream file;
+    file.open(fileName.str().c_str());
+    file >> numOfGenes;
+    wholeMotifMatrix = new int*[numOfGenes];
+    for (int i = 0; i < numOfGenes; i++) {
+        wholeMotifMatrix[i] = new int[numOfGenes];
+        for (int j = 0; j < numOfGenes; j++) {
+            file >> wholeMotifMatrix[i][j];
+        }
+    }
+    file.close();
+}
 
-	
-	
+void Plasmid::findCompleteCondidates(
+                                     const int& numRowOfDatabase,
+                                     const int& numColumnOfDatabase,
+                                     const std::string* namesOfRegualters,
+                                     const std::string* namesOfRegulatees,
+                                     const int** database
+                                     )
+{
+    
+}
+
+    
+    
+    
+    
+    
+    
     
     
 }// namespace ustc

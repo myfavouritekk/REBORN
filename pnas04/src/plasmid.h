@@ -56,6 +56,15 @@ struct CompleteCandidate{
     std::vector<RegulatorCandidates*> regulators;
     std::vector<std::string> regulateeStrings;
 };
+ 
+
+
+
+
+//******************************************************************//
+//*     class Plasmid: constructed by real parts                   *//
+//******************************************************************//
+    
     
 class Plasmid{
     
@@ -80,6 +89,9 @@ public:
     
     //      read motifs from a text file and store them
     void readMotifs(const int& cellIndex);
+    
+    //      read complete regulatory matrix from a text file
+    void readCompleteMatrix(const int& cellIndex);
     
     //      find suitable structures to rebuild itself based on regulatory matrice of motifs
     void findMotifsCandidates(
@@ -113,7 +125,6 @@ private:
     int numSingleMotifs;
     int numDoubleMotifs;
     int numTripleMotifs;
-    int numOfGenes;
     
     int*** singleMotifsMatrice;
     int*** doubleMotifsMatrice;
@@ -125,6 +136,7 @@ private:
     //      members used to store whole matrix                  //
     //==========================================================//
     int** wholeMotifMatrix;
+    int numOfGenes;
     std::vector<CompleteCandidate*> completeCandidates;
     
     

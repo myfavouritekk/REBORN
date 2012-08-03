@@ -7,7 +7,7 @@
 //
 
 #include "buildplasmids.h"
-
+#include <fstream>
 
 namespace ustc {
  
@@ -22,8 +22,39 @@ BuildPlasmids::~BuildPlasmids()
 
 void BuildPlasmids::buildProcess(){
     
+    //      loading data from database
+    loadDatabase();
+    
+    
+    
 }
     
+
+void BuildPlasmids::loadDatabase(){
+    std::ifstream database;
+    database.open("USTC_SOFTWARE_PARTS_DATA.txt");
+    database >> numOfGeneParts >> numOfGeneParts;
+    
+    //      allocate arrays to store database
+    geneNames = new std::string[numOfGeneParts];
+    promoterNames = new std::string[numOfPromoterParts];
+    for (int i = 0; i < numOfGeneParts; i++) {
+        database >> geneNames[i];
+    }
+    for (int i = 0; i < numOfPromoterParts; i++) {
+        database >> promoterNames[i];
+    }
+    
+    regulatoryMatix = new int*[numOfPromoterParts];
+    for (int i = 0; i < numOfPromoterParts; i++) {
+        regulatoryMatix[i] = new int[numOfGeneParts];
+        for (int j = 0; j < numOfGeneParts; j++) {
+            database >> regulatoryMatix[i][j];
+        }
+    }
+    
+    database.close();
+}
     
     
 }   //      namespace ustc

@@ -28,6 +28,20 @@ public:
     //
     void buildProcess();
     
+private:
+    
+    void loadDatabase();
+    
+    //
+    //      data loaded in from the external database
+    //
+    int numOfGeneParts;
+    int numOfPromoterParts;
+    std::string* geneNames;
+    std::string* promoterNames;
+    int** regulatoryMatix;
+    
+    
 };
     
     

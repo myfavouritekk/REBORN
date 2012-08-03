@@ -36,10 +36,10 @@ private:
     //
     //      data loaded in from the external database
     //
-    int numOfGeneParts;
-    int numOfPromoterParts;
-    std::string* geneNames;
-    std::string* promoterNames;
+    int numOfRegulators;
+    int numOfRegulatees;
+    std::string* regulatorNames;
+    std::string* regulateeNames;
     int** regulatoryMatix;
     
     

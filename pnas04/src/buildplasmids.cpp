@@ -37,22 +37,22 @@ void BuildPlasmids::buildProcess(){
 void BuildPlasmids::loadDatabase(){
     std::ifstream database;
     database.open("USTC_SOFTWARE_PARTS_DATA.txt");
-    database >> numOfGeneParts >> numOfGeneParts;
+    database >> numOfRegulators >> numOfRegulatees;
     
     //      allocate arrays to store database
-    geneNames = new std::string[numOfGeneParts];
-    promoterNames = new std::string[numOfPromoterParts];
-    for (int i = 0; i < numOfGeneParts; i++) {
-        database >> geneNames[i];
+    regulatorNames = new std::string[numOfRegulators];
+    regulateeNames = new std::string[numOfRegulatees];
+    for (int i = 0; i < numOfRegulators; i++) {
+        database >> regulatorNames[i];
     }
-    for (int i = 0; i < numOfPromoterParts; i++) {
-        database >> promoterNames[i];
+    for (int i = 0; i < numOfRegulatees; i++) {
+        database >> regulateeNames[i];
     }
     
-    regulatoryMatix = new int*[numOfPromoterParts];
-    for (int i = 0; i < numOfPromoterParts; i++) {
-        regulatoryMatix[i] = new int[numOfGeneParts];
-        for (int j = 0; j < numOfGeneParts; j++) {
+    regulatoryMatix = new int*[numOfRegulatees];
+    for (int i = 0; i < numOfRegulatees; i++) {
+        regulatoryMatix[i] = new int[numOfRegulators];
+        for (int j = 0; j < numOfRegulators; j++) {
             database >> regulatoryMatix[i][j];
         }
     }

@@ -15,6 +15,9 @@ namespace ustc{
 
 class Cell {
 
+    friend class Population;
+    friend class Plasmid;
+    
     public:
 
 		//	no default constructor, for construction, number of inducers and proteins should be provided
@@ -89,6 +92,10 @@ class Cell {
         
         //add ranking to rankings vector
         void addRanking(int ranking);
+   
+        //get index
+        int getIndex();
+    
     
     private:
 
@@ -108,6 +115,8 @@ class Cell {
 		void mut_add_postmod();
 
     private:
+        //index or ranking of the cell
+        int cellIndex;
     
         //number of inducer
         int numInducer;

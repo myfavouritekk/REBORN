@@ -197,6 +197,7 @@ void Population::sort(){
     quickSort(cells, ncell);
     for (int i = 0; i < ncell; i++) {
         cells[i]->addRanking(i + 1); //add ranking i to the ith cell
+        cells[i] -> cellIndex = i;
     }
 }
 
@@ -207,6 +208,7 @@ void Population::selection(){
     
     for (int i = 0; i < ncell; i++) {
         cells[i]->addRanking(i + 1); //add ranking i to the ith cell
+        cells[i] -> cellIndex = i;
     }
     
     //cells with lower score will extinct

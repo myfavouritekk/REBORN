@@ -4,7 +4,7 @@ namespace ustc{
 
 //constructor, by default it will use score function 1 and evlute 100 generations
 Population::Population (const int& _ncell, const int& _evolution)
-:ncell(_ncell), numr(0), numind(0), numprot(0), xpoints(NULL), ypoints(NULL), cells(NULL) ,sfunc(ScoreFunc(1)),evolution(_evolution)
+:ncell(_ncell), numr(0), numind(0), numprot(0), xpoints(NULL), ypoints(NULL), cells(NULL) ,sfunc(ScoreFunc(ABSOLUTE)),evolution(_evolution)
 {
 	ncell = ncell <=0 ? 100 : ncell;
     evolution = evolution <= 0? 1000 : evolution;

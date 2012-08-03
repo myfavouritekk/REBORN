@@ -7,13 +7,14 @@
 
 namespace ustc{
 
+enum score_function_type{SQUARE, ABSOLUTE, NORMOLIZE, DIREVATIVE};
 
 class ScoreFunc{
     
     public:
         
         //Constructor
-        ScoreFunc(int type);
+        ScoreFunc(score_function_type type);
        
         //Destructor
         ~ScoreFunc();
@@ -24,7 +25,7 @@ class ScoreFunc{
 
     private:
 
-        int type;//0-5 for different types
+        score_function_type type;//0-5 for different types
 
         //several Score function options
         double getScore_0(double* targetData, double* generatedData, int n);

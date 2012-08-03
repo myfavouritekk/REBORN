@@ -3,7 +3,7 @@
 namespace ustc{
 
 //Constructor
-ScoreFunc::ScoreFunc(int _type){
+ScoreFunc::ScoreFunc(score_function_type _type){
 
     type = _type;
 
@@ -19,25 +19,33 @@ ScoreFunc::~ScoreFunc(){
 double ScoreFunc::getScore(double* targetData, double* generatedData, int n){
 
     switch (type) {
-    case 0:
-        return getScore_0(targetData, generatedData, n);
-    case 1:
-        return getScore_1(targetData, generatedData, n);
+        case SQUARE:
+            return getScore_0(targetData, generatedData, n);
+            break;
             
-    case 2:
-        return getScore_2(targetData, generatedData, n);
-    
-    /*
-     
-    case 3:
-        return getScore_3(data1, data2, n);
-    case 4:
-        return getScore_4(data1, data2, n);
-    case 5:
-        return getScore_5(data1, data2, n);
-     *
-     */
-    }
+        case ABSOLUTE:
+            return getScore_1(targetData, generatedData, n);
+            break;
+            
+        case NORMOLIZE:
+            return getScore_2(targetData, generatedData, n);
+            break;
+            
+        case DIREVATIVE:
+            return getScore_3(targetData, generatedData, n);
+            break;
+            
+        /*
+         case 4:
+         return getScore_4(data1, data2, n);
+         case 5:
+         return getScore_5(data1, data2, n);
+         *
+         */
+            
+        default:
+            break;
+}
 
     
     return 0;

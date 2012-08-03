@@ -7,3 +7,23 @@
 //
 
 #include "buildplasmids.h"
+
+
+namespace ustc {
+ 
+
+BuildPlasmids::BuildPlasmids()
+{}
+
+
+BuildPlasmids::~BuildPlasmids()
+{}
+
+
+void BuildPlasmids::buildProcess(){
+    
+}
+    
+    
+    
+}   //      namespace ustc

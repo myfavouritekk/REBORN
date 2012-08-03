@@ -11,4 +11,29 @@
 
 #include <iostream>
 
+namespace ustc {
+    
+    
+class BuildPlasmids{
+
+public:
+    BuildPlasmids();
+    ~BuildPlasmids();
+    
+    
+    //
+    //      the whole process of building the plasmids with
+    //      genetic networks generated from network inference
+    //      process and real parts form partsregistry
+    //
+    void buildProcess();
+    
+};
+    
+    
+}   //      namespace ustc
+
+
+
+
 #endif /* defined(__PNAS04Team__buildplasmids__) */

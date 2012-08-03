@@ -94,7 +94,7 @@ void Plasmid::readMotifs(const int& cellIndex){
 }
 
     
-void Plasmid::findCandidates(
+void Plasmid::findMotifsCandidates(
                              const int& numRow,
                              const int& numColumn,
                              const std::string* namesOfGenes,
@@ -117,7 +117,7 @@ void Plasmid::findCandidates(
 					mc -> geneString.push_back(namesOfGenes[j]);
 					mc -> genes.push_back(gc);
 					mc -> promoterStrings.push_back(namesOfPromoters[k]);
-					candidates.push_back(mc);
+					motifCandidates.push_back(mc);
 				}
 			}
 		}
@@ -159,7 +159,7 @@ void Plasmid::findCandidates(
 							mc -> promoterStrings.push_back(namesOfPromoters[l]);
 							mc -> genes.push_back(gc1);
 							mc -> genes.push_back(gc2);
-							candidates.push_back(mc);
+							motifCandidates.push_back(mc);
 						}
 					}
 				}
@@ -219,7 +219,7 @@ void Plasmid::findCandidates(
 									mc -> genes.push_back(gc1);
 									mc -> genes.push_back(gc2);
 									mc -> genes.push_back(gc3);
-									candidates.push_back(mc);
+									motifCandidates.push_back(mc);
 								}
 							}
 						}

@@ -17,6 +17,8 @@ namespace ustc {
     
 class BuildPlasmids{
 
+    friend class plasmid;
+    
 public:
     BuildPlasmids();
     ~BuildPlasmids();

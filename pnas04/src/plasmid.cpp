@@ -46,7 +46,6 @@ void Plasmid::readMotifs(const int& cellIndex){
 	if (infile.fail ()) throw std::runtime_error ("bad data");
 	if (numSingleMotifs + numDoubleMotifs + numTripleMotifs == 0) {
 		std::cerr << "Error: empty data" << std::endl;
-		exit(1);
 	}
 
 	// creat singleMotifMatrice

@@ -22,6 +22,9 @@
 //      Number of cells that do not change topology
 #define CELLS_UNCHANGED 10
 
+//      Number of cells that are generated to SBMLModels
+#define NUM_SBMLMODEL 10
+
 //      parameters for mutation in Cell
 #define PROB_MUT_DEG_PROT 0.5
 #define PROB_MUT_KIN_CONST 1.0

@@ -25,10 +25,31 @@ void BuildPlasmids::buildProcess(){
     //      loading data from database
     loadDatabase();
     
+    //==============================================================//
+    //      find complete regulatory matrix in the database         //
+    //==============================================================//
     ustc::Plasmid** plasmids = new Plasmid*[NUM_SBMLMODEL];
-    for (int i = 0; i < NUM_SBMLMODEL; i++) {
-        plasmids[i] = new Plasmid();
-        plasmids[i] -> readMotifs(i);
+    for (int plasmidIndex = 0; plasmidIndex < NUM_SBMLMODEL; plasmidIndex++) {
+        plasmids[plasmidIndex] = new Plasmid();
+        
+        //  read complete regulatory matrix
+        plasmids[plasmidIndex] -> readCompleteMatrix(plasmidIndex);
+        
+        //  find complete regulatory matrix in the database
+        plasmids[plasmidIndex] -> findCompleteCondidates(
+                                              numOfRegulatees,
+                                              numOfRegulators,
+                                              regulatorNames,
+                                              regulateeNames,
+                                              (const int**)regulatoryMatix
+                                              );
+        
+        //  generate plans to build the plasmid
+        plasmids[plasmidIndex] -> generatePlans();
+        
+        //  output those plans into files
+        plasmids[plasmidIndex] -> generatePlanOutputs(plasmidIndex);
+        
     }
     
 }

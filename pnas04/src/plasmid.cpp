@@ -238,11 +238,11 @@ void Plasmid::readCompleteMatrix(const int& cellIndex){
     std::fstream file;
     file.open(fileName.str().c_str());
     file >> numOfGenes;
-    wholeMotifMatrix = new int*[numOfGenes];
+    wholeRegulatoryMatrix = new int*[numOfGenes];
     for (int i = 0; i < numOfGenes; i++) {
-        wholeMotifMatrix[i] = new int[numOfGenes];
+        wholeRegulatoryMatrix[i] = new int[numOfGenes];
         for (int j = 0; j < numOfGenes; j++) {
-            file >> wholeMotifMatrix[i][j];
+            file >> wholeRegulatoryMatrix[i][j];
         }
     }
     file.close();

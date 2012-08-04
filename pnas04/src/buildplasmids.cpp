@@ -57,7 +57,12 @@ void BuildPlasmids::buildProcess(){
 
 void BuildPlasmids::loadDatabase(){
     std::ifstream database;
-    database.open("USTC_SOFTWARE_PARTS_DATA.txt");
+    std::stringstream databaseName;
+    databaseName << DATABASE_PATH << "USTC_SOFTWARE_PARTS_DATA.txt";
+    database.open(databaseName.str().c_str());
+    if (!database) {
+        std::cerr << "Error, unable to load database!" << std::endl;
+    }
     database >> numOfRegulators >> numOfRegulatees;
     
     //      allocate arrays to store database

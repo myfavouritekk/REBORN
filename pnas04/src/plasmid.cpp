@@ -33,7 +33,7 @@ void Plasmid::addDnaPiece(DNAPiece* newDNAPiece){
 void Plasmid::readMotifs(const int& cellIndex){
 
 	std::stringstream ss;
-	ss << "Cell_"<<cellIndex <<"_Motifs.txt";
+	ss << SAVES_PATH << "Cell_"<<cellIndex <<"_Motifs.txt";
 	std::ifstream infile;
 	infile.open(ss.str().c_str());
 	if (!infile) {
@@ -234,7 +234,7 @@ void Plasmid::findMotifsCandidates(
     
 void Plasmid::readCompleteMatrix(const int& cellIndex){
     std::stringstream fileName;
-    fileName << "Cell_" << cellIndex << "_Complete.txt";
+    fileName << SAVES_PATH << "Cell_" << cellIndex << "_Complete.txt";
     std::fstream file;
     file.open(fileName.str().c_str());
     file >> numOfGenes;

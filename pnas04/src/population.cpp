@@ -237,7 +237,9 @@ void Population::readDynamics (const string& fn) {
 	 * READ INDUCER
 	 */
     std::ifstream infile;
-    infile.open (fn.c_str());
+    std::stringstream infileName;
+    infileName << INPUT_PATH << fn;
+    infile.open (infileName.str().c_str());
     if (!infile) {
         std::cerr << "Error: unable to open input file: " << infile << std::endl;
 		exit(1);

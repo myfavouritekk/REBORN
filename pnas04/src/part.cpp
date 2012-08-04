@@ -24,7 +24,9 @@ Part::Part(
            ){
     pType = _pType;
     std::fstream partFile;
-    partFile.open(_name.c_str());
+    std::stringstream partFileName;
+    partFileName << DATABASE_PATH << _name;
+    partFile.open(partFileName.str().c_str());
 
     
 #warning "to be implemented"

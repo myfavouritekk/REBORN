@@ -935,7 +935,9 @@ void Cell::generateTimeCourses(double*** targetData,int numTargetNodes, int time
      
      //print time courses to file
      std::ofstream timeCoursesFile;
-     timeCoursesFile.open(name.c_str());
+     std::stringstream currDataFileName;
+     currDataFileName << OUTPUT_PATH << name;
+     timeCoursesFile.open(currDataFileName.str().c_str());
      int nodeSize = (int)nodes.size();
      for (int i = 0; i < numInputSets; i++) {
          for (int j = 0; j < nodeSize; j++) {
@@ -1044,7 +1046,9 @@ void Cell::getScore(ScoreFunc& sfunc, double*** targetData, int numTargetNodes, 
         
         //print time courses to file
         std::ofstream timeCoursesFile;
-        timeCoursesFile.open("data.txt");
+        std::stringstream timeCoursesFileName;
+        timeCoursesFileName << OUTPUT_PATH << "Cell_" << cellIndex << "_TimeCourses.txt";
+        timeCoursesFile.open(timeCoursesFileName.str().c_str());
 		for (int i = 0; i < numInputSets; i++){
 			for (int j = 0; j < numTargetNodes; j++) {
 				for (int k = 0; k < time; k++) {
@@ -1288,6 +1292,15 @@ void Cell::genRegulatoryRelationships(){
              g2 -1  0   0
              g4 -1  1   0
      */
+    
+    //
+    //at the same time, print to a file "Cell_i_Complete.txt"
+    //
+    std::ofstream completeFile;
+    std::stringstream fileName;
+    fileName << SAVES_PATH << "Cell_" << cellIndex << "_Complete.txt";
+    completeFile.open(fileName.str().c_str());
+    
     std::cout<< "\t";
     for (int i = 0; i < numOfGene ; i++){
         std::cout<< nodes[indexOfGene[i]] -> getNstring()<< "\t";
@@ -1298,12 +1311,14 @@ void Cell::genRegulatoryRelationships(){
         std::cout<< nodes[indexOfGene[i]] -> getNstring()<< "\t";
         for (int j = 0; j < numOfGene; j++) {
             std::cout << regulatoryMatrix[i][j] << "\t";
+            completeFile << regulatoryMatrix[i][j] << "\t";
         }
         std::cout << std::endl;
+        completeFile << std::endl;
     }
     delete [] indexOfGene;
 
-    
+    completeFile.close();
     
     //find and print motifs
     findMotifs();
@@ -1349,7 +1364,7 @@ void Cell::findMotifs(){
     
     std::ofstream motifFile;
     std::stringstream fileName;
-    fileName << "Cell_" << cellIndex << "_Motifs.txt";
+    fileName << SAVES_PATH << "Cell_" << cellIndex << "_Motifs.txt";
     motifFile.open(fileName.str().c_str());
     motifFile << numOfSingleMotifs << "\t" << numOfDoubleMotifs << "\t" << numOfTripleMotifs << std::endl;
     motifFile << singleString << doubleString << tripleString;

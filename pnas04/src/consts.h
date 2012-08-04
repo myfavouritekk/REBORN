@@ -10,14 +10,26 @@
 #define PNAS04Team_consts_h
 
 //
+//      glaobal constants
+//
+//      path strings
+#define ROOT_PATH "/users/apple/desktop/root/"
+#define INPUT_PATH ROOT_PATH"input/"
+#define OUTPUT_PATH ROOT_PATH"output/"
+#define DATABASE_PATH ROOT_PATH"database/"
+#define SAVES_PATH ROOT_PATH"saves/"
+
+#define COMPLETEMODEL_OUTPUT_PATH SAVES_PATH"complete/"
+#define MOTIFMODEL_OUTPUT_PATH SAVES_PATH"motifs/"
+//
 //      constants in network inference process
 //
 
 //      Total evolution number of the program
-#define TOTAL_EVO 1000
+#define TOTAL_EVO 200
 
 //      Total number of cells
-#define POPULATION 1000
+#define POPULATION 10
 
 //      Number of cells that do not change topology
 #define CELLS_UNCHANGED 10
@@ -46,6 +58,8 @@
 //
 //      constants in building plasmids process
 //
+
+
 
 
 #endif

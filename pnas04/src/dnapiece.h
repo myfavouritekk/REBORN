@@ -30,11 +30,14 @@ private:
     
 public:
     
+    //
     //  constructors
     //
+    
+    //  default constructor
+    DNAPiece();
+    
     //  constructors for top-down design
-    //
-    DNAPiece();     //      default constructor
     DNAPiece(
              Part* _promoter,
              Part* _rbs,
@@ -51,16 +54,16 @@ public:
     
     //  constructors for bottom-up design
     DNAPiece(
-             std::string promoterId,
-             std::string rbsId,
-             std::string geneId,
-             std::string terminatorId
+             std::string promoterName,
+             std::string rbsName,
+             std::string geneName,
+             std::string terminatorName
              );
     DNAPiece(
-             std::string promoterId,
-             std::string rbsId,
-             std::string geneId,
-             std::string terminatorId,
+             std::string promoterName,
+             std::string rbsName,
+             std::string geneName,
+             std::string terminatorName,
              piece_direction _direction
              );
     

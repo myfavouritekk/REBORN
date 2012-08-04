@@ -256,13 +256,45 @@ void Plasmid::findCompleteCondidates(
                                      const int** database
                                      )
 {
+#warning "to be implemented"
     
 }
 
     
     
+void Plasmid::generatePlans(){
     
+    //          clear previous plans
+    plans.clear();
     
+    //          determine the number of plans
+    int numberOfPlans = (int)completeCandidates.size();
+    
+    //          constructing every plan
+    for (int i = 0; i < numberOfPlans; i++) {
+        CompleteCandidate* aCandidate = completeCandidates[i];        
+        std::vector<DNAPiece*> aPlan;
+        
+        //      constructing every DNA piece of the plan
+        for (int j = 0; j < numOfGenes; j++) {
+            std::string geneName = (aCandidate -> regulators)[i] -> name;
+            
+            //  for case all regulatees are genes, and no promoters
+            DNAPiece* aPiece = new DNAPiece(NULL, NULL, geneName, NULL);
+#warning "haven't cover cases where promoters are regulatees"
+            aPlan.push_back(aPiece);
+        }
+        
+        plans.push_back(aPlan);
+    }
+    
+}
+
+
+void Plasmid::generatePlanOutputs(const int& plasmidIndex){
+#warning "to be implemented"
+    
+}
     
     
     

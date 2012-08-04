@@ -26,13 +26,16 @@ private:
     
 public:
     
-    //  constructor
+    //  constructors
     Part(
-            const part_Type& _pType,
-            const std::string& _id,
-            const std::string& _name
-            );
-    
+         const part_Type& _pType,
+         const std::string& _id,
+         const std::string& _name
+         );
+    Part(
+         const part_Type& _pType,
+         const std::string& _name
+         );
     
     part_Type getPtype();
     std::string getId();

@@ -28,6 +28,55 @@ DNAPiece::DNAPiece(
     direction = CLOCKWISE;  // default direction
 }
     
+DNAPiece::DNAPiece(
+                   Part* _promoter,
+                   Part* _rbs,
+                   Part* _gene,
+                   Part* _terminator,
+                   piece_direction _direction
+                   ){
+    
+    
+    promoter = _promoter;
+    rbs = _rbs;
+    gene = _gene;
+    terminator = _terminator;
+    
+    direction = _direction;
+}
+    
+    
+DNAPiece::DNAPiece(
+                   std::string promoterId,
+                   std::string rbsId,
+                   std::string geneId,
+                   std::string terminatorId
+                   ){
+    promoter = new Part(PROMOTER, promoterId);
+    rbs = new Part(RBS, rbsId);
+    gene = new Part(GENE_PART, geneId);
+    terminator = new Part(TERMINATOR, terminatorId);
+    
+    direction = CLOCKWISE;
+}
+DNAPiece::DNAPiece(
+                   std::string promoterId,
+                   std::string rbsId,
+                   std::string geneId,
+                   std::string terminatorId,
+                   piece_direction _direction
+                   ){
+    promoter = new Part(PROMOTER, promoterId);
+    rbs = new Part(RBS, rbsId);
+    gene = new Part(GENE_PART, geneId);
+    terminator = new Part(TERMINATOR, terminatorId);
+    
+    direction = _direction;
+
+}
+
+
+    
 Part* DNAPiece::getPromoter(){
     return promoter;
 }

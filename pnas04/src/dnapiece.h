@@ -34,6 +34,7 @@ public:
     //
     //  constructors for top-down design
     //
+    DNAPiece();     //      default constructor
     DNAPiece(
              Part* _promoter,
              Part* _rbs,

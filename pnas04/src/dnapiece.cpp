@@ -11,7 +11,17 @@
 
 namespace ustc {
 
-//  constructor
+//  constructors
+    
+DNAPiece::DNAPiece(){
+    promoter = NULL;
+    rbs = NULL;
+    gene = NULL;
+    terminator = NULL;
+    
+    direction = CLOCKWISE;
+}
+    
 DNAPiece::DNAPiece(
                    Part* _promoter,
                    Part* _rbs,

@@ -294,7 +294,8 @@ int** findMatrixRecurssion(
         int numPossible = 0;
         std::vector<int*> choicesVector;
         for (int i = 0; i < numberOfChoicesInPool; i++ ) {
-            if(databaseMatrix[choicesPool[i]][choicesPool[i]] == targetMatrix[0][0]){
+            if(databaseMatrix[choicesPool[i]][choicesPool[i]] == 2 ||
+               databaseMatrix[choicesPool[i]][choicesPool[i]] == targetMatrix[0][0]){ //  2 means it can not only up-regulate, but also down-regulate
                 numPossible++;
                 int* aChoice = new int(choicesPool[i]);
                 choicesVector.push_back(aChoice);
@@ -333,7 +334,8 @@ int** findMatrixRecurssion(
     //      choose which one is suitable for the first element
     for(int i = 0; i < numberOfChoicesInPool; i++){
         int firstElementIndex = choicesPool[i];
-        if (databaseMatrix[firstElementIndex][firstElementIndex] != targetMatrix[0][0]) {
+        if (databaseMatrix[firstElementIndex][firstElementIndex] != 2 &&
+            databaseMatrix[firstElementIndex][firstElementIndex] != targetMatrix[0][0]) { //  2 means it can not only up-regulate, but also down-regulate
             continue;
         }
         
@@ -363,8 +365,10 @@ int** findMatrixRecurssion(
         for (int i = 0 ; i < numberOfNewSets; i++) {
             bool work = true;
             for (int j = 0; j < numberOfChoicesToBeChosen - 1; j++) {
-                if (targetMatrix[j + 1][0] != databaseMatrix[possibleSolutions[i][j]][firstElementIndex] ||
-                    targetMatrix[0][j + 1] != databaseMatrix[firstElementIndex][possibleSolutions[i][j]]) {
+                if ((databaseMatrix[possibleSolutions[i][j]][firstElementIndex] != 2 &&
+                    targetMatrix[j + 1][0] != databaseMatrix[possibleSolutions[i][j]][firstElementIndex]) ||
+                    (databaseMatrix[firstElementIndex][possibleSolutions[i][j]] != 2 &&
+                    targetMatrix[0][j + 1] != databaseMatrix[firstElementIndex][possibleSolutions[i][j]])) {
                     work = false;
                     break;
                 }
@@ -463,16 +467,15 @@ void Plasmid::generatePlans(){
     //          constructing every plan
     for (int i = 0; i < numberOfPlans; i++) {
         CompleteCandidate* aCandidate = completeCandidates[i];        
-        std::vector<DNAPiece*> aPlan;
+        std::vector<Operon*> aPlan;
         
         //      constructing every DNA piece of the plan
         for (int j = 0; j < numOfGenes; j++) {
-            std::string geneName = (aCandidate -> regulators)[i] -> name;
+            std::string operonName = (aCandidate -> regulators)[i] -> name;
             
-            //  for case all regulatees are genes, and no promoters
-            DNAPiece* aPiece = new DNAPiece(NULL, NULL, geneName, NULL);
-#warning "haven't cover cases where promoters are regulatees"
-            aPlan.push_back(aPiece);
+            //  for case all regulatees are operons, and no promoters
+            Operon* anOperon = new Operon(operonName);
+            aPlan.push_back(anOperon);
         }
         
         plans.push_back(aPlan);
@@ -483,8 +486,8 @@ void Plasmid::generatePlans(){
 
 void Plasmid::generatePlanOutputs(const int plasmidIndex){
 
-    std::vector<std::vector<DNAPiece*> >::iterator iter_plan = plans.begin();
-    std::vector<std::vector<DNAPiece*> >::const_iterator iter_plan_end = plans.end();
+    std::vector<std::vector<Operon*> >::iterator iter_plan = plans.begin();
+    std::vector<std::vector<Operon*> >::const_iterator iter_plan_end = plans.end();
     int planIndex = 1;
     while (iter_plan != iter_plan_end) {
         std::ofstream plasmidPlanFile;
@@ -493,16 +496,12 @@ void Plasmid::generatePlanOutputs(const int plasmidIndex){
         plasmidPlanFile.open(plasmidPlanFileName.str().c_str());
         
         //  write this plan into a file
-        std::vector<DNAPiece*>::iterator iter_dna = iter_plan -> begin();
-        std::vector<DNAPiece*>::const_iterator iter_dna_end = iter_plan -> end();
-        while (iter_dna != iter_dna_end) {
-            plasmidPlanFile <<
-            (*iter_dna) -> getPromoter() -> getName() << std::endl <<
-            (*iter_dna) -> getRbs() -> getName() << std::endl <<
-            (*iter_dna) -> getGene() -> getName() << std::endl <<
-            (*iter_dna) -> getTerminator() -> getName() << std::endl;
+        std::vector<Operon*>::iterator iter_operon = iter_plan -> begin();
+        std::vector<Operon*>::const_iterator iter_operon_end = iter_plan -> end();
+        while (iter_operon != iter_operon_end) {
+            plasmidPlanFile << (*iter_operon) -> description();
                 
-            iter_dna++;
+            iter_operon++;
         }
         
         plasmidPlanFile.close();

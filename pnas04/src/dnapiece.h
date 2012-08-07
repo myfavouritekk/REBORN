@@ -67,6 +67,9 @@ public:
              piece_direction _direction
              );
     
+    //  constructor for transcriptianl units
+    DNAPiece(const std::string operonName);
+    
     //  destructor
     ~DNAPiece();
     

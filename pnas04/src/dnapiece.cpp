@@ -85,7 +85,11 @@ DNAPiece::DNAPiece(
 
 }
 
-
+    
+DNAPiece::DNAPiece(const std::string operonName){
+    
+}
+    
     
 Part* DNAPiece::getPromoter(){
     return promoter;

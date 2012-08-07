@@ -22,6 +22,7 @@
 #define COMPLETEMODEL_OUTPUT_PATH SAVES_PATH"complete/"
 #define MOTIFMODEL_OUTPUT_PATH SAVES_PATH"motifs/"
 #define COMPLETEMODEL_OUTPUT_PATH SAVES_PATH"complete/"
+#define OPERONS_PATH DATABASE_PATH"operons/"
 //
 //      constants in network inference process
 //

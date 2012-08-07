@@ -1307,6 +1307,10 @@ void Cell::genRegulatoryRelationships(){
     }
     std::cout<< std::endl;
     
+    
+    //  pirnt the number of genes to the completeFile
+    completeFile << numOfGene << std::endl;
+    
     for (int i = 0; i < numOfGene ; i++) {
         std::cout<< nodes[indexOfGene[i]] -> getNstring()<< "\t";
         for (int j = 0; j < numOfGene; j++) {

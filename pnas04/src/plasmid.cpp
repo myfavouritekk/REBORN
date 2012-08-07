@@ -482,7 +482,34 @@ void Plasmid::generatePlans(){
 
 
 void Plasmid::generatePlanOutputs(const int& plasmidIndex){
-#warning "to be implemented"
+
+    std::vector<std::vector<DNAPiece*> >::iterator iter_plan = plans.begin();
+    std::vector<std::vector<DNAPiece*> >::const_iterator iter_plan_end = plans.end();
+    int planIndex = 1;
+    while (iter_plan != iter_plan_end) {
+        std::ofstream plasmidPlanFile;
+        std::stringstream plasmidPlanFileName;
+        plasmidPlanFileName << OUTPUT_PATH << "Plasmid_" << plasmidIndex <<"_Plan_" << planIndex << "_.txt";
+        plasmidPlanFile.open(plasmidPlanFileName.str().c_str());
+        
+        //  write this plan into a file
+        std::vector<DNAPiece*>::iterator iter_dna = iter_plan -> begin();
+        std::vector<DNAPiece*>::const_iterator iter_dna_end = iter_plan -> end();
+        while (iter_dna != iter_dna_end) {
+            plasmidPlanFile <<
+            (*iter_dna) -> getPromoter() -> getName() << std::endl <<
+            (*iter_dna) -> getRbs() -> getName() << std::endl <<
+            (*iter_dna) -> getGene() -> getName() << std::endl <<
+            (*iter_dna) -> getTerminator() -> getName() << std::endl;
+                
+            iter_dna++;
+        }
+        
+        plasmidPlanFile.close();
+        
+        iter_plan++;
+        planIndex++;
+    }
     
 }
     

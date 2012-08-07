@@ -248,6 +248,151 @@ void Plasmid::readCompleteMatrix(const int& cellIndex){
     file.close();
 }
 
+
+    
+    
+    //==============================================================================//
+    //                                                                              //
+    //  findMatrixRecurssion method                                                 //
+    //  purpose: find small matrix in a big matrix                                  //
+    //  it uses recurssion algorithm to find MxM matrix in NxN matrix, based on     //
+    //      recussion of finding (M-1)x(M-1) matrix in (N-1)x(N-1) matrix           //
+    //  parameters:                                                                 //
+    //          databaseMatrix is the global giant matrix                           //
+    //          targetMatrix is the current matrix to be find                       //
+    //          choicesPool contains the indice of rows or coloumns can be chosen   //
+    //          numberOfChoicesInPool is the size of choicesPool                    //
+    //          numberOfChoicesToBeChosen is the size of targetMatrix               //
+    //          numberOfPossibleChoicesSets is the number of possible solutions     //
+    //  return value:                                                               //
+    //          return value is the 2-d array that contains the possible solutions  //
+    //                                                                              //
+    //==============================================================================//
+int** findMatrixRecurssion(
+                           const int** databaseMatrix,
+                           const int** targetMatrix,
+                           const int* choicesPool,
+                           const int numberOfChoicesInPool,
+                           const int numberOfChoicesToBeChosen,
+                           int* numberOfPossibleChoiceSets
+                           )
+{
+    int** findMatrixRecurssion(
+                               const int** databaseMatrix,
+                               const int** targetMatrix,
+                               const int* choicesPool,
+                               const int numberOfChoicesInPool,
+                               const int numberOfChoicesToBeChosen,
+                               int* numberOfPossibleChoiceSets
+                               );
+   
+    //
+    //      for choosing 1 element from the choicePool,
+    //      which is also the end of recurssion.
+    //
+    if(numberOfChoicesToBeChosen == 1){
+        int numPossible = 0;
+        std::vector<int*> choicesVector;
+        for (int i = 0; i < numberOfChoicesInPool; i++ ) {
+            if(databaseMatrix[choicesPool[i]][choicesPool[i]] == targetMatrix[0][0]){
+                numPossible++;
+                int* aChoice = new int(choicesPool[i]);
+                choicesVector.push_back(aChoice);
+            }
+        }
+        int** choices = new int*[numPossible];
+        for(int i = 0; i < numPossible; i++){
+            choices[i] = choicesVector[i];
+        }
+        *numberOfPossibleChoiceSets = numPossible;
+        return choices;
+    }
+    
+    
+    //
+    //      general situation
+    //
+    
+    //      variables for recurssion
+    int** newTargetMatrix = new int*[numberOfChoicesToBeChosen - 1];
+    int numOfWorkingChoices = 0;
+    std::vector<int*> choicesVector;
+    
+    
+    //
+    //      constructing new targetMatrix, which is the same as the old without first row and first coloumn
+    //
+    for(int i = 0; i < numberOfChoicesToBeChosen - 1; i++){
+        newTargetMatrix[i] = new int[numberOfChoicesToBeChosen - 1];
+        for(int j = 0; j < numberOfChoicesToBeChosen - 1; j++){
+            newTargetMatrix[i][j] = targetMatrix[i + 1][j + 1];
+        }
+    }
+    
+    
+    //      choose which one is suitable for the first element
+    for(int i = 0; i < numberOfChoicesInPool; i++){
+        int firstElementIndex = choicesPool[i];
+        if (databaseMatrix[firstElementIndex][firstElementIndex] != targetMatrix[0][0]) {
+            continue;
+        }
+        
+        //
+        //  constructing new choicePool for recurssion
+        //
+        int* newPool = new int[numberOfChoicesInPool - 1];
+        for(int j = 0, k = 0; j < numberOfChoicesInPool; j++){
+            if( i != j){
+                newPool[k] = choicesPool[j];
+                k++;
+            }
+        }
+        
+        int numberOfNewSets;
+        int** possibleSolutions = findMatrixRecurssion(
+                                                       databaseMatrix,
+                                                       (const int**)newTargetMatrix,
+                                                       newPool,
+                                                       numberOfChoicesInPool - 1,
+                                                       numberOfChoicesToBeChosen - 1,
+                                                       &numberOfNewSets
+                                                       );
+        //
+        //  judge whether the solutions work
+        //
+        for (int i = 0 ; i < numberOfNewSets; i++) {
+            bool work = true;
+            for (int j = 0; j < numberOfChoicesToBeChosen - 1; j++) {
+                if (targetMatrix[j + 1][0] != databaseMatrix[possibleSolutions[i][j]][firstElementIndex] ||
+                    targetMatrix[0][j + 1] != databaseMatrix[firstElementIndex][possibleSolutions[i][j]]) {
+                    work = false;
+                    break;
+                }
+            }
+            if (work) {
+                numOfWorkingChoices++;
+                int* aChoice = new int[numberOfChoicesToBeChosen];
+                aChoice[0] = firstElementIndex;
+                for (int k = 1; k < numberOfChoicesToBeChosen; k++) {
+                    aChoice[k] = possibleSolutions[i][k - 1];
+                }
+                choicesVector.push_back(aChoice);
+            }
+        }
+    }
+    *numberOfPossibleChoiceSets = numOfWorkingChoices;
+    int **choices = new int*[numOfWorkingChoices];
+    for (int i = 0; i < numOfWorkingChoices; i++) {
+        choices[i] = choicesVector[i];
+    }
+    return choices;
+}
+
+    
+    
+    
+    
+    
 void Plasmid::findCompleteCondidates(
                                      const int& numRowOfDatabase,
                                      const int& numColumnOfDatabase,
@@ -256,7 +401,52 @@ void Plasmid::findCompleteCondidates(
                                      const int** database
                                      )
 {
-#warning "to be implemented"
+
+    //  find wholeRegulatoryMatrix in the database,
+    //  and store the suitable choices in the cadidateIndice array,
+    //  each 1-d array stores the choices, and number of 1-ds is the numberOfCandidates
+    int** candidateIndice;
+    int numberOfCandidates;
+    int* choicePool = new int[numColumnOfDatabase];
+    for (int i = 0; i < numColumnOfDatabase; i++) {
+        choicePool[i] = i;
+    }
+    candidateIndice = findMatrixRecurssion(database, (const int**)wholeRegulatoryMatrix, choicePool, numColumnOfDatabase, numOfGenes, &numberOfCandidates);
+    
+    //  construct condidates based on the results from findMatrixRecussion methods
+    for (int i = 0; i < numberOfCandidates; i++) {
+        CompleteCandidate* aNewCandidate = new CompleteCandidate;
+        aNewCandidate -> numOfRegulatees = numOfGenes;
+        aNewCandidate -> numOfRegulators = numOfGenes;
+        
+        
+        //  constructing its' regulators and regulateeStrings
+        for (int j = 0; j < numOfGenes; j++) {
+            
+            //  push back a regulatee's string
+            (aNewCandidate -> regulateeStrings).push_back(namesOfRegulatees[candidateIndice[i][j]]);
+            
+            //  constructing a regulator
+            RegulatorCandidates* aRegulator = new RegulatorCandidates;
+            aRegulator -> name = namesOfRegualters[candidateIndice[i][j]];
+            //  find its regulatees
+            for (int k = 0; k < numOfGenes; i++) {
+                //  find regulation that is not 0
+                if (database[candidateIndice[i][k]][candidateIndice[i][j]] != 0) {
+                    Regulation* aRegulation = new Regulation;
+                    aRegulation -> itsRegulateeNames = namesOfRegulatees[candidateIndice[i][k]];
+                    aRegulation -> regulateDirection = database[candidateIndice[i][k]][candidateIndice[i][j]];
+                    aRegulator -> itsRegulatees.push_back(aRegulation);
+                }
+            }
+            
+            aNewCandidate -> regulators.push_back(aRegulator);
+        }
+        
+        
+        //  add this candidate
+        completeCandidates.push_back(aNewCandidate);
+    }   //  finished canstructing the completeCandidates vector
     
 }
 

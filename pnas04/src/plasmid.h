@@ -43,9 +43,15 @@ struct MotifCandidate{
     //      structs used to find whole structure                //
     //==========================================================//
     
+    
+struct Regulation{
+    std::string itsRegulateeNames;
+    int regulateDirection;
+};
+    
 struct RegulatorCandidates{
     std::string name;
-    std::vector<std::string> itsRegulateeNames;
+    std::vector<Regulation* > itsRegulatees;
 };
 
 

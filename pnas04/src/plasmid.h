@@ -98,8 +98,8 @@ public:
     
     //      find suitable structures to rebuild itself based on regulatory matrice of motifs
     void findMotifsCandidates(
-                                const int& numRow,
-                                const int& numColumn,
+                                const int numRow,
+                                const int numColumn,
                                 const std::string* namesOfGenes,
                                 const std::string* namesOfPromoters,
                                 const int** database
@@ -110,8 +110,8 @@ public:
     
     //      find suitable strctures to rebuild itself based on the whole matrix
     void findCompleteCondidates(
-                                const int& numRow,
-                                const int& numColumn,
+                                const int numRow,
+                                const int numColumn,
                                 const std::string* namesOfRegualters,
                                 const std::string* namesOfRegulatees,
                                 const int** database
@@ -122,7 +122,7 @@ public:
     //==========================================================//
     
     void generatePlans();
-    void generatePlanOutputs(const int& plasmidIndex);
+    void generatePlanOutputs(const int plasmidIndex);
     
 private:
     

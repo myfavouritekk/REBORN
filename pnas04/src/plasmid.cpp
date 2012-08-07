@@ -95,8 +95,8 @@ void Plasmid::readMotifs(const int& cellIndex){
 
     
 void Plasmid::findMotifsCandidates(
-                             const int& numRow,
-                             const int& numColumn,
+                             const int numRow,
+                             const int numColumn,
                              const std::string* namesOfGenes,
                              const std::string* namesOfPromoters,
                              const int** database
@@ -394,8 +394,8 @@ int** findMatrixRecurssion(
     
     
 void Plasmid::findCompleteCondidates(
-                                     const int& numRowOfDatabase,
-                                     const int& numColumnOfDatabase,
+                                     const int numRowOfDatabase,
+                                     const int numColumnOfDatabase,
                                      const std::string* namesOfRegualters,
                                      const std::string* namesOfRegulatees,
                                      const int** database
@@ -430,9 +430,9 @@ void Plasmid::findCompleteCondidates(
             RegulatorCandidates* aRegulator = new RegulatorCandidates;
             aRegulator -> name = namesOfRegualters[candidateIndice[i][j]];
             //  find its regulatees
-            for (int k = 0; k < numOfGenes; i++) {
+            for (int k = 0; k < numOfGenes; k++) {
                 //  find regulation that is not 0
-                if (database[candidateIndice[i][k]][candidateIndice[i][j]] != 0) {
+                if (wholeRegulatoryMatrix[k][j] != 0) {
                     Regulation* aRegulation = new Regulation;
                     aRegulation -> itsRegulateeNames = namesOfRegulatees[candidateIndice[i][k]];
                     aRegulation -> regulateDirection = database[candidateIndice[i][k]][candidateIndice[i][j]];
@@ -481,7 +481,7 @@ void Plasmid::generatePlans(){
 }
 
 
-void Plasmid::generatePlanOutputs(const int& plasmidIndex){
+void Plasmid::generatePlanOutputs(const int plasmidIndex){
 
     std::vector<std::vector<DNAPiece*> >::iterator iter_plan = plans.begin();
     std::vector<std::vector<DNAPiece*> >::const_iterator iter_plan_end = plans.end();

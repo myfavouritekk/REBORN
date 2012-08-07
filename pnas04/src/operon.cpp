@@ -49,15 +49,16 @@ Operon::Operon(const std::string _name){
 
 
 
-void Operon::description(){
+std::string Operon::description(){
     
-    std::cout << "Transcritional Unit: " << name << std::endl;
-    std::cout << "\tGenes: ";
+    std::stringstream result;
+    result << "Transcritional Unit: " << name << std::endl;
+    result << "\tGenes: ";
     int numberOfGenes = (int)genes.size();
     for (int i = 0; i < numberOfGenes; i++) {
-        std::cout << genes[i] << "\t";
+        result << genes[i] << "\t";
     }
-    
+    return result.str();
 }
     
     

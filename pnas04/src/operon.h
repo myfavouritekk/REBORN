@@ -24,11 +24,11 @@ class Operon{
     
 public:
     //      constructor and destructor
-    Operon(const std::string _identifier);
+    Operon(const std::string _name);
     ~Operon();
     
     //      description method
-    void description();
+    std::string description();
     
 private:
     std::string name;

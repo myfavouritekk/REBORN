@@ -17,7 +17,7 @@ Plasmid::Plasmid(){
 }
 
 
-DNAPiece* Plasmid::getDnaPiece(const int& dnaPieceIndex){
+DNAPiece* Plasmid::getDnaPiece(const int dnaPieceIndex){
     int size = (int)dnaPieces.size();
     if (dnaPieceIndex >= 0 && dnaPieceIndex < size) {
         return dnaPieces[dnaPieceIndex];
@@ -30,7 +30,7 @@ void Plasmid::addDnaPiece(DNAPiece* newDNAPiece){
 }
     
     
-void Plasmid::readMotifs(const int& cellIndex){
+void Plasmid::readMotifs(const int cellIndex){
 
 	std::stringstream ss;
 	ss << SAVES_PATH << "Cell_"<<cellIndex <<"_Motifs.txt";
@@ -232,7 +232,7 @@ void Plasmid::findMotifsCandidates(
 }
 
     
-void Plasmid::readCompleteMatrix(const int& cellIndex){
+void Plasmid::readCompleteMatrix(const int cellIndex){
     std::stringstream fileName;
     fileName << SAVES_PATH << "Cell_" << cellIndex << "_Complete.txt";
     std::fstream file;
@@ -509,6 +509,7 @@ void Plasmid::generatePlanOutputs(const int plasmidIndex){
         iter_plan++;
         planIndex++;
     }
+ndl;
     
 }
     

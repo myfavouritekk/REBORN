@@ -85,7 +85,7 @@ public:
     //      PART 1: methods related to real parts               //
     //==========================================================//
     
-    DNAPiece* getDnaPiece(const int& dnaPieceIndex);
+    DNAPiece* getDnaPiece(const int dnaPieceIndex);
     
     void addDnaPiece(DNAPiece* newDnaPiece);
     
@@ -95,7 +95,7 @@ public:
     //==========================================================//
     
     //      read motifs from a text file and store them
-    void readMotifs(const int& cellIndex);
+    void readMotifs(const int cellIndex);
     
     //      find suitable structures to rebuild itself based on regulatory matrice of motifs
     void findMotifsCandidates(
@@ -107,7 +107,7 @@ public:
                                 );
     
     //      read complete regulatory matrix from a text file
-    void readCompleteMatrix(const int& cellIndex);
+    void readCompleteMatrix(const int cellIndex);
     
     //      find suitable strctures to rebuild itself based on the whole matrix
     void findCompleteCondidates(

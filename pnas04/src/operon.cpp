@@ -7,6 +7,7 @@
 //
 
 #include "operon.h"
+#include "consts.h"
 
 
 namespace ustc {
@@ -19,7 +20,7 @@ Operon::Operon(const std::string _name){
     
     std::ifstream tuDataFile;
     std::stringstream tuDataFileName;
-    tuDataFileName << _name << ".txt";
+    tuDataFileName << OPERONS_PATH << _name << ".txt";
     tuDataFile.open(tuDataFileName.str().c_str());
     
     //      initialize the members
@@ -58,6 +59,7 @@ std::string Operon::description(){
     for (int i = 0; i < numberOfGenes; i++) {
         result << genes[i] << "\t";
     }
+    result << std::endl;
     return result.str();
 }
     

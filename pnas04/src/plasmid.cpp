@@ -471,7 +471,7 @@ void Plasmid::generatePlans(){
         
         //      constructing every DNA piece of the plan
         for (int j = 0; j < numOfGenes; j++) {
-            std::string operonName = (aCandidate -> regulators)[i] -> name;
+            std::string operonName = (aCandidate -> regulators)[j] -> name;
             
             //  for case all regulatees are operons, and no promoters
             Operon* anOperon = new Operon(operonName);

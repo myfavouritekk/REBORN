@@ -41,7 +41,7 @@ void BuildPlasmids::buildProcess(){
                                               numOfRegulators,
                                               regulatorNames,
                                               regulateeNames,
-                                              (const int**)regulatoryMatix
+                                              (const int**)wholeRegulatoryMatrixInDataBase
                                               );
         
         //  generate plans to build the plasmid
@@ -75,11 +75,11 @@ void BuildPlasmids::loadDatabase(){
         database >> regulateeNames[i];
     }
     
-    regulatoryMatix = new int*[numOfRegulatees];
+    wholeRegulatoryMatrixInDataBase = new int*[numOfRegulatees];
     for (int i = 0; i < numOfRegulatees; i++) {
-        regulatoryMatix[i] = new int[numOfRegulators];
+        wholeRegulatoryMatrixInDataBase[i] = new int[numOfRegulators];
         for (int j = 0; j < numOfRegulators; j++) {
-            database >> regulatoryMatix[i][j];
+            database >> wholeRegulatoryMatrixInDataBase[i][j];
         }
     }
     

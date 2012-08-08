@@ -42,7 +42,7 @@ private:
     int numOfRegulatees;
     std::string* regulatorNames;
     std::string* regulateeNames;
-    int** regulatoryMatix;
+    int** wholeRegulatoryMatrixInDataBase;
     
     
 };

@@ -492,7 +492,7 @@ void Plasmid::generatePlanOutputs(const int plasmidIndex){
     while (iter_plan != iter_plan_end) {
         std::ofstream plasmidPlanFile;
         std::stringstream plasmidPlanFileName;
-        plasmidPlanFileName << OUTPUT_PATH << "Plasmid_" << plasmidIndex <<"_Plan_" << planIndex << "_.txt";
+        plasmidPlanFileName << OUTPUT_PATH << "Plasmid_" << plasmidIndex + 1 <<"_Plan_" << planIndex << "_.txt";
         plasmidPlanFile.open(plasmidPlanFileName.str().c_str());
         
         //  write this plan into a file
@@ -505,11 +505,16 @@ void Plasmid::generatePlanOutputs(const int plasmidIndex){
         }
         
         plasmidPlanFile.close();
-        
+        std::cout << "Finished plan " << planIndex << std::endl;
         iter_plan++;
         planIndex++;
     }
-ndl;
+    
+    //  print status  in the debug area
+    std::cout
+        << "Finished Generating Plasmid Plans for: Plasmid " << plasmidIndex + 1
+        << "\t//\t" << plans.size() << " plans in all"
+        << std::endl;
     
 }
     

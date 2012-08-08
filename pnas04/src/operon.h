@@ -30,10 +30,14 @@ public:
     //      description method
     std::string description();
     
+    //      whether this Operon has data in the database
+    bool isAvailableInDatabase();
+    
 private:
     std::string name;
     std::vector<std::string> genes;
     
+    bool hasData;
     
 };
     

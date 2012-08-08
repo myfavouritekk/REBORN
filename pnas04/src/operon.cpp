@@ -13,7 +13,7 @@
 namespace ustc {
     
     
-Operon::Operon(const std::string _name){
+Operon::Operon(const std::string _name):hasData(true){
     
     
     //      using the identifier as the name of a file and query other information
@@ -22,6 +22,18 @@ Operon::Operon(const std::string _name){
     std::stringstream tuDataFileName;
     tuDataFileName << OPERONS_PATH << _name << ".txt";
     tuDataFile.open(tuDataFileName.str().c_str());
+    
+    //      in case of no file for this operon
+    if (!tuDataFile) {
+        
+        name = _name;
+        
+        hasData = false;    //      to show not available in database
+        
+        return;
+        
+    }
+    
     
     //      initialize the members
     std::string geneNames;
@@ -56,18 +68,29 @@ Operon::Operon(const std::string _name){
 
 
 std::string Operon::description(){
-    
+
     std::stringstream result;
-    result << "Transcritional Unit: " << name << std::endl;
-    result << "\tGenes: ";
-    int numberOfGenes = (int)genes.size();
-    for (int i = 0; i < numberOfGenes; i++) {
-        result << genes[i] << "\t";
+    
+    if (isAvailableInDatabase()) {// has data
+        result << "Transcritional Unit: " << name << std::endl;
+        result << "\tGenes: ";
+        int numberOfGenes = (int)genes.size();
+        for (int i = 0; i < numberOfGenes; i++) {
+            result << genes[i] << "\t";
+        }
+        result << std::endl;
+        return result.str();
     }
-    result << std::endl;
+    
+    result << "Transcritional Unit: " << name << std::endl;
+    result << "\tNot available in the database,\n\tPlease update the database and try again.\n";
     return result.str();
 }
     
+   
+bool Operon::isAvailableInDatabase(){
+    return hasData;
+}
     
     
 }   //      namespace ustc

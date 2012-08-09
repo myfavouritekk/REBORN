@@ -23,6 +23,10 @@
 #define MOTIFMODEL_OUTPUT_PATH SAVES_PATH"motifs/"
 #define COMPLETEMODEL_OUTPUT_PATH SAVES_PATH"complete/"
 #define OPERONS_PATH DATABASE_PATH"operons/"
+#define GENES_PATH DATABASE_PATE"genes/"
+#define PROMOTERS_PATH DATABASE_PATH"promoters/"
+#define RBSES_PATH DATABASE_PATH"rbses/"
+#define TERMINATORS_PATH DATABASE_PATH"rbses/"
 //
 //      constants in network inference process
 //

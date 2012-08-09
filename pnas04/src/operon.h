@@ -33,9 +33,17 @@ public:
     //      whether this Operon has data in the database
     bool isAvailableInDatabase();
     
+    
+    //      get components numbers
+    int getNumGenes();
+    int getNumPromoters();
+    int getNumTerminators();
+    
 private:
     std::string name;
     std::vector<std::string> genes;
+    std::vector<std::string> promoters;
+    std::vector<std::string> terminators;
     
     bool hasData;
     

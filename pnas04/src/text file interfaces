@@ -76,3 +76,22 @@ Cell_1_Complete.txt
 3. the following is the complete matrix of regulatory relationships among those
     genes
 
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+//              Operon data file                                                //
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+
+example:
+
+atpIBEFHAGDC.txt
+
+            atpIBEFHAGDC
+            9	4	1
+            atpA	atpB	atpC	atpD	atpE	atpF	atpG	atpH	atpI	
+            atpCp1	atpBp2	atpBp1	atpIp	
+            ECK120010863	
+
+1. atpIBEFHAGDC is the operon name
+2. the following three integers are the numbers of genes, promoters and terminators in the operon
+3. following are names of those genes, promoters and terminators
+

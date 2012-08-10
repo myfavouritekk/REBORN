@@ -35,10 +35,10 @@
 #define TOTAL_EVO 1000
 
 //      Total number of cells
-#define POPULATION 10
+#define POPULATION 1000
 
 //      Number of cells that do not change topology
-#define CELLS_UNCHANGED 0
+#define CELLS_UNCHANGED 5
 
 //      Number of cells that are generated to SBMLModels
 #define NUM_SBMLMODEL 10

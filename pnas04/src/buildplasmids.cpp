@@ -25,33 +25,29 @@ void BuildPlasmids::buildProcess(){
     //      loading data from database
     loadDatabase();
     
-    //==============================================================//
-    //      find complete regulatory matrix in the database         //
-    //==============================================================//
-    ustc::Plasmid** plasmids = new Plasmid*[NUM_SBMLMODEL];
-    for (int plasmidIndex = 0; plasmidIndex < NUM_SBMLMODEL; plasmidIndex++) {
-        plasmids[plasmidIndex] = new Plasmid();
-        
-        //  read complete regulatory matrix
-        plasmids[plasmidIndex] -> readCompleteMatrix(plasmidIndex);
-        
-        //  find complete regulatory matrix in the database
-        plasmids[plasmidIndex] -> findCompleteCondidates(
-                                              numOfRegulatees,
-                                              numOfRegulators,
-                                              regulatorNames,
-                                              regulateeNames,
-                                              (const int**)wholeRegulatoryMatrixInDataBase
-                                              );
-        
-        //  generate plans to build the plasmid
-        plasmids[plasmidIndex] -> generatePlans();
-        
-        //  output those plans into files
-        plasmids[plasmidIndex] -> generatePlanOutputs(plasmidIndex);
-        
-    }
     
+    std::cout << "Which build method do you what?" << std::endl
+        << "1. Using Operons as basic elements." << std::endl
+        << "2. Using promoters and genes as basic elements." << std::endl;
+    int buildChoice;
+    std::cin >> buildChoice;
+    
+    switch (buildChoice) {
+
+        case 2:{
+            
+            break;
+        }
+        default:{
+            
+            //==============================================================//
+            //      build plasmid based on operon-operon relationships      //
+            //==============================================================//
+            buildUsingOperons();
+            
+            break;
+        }
+    }
 }
     
 
@@ -85,6 +81,37 @@ void BuildPlasmids::loadDatabase(){
     
     database.close();
 }
+    
+
+    
+//      build plasmid based on operon-operon relationships
+void BuildPlasmids::buildUsingOperons(){
+    ustc::Plasmid** plasmids = new Plasmid*[NUM_SBMLMODEL];
+    for (int plasmidIndex = 0; plasmidIndex < NUM_SBMLMODEL; plasmidIndex++) {
+        plasmids[plasmidIndex] = new Plasmid();
+        
+        //  read complete regulatory matrix
+        plasmids[plasmidIndex] -> readCompleteMatrix(plasmidIndex);
+        
+        //  find complete regulatory matrix in the database
+        plasmids[plasmidIndex] -> findCompleteCondidates(
+                                                         numOfRegulatees,
+                                                         numOfRegulators,
+                                                         regulatorNames,
+                                                         regulateeNames,
+                                                         (const int**)wholeRegulatoryMatrixInDataBase
+                                                         );
+        
+        //  generate plans to build the plasmid
+        plasmids[plasmidIndex] -> generatePlans();
+        
+        //  output those plans into files
+        plasmids[plasmidIndex] -> generatePlanOutputs(plasmidIndex);
+        
+    }
+}
+    
+    
     
     
 }   //      namespace ustc

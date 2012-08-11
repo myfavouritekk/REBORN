@@ -35,6 +35,11 @@ private:
     
     void loadDatabase();
     
+    
+    //      build process based on finding operon-operon relationships
+    void buildUsingOperons();
+    
+    
     //
     //      data loaded in from the external database
     //

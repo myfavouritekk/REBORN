@@ -177,7 +177,162 @@ int** findMatrixRecurssion(
     return choices;
 }
 
+	//==============================================================================//
+    //                                                                              //
+    //  findMatrixRecurssion2 method                                                //
+    //  purpose: find small matrix in a big matrix                                  //
+    //  it uses recurssion algorithm to find MxM matrix in NxN matrix, based on     //
+    //      recussion of finding (M-1)x(M-1) matrix in (N-1)x(N-1) matrix           //
+    //  parameters:                                                                 //
+    //          databaseMatrix is the global giant matrix                           //
+    //          targetMatrix is the current matrix to be find						//
+	//																				//
+    //          choicesPoolOfRows contains the indice of rows can be chosen			//
+	//			choicesPoolOfColumns contains the indice of columns can be chosen	//	
+    //																				//
+	//			numberOfRowChoicesInPool is the size of choicesPool of rows			//
+	//			numberOfColumnChoicesInPool is the size of choicesPool of columns	//
+    //																				//
+	//			numberOfChoicesToBeChosen is the size of targetMatrix               //
+    //          numberOfPossibleChoicesSets is the number of possible solutions     //
+    //  return value:                                                               //
+    //          return value is the 2-d array that contains the possible solutions  //
+    //                                                                              //
+    //==============================================================================//
+
+int*** findMatrixRecurssion2	(const int** databaseMatrix,
+								const int** targetMatrix,
+								const int* choicesPoolOfRows,
+								const int* choicesPoolOfColumns,
+								int numberOfRowChoicesInPool,
+								int numberOfColmunsChoicesInPool,
+								int numberOfChoicesToBeChosen,
+								int* numberOfPossibleChoices
+								)
+{
+	int*** findMatrixRecurssion2(const int** databaseMatrix,
+								const int** targetMatrix,
+								const int* choicesPoolOfRows,
+								const int* choicesPoolOfColumns,
+								int numberOfRowChoicesInPool,
+								int numberOfColmunsChoicesInPool,
+								int numberOfChoicesToBeChosen,
+								int* numberOfPossibleChoices
+								);
+	if(numberOfChoicesToBeChosen == 1){
+		int numPossible = 0;
+		std::vector<int**> choicesVector;
+		for(int i = 0; i < numberOfRowChoicesInPool; i ++){
+			for(int j = 0; j < numberOfColmunsChoicesInPool; j ++){
+				if(databaseMatrix[choicesPoolOfRows[i]][choicesPoolOfColumns[j]] == 2 ||
+					databaseMatrix[choicesPoolOfRows[i]][choicesPoolOfColumns[i]] == targetMatrix[0][0]){
+						numPossible ++;
+						int** aChoice = new int*[2];
+						for(int i = 0; i < 2; i ++){
+							aChoice[i] = new int[1];
+						}
+						aChoice[0][0] = choicesPoolOfRows[i];
+						aChoice[1][0] = choicesPoolOfColumns[j];
+						choicesVector.push_back(aChoice);
+				}
+			}
+		}
+		int *** choices = new int** [numPossible];
+		for(int i = 0; i < numPossible; i ++ ){
+			choices[i] = choicesVector[i];
+		}
+		return choices;
+	}
+
+	 //      variables for recurssion
+    int** newTargetMatrix = new int*[numberOfChoicesToBeChosen - 1];
+    int numOfWorkingChoices = 0;
+    std::vector<int**> choicesVector;
     
+    
+    //
+    //      constructing new targetMatrix, which is the same as the old without first row and first coloumn
+    //
+    for(int i = 0; i < numberOfChoicesToBeChosen - 1; i++){
+        newTargetMatrix[i] = new int[numberOfChoicesToBeChosen - 1];
+        for(int j = 0; j < numberOfChoicesToBeChosen - 1; j++){
+            newTargetMatrix[i][j] = targetMatrix[i + 1][j + 1];
+        }
+    }
+    //      choose which one is suitable for the first element
+	int firstElement [2][1]; 
+    for(int i = 0; i < numberOfRowChoicesInPool; i++){
+		for(int j = 0; j < numberOfColmunsChoicesInPool; j ++ ){
+			if(databaseMatrix[choicesPoolOfRows[i]][choicesPoolOfColumns[j]] != 2 &&
+				databaseMatrix[choicesPoolOfRows[i]][choicesPoolOfColumns[i]] != targetMatrix[0][0]){
+				continue;
+			}
+			firstElement[0][0] = choicesPoolOfRows[i];
+			firstElement[1][0] = choicesPoolOfColumns[j];
+
+	        int* newPoolOfRow = new int[numberOfRowChoicesInPool - 1];
+			for(int j = 0, k = 0; j < numberOfRowChoicesInPool; j++){
+				if( i != j){
+					newPoolOfRow[k] = choicesPoolOfRows[j];
+					k++;
+				}
+			}
+			int* newPoolOfColumn = new int[numberOfColmunsChoicesInPool - 1];
+			for(int j = 0, k = 0; j < numberOfColmunsChoicesInPool; j++){
+				if( i != j){
+					newPoolOfColumn[k] = choicesPoolOfColumns[j];
+					k++;
+				}
+			}
+		
+			int numberOfNewSets;
+			int*** possibleSolutions = findMatrixRecurssion2(
+														   databaseMatrix,
+														   (const int**)newTargetMatrix,
+														   newPoolOfRow,
+														   newPoolOfColumn,
+														   numberOfRowChoicesInPool - 1,
+														   numberOfColmunsChoicesInPool - 1,
+														   numberOfChoicesToBeChosen - 1,
+														   &numberOfNewSets
+														   );
+			 //  judge whether the solutions work
+			for(int i = 0; i < numberOfNewSets; i ++){
+				bool work = true;
+				for(int j = 0; j < numberOfChoicesToBeChosen - 1; j ++){
+					if((databaseMatrix[firstElement[0][0]][possibleSolutions[i][1][j]] != 2) &&
+						(newTargetMatrix[0][j + 1] != databaseMatrix[firstElement[1][0]][possibleSolutions[i][1][j]]) &&
+						(databaseMatrix[possibleSolutions[i][0][j]][firstElement[1][0]] != 2) &&
+						(newTargetMatrix[j + 1][0] != databaseMatrix[possibleSolutions[i][0][j]][firstElement[1][0]])
+						){
+						work = false;
+						break;
+					}
+				}
+				if(work){
+					numOfWorkingChoices ++;
+					int** aChoice = new int* [2];
+					aChoice[0] = new int [numberOfChoicesToBeChosen];
+					aChoice[1] = new int [numberOfChoicesToBeChosen];
+					aChoice[0][0] = firstElement[0][0];
+					aChoice[1][0] = firstElement[1][0];
+					for(int k = 1; k < numberOfChoicesToBeChosen; k++ ){
+						aChoice[0][k] = possibleSolutions[i][0][k - 1];
+						aChoice[1][k] = possibleSolutions[i][1][k - 1];
+					}
+					choicesVector.push_back (aChoice);
+				}
+			}
+		}
+    }
+    *numberOfPossibleChoices = numOfWorkingChoices;
+    int ***choices = new int**[numOfWorkingChoices];
+	for(int i = 0 ; i < numOfWorkingChoices; i ++){
+		choices[i] = choicesVector[i];
+	}
+	return choices;
+
+}    
     
     
     
@@ -238,8 +393,7 @@ void Plasmid::findCompleteCondidates(
     }   //  finished canstructing the completeCandidates vector
     
 }
-
-    
+   
     
 void Plasmid::generatePlans(){
     

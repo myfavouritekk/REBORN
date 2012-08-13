@@ -43,7 +43,7 @@ private:
     void buildUsingBioBricks();
     
     //
-    //      data loaded in from the external database
+    //      operons data loaded in from the external database
     //
     int numOfRegulators;
     int numOfRegulatees;
@@ -52,6 +52,14 @@ private:
     int** wholeRegulatoryMatrixInDataBase;
     
     
+    //
+    //      promoters and genes data loaded in from the external database
+    //
+    int numOfGenes;
+    int numOfPromoters;
+    std::string* geneNames;
+    std::string* promoterNames;
+    int** wholeRegulatoryMatrixOfGenesAndPromoters;
 };
     
     

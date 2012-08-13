@@ -53,7 +53,7 @@ void Plasmid::readCompleteMatrix(const int cellIndex){
     //          return value is the 2-d array that contains the possible solutions  //
     //                                                                              //
     //==============================================================================//
-int** findMatrixRecurssion(
+int** findMatrixRecursion(
                            const int** databaseMatrix,
                            const int** targetMatrix,
                            const int* choicesPool,
@@ -62,7 +62,7 @@ int** findMatrixRecurssion(
                            int* numberOfPossibleChoiceSets
                            )
 {
-    int** findMatrixRecurssion(
+    int** findMatrixRecursion(
                                const int** databaseMatrix,
                                const int** targetMatrix,
                                const int* choicesPool,
@@ -136,7 +136,7 @@ int** findMatrixRecurssion(
         }
         
         int numberOfNewSets;
-        int** possibleSolutions = findMatrixRecurssion(
+        int** possibleSolutions = findMatrixRecursion(
                                                        databaseMatrix,
                                                        (const int**)newTargetMatrix,
                                                        newPool,
@@ -200,7 +200,7 @@ int** findMatrixRecurssion(
     //                                                                              //
     //==============================================================================//
 
-int*** findMatrixRecurssion2	(const int** databaseMatrix,
+int*** findMatrixRecursion2	(const int** databaseMatrix,
 								const int** targetMatrix,
 								const int* choicesPoolOfRows,
 								const int* choicesPoolOfColumns,
@@ -210,7 +210,7 @@ int*** findMatrixRecurssion2	(const int** databaseMatrix,
 								int* numberOfPossibleChoices
 								)
 {
-	int*** findMatrixRecurssion2(const int** databaseMatrix,
+	int*** findMatrixRecursion2(const int** databaseMatrix,
 								const int** targetMatrix,
 								const int* choicesPoolOfRows,
 								const int* choicesPoolOfColumns,
@@ -286,7 +286,7 @@ int*** findMatrixRecurssion2	(const int** databaseMatrix,
 			}
 		
 			int numberOfNewSets;
-			int*** possibleSolutions = findMatrixRecurssion2(
+			int*** possibleSolutions = findMatrixRecursion2(
 														   databaseMatrix,
 														   (const int**)newTargetMatrix,
 														   newPoolOfRow,
@@ -355,7 +355,7 @@ void Plasmid::findCompleteCondidates(
     for (int i = 0; i < numColumnOfDatabase; i++) {
         choicePool[i] = i;
     }
-    candidateIndice = findMatrixRecurssion(database, (const int**)wholeRegulatoryMatrix, choicePool, numColumnOfDatabase, numOfGenes, &numberOfCandidates);
+    candidateIndice = findMatrixRecursion(database, (const int**)wholeRegulatoryMatrix, choicePool, numColumnOfDatabase, numOfGenes, &numberOfCandidates);
     
     //  construct condidates based on the results from findMatrixRecussion methods
     for (int i = 0; i < numberOfCandidates; i++) {

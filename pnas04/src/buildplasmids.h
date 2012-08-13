@@ -39,6 +39,8 @@ private:
     //      build process based on finding operon-operon relationships
     void buildUsingOperons();
     
+    //      build process based on finding promoter-gene relationships
+    void buildUsingBioBricks();
     
     //
     //      data loaded in from the external database

@@ -16,6 +16,7 @@
 #include <stdexcept>
 #include "operon.h"
 #include "consts.h"
+#include "biobrick.h"
 
 namespace ustc{
     

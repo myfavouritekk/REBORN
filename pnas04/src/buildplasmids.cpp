@@ -52,34 +52,68 @@ void BuildPlasmids::buildProcess(){
     
 
 void BuildPlasmids::loadDatabase(){
-    std::ifstream database;
-    std::stringstream databaseName;
-    databaseName << DATABASE_PATH << "USTC_SOFTWARE_PARTS_DATA.txt";
-    database.open(databaseName.str().c_str());
-    if (!database) {
+   
+	std::ifstream databaseOfOperons;
+	std::ifstream databaseOfGenesAndPromoters;
+    std::stringstream databaseNameOfOperons;
+	std::stringstream databaseNameOfGenesAndPromoters;
+
+    databaseNameOfOperons << DATABASE_PATH << "USTC_SOFTWARE_PARTS_DATA.txt";
+	databaseNameOfGenesAndPromoters << DATABASE_PATH << "USTC_SOFTWARE_BIOBRICKS_DATA.txt";
+
+    databaseOfOperons.open(databaseNameOfOperons.str().c_str());
+	databaseOfGenesAndPromoters.open(databaseNameOfGenesAndPromoters.str().c_str());
+
+    if (!databaseOfOperons || !databaseOfGenesAndPromoters) {
         std::cerr << "Error, unable to load database!" << std::endl;
+		return;
     }
-    database >> numOfRegulators >> numOfRegulatees;
+	
+	//load database with operons
+    databaseOfOperons >> numOfRegulators >> numOfRegulatees;
     
     //      allocate arrays to store database
     regulatorNames = new std::string[numOfRegulators];
     regulateeNames = new std::string[numOfRegulatees];
     for (int i = 0; i < numOfRegulators; i++) {
-        database >> regulatorNames[i];
+        databaseOfOperons >> regulatorNames[i];
     }
     for (int i = 0; i < numOfRegulatees; i++) {
-        database >> regulateeNames[i];
+        databaseOfOperons >> regulateeNames[i];
     }
     
     wholeRegulatoryMatrixInDataBase = new int*[numOfRegulatees];
     for (int i = 0; i < numOfRegulatees; i++) {
         wholeRegulatoryMatrixInDataBase[i] = new int[numOfRegulators];
         for (int j = 0; j < numOfRegulators; j++) {
-            database >> wholeRegulatoryMatrixInDataBase[i][j];
+            databaseOfOperons >> wholeRegulatoryMatrixInDataBase[i][j];
         }
     }
     
-    database.close();
+    databaseOfOperons.close();
+
+	//load database with promoters and genes
+	databaseOfGenesAndPromoters >> numOfGenes >> numOfPromoters;
+
+	geneNames = new std::string[numOfGenes];
+	promoterNames = new std::string[numOfPromoters];
+	for(int i = 0;i < numOfGenes; i++){
+		databaseOfGenesAndPromoters >> geneNames[i];
+	}
+	for(int i = 0;i < numOfPromoters;i++){
+		databaseOfGenesAndPromoters >> promoterNames[i];
+	}
+
+	wholeRegulatoryMatrixOfGenesAndPromoters = new int*[numOfPromoters];
+	for(int i = 0; i < numOfPromoters; i++){
+		wholeRegulatoryMatrixOfGenesAndPromoters[i] = new int[numOfGenes];
+		for(int j = 0;j < numOfGenes; j++){
+			databaseOfGenesAndPromoters >> wholeRegulatoryMatrixOfGenesAndPromoters[i][j];
+		}
+	}
+
+	databaseOfGenesAndPromoters.close();
+
 }
     
 

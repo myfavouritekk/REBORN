@@ -337,7 +337,7 @@ int*** findMatrixRecursion2	(const int** databaseMatrix,
     
     
     
-void Plasmid::findCompleteCondidates(
+void Plasmid::findCompleteCandidates(
                                      const int numRowOfDatabase,
                                      const int numColumnOfDatabase,
                                      const std::string* namesOfRegualters,

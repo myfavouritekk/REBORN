@@ -200,20 +200,20 @@ int** findMatrixRecursion(
     //                                                                              //
     //==============================================================================//
 
-int*** findMatrixRecursion2	(const int** databaseMatrix,
-								const int** targetMatrix,
-								const int* choicesPoolOfRows,
-								const int* choicesPoolOfColumns,
-								int numberOfRowChoicesInPool,
-								int numberOfColmunsChoicesInPool,
-								int numberOfChoicesToBeChosen,
-								int* numberOfPossibleChoices
-								)
+int*** findMatrixRecursion2	(int** databaseMatrix,
+                             int** targetMatrix,
+                             int* choicesPoolOfRows,
+                             int* choicesPoolOfColumns,
+                             int numberOfRowChoicesInPool,
+                             int numberOfColmunsChoicesInPool,
+                             int numberOfChoicesToBeChosen,
+                             int* numberOfPossibleChoices
+                             )
 {
-	int*** findMatrixRecursion2(const int** databaseMatrix,
-								const int** targetMatrix,
-								const int* choicesPoolOfRows,
-								const int* choicesPoolOfColumns,
+	int*** findMatrixRecursion2(int** databaseMatrix,
+								int** targetMatrix,
+								int* choicesPoolOfRows,
+								int* choicesPoolOfColumns,
 								int numberOfRowChoicesInPool,
 								int numberOfColmunsChoicesInPool,
 								int numberOfChoicesToBeChosen,
@@ -222,18 +222,21 @@ int*** findMatrixRecursion2	(const int** databaseMatrix,
 	if(numberOfChoicesToBeChosen == 1){
 		int numPossible = 0;
 		std::vector<int**> choicesVector;
+		
+
+
 		for(int i = 0; i < numberOfRowChoicesInPool; i ++){
 			for(int j = 0; j < numberOfColmunsChoicesInPool; j ++){
 				if(databaseMatrix[choicesPoolOfRows[i]][choicesPoolOfColumns[j]] == 2 ||
-					databaseMatrix[choicesPoolOfRows[i]][choicesPoolOfColumns[i]] == targetMatrix[0][0]){
-						numPossible ++;
-						int** aChoice = new int*[2];
-						for(int i = 0; i < 2; i ++){
-							aChoice[i] = new int[1];
-						}
-						aChoice[0][0] = choicesPoolOfRows[i];
-						aChoice[1][0] = choicesPoolOfColumns[j];
-						choicesVector.push_back(aChoice);
+                   databaseMatrix[choicesPoolOfRows[i]][choicesPoolOfColumns[j]] == targetMatrix[0][0]){
+                    numPossible ++;
+                    int** aChoice = new int*[2];
+                    for(int i = 0; i < 2; i ++){
+                        aChoice[i] = new int[1];
+                    }
+                    aChoice[0][0] = choicesPoolOfRows[i];
+                    aChoice[1][0] = choicesPoolOfColumns[j];
+                    choicesVector.push_back(aChoice);
 				}
 			}
 		}
@@ -241,10 +244,11 @@ int*** findMatrixRecursion2	(const int** databaseMatrix,
 		for(int i = 0; i < numPossible; i ++ ){
 			choices[i] = choicesVector[i];
 		}
+        *numberOfPossibleChoices = numPossible;
 		return choices;
 	}
-
-	 //      variables for recurssion
+    
+    //      variables for recurssion
     int** newTargetMatrix = new int*[numberOfChoicesToBeChosen - 1];
     int numOfWorkingChoices = 0;
     std::vector<int**> choicesVector;
@@ -260,51 +264,54 @@ int*** findMatrixRecursion2	(const int** databaseMatrix,
         }
     }
     //      choose which one is suitable for the first element
-	int firstElement [2][1]; 
+	int firstElement [2][1];
     for(int i = 0; i < numberOfRowChoicesInPool; i++){
 		for(int j = 0; j < numberOfColmunsChoicesInPool; j ++ ){
 			if(databaseMatrix[choicesPoolOfRows[i]][choicesPoolOfColumns[j]] != 2 &&
-				databaseMatrix[choicesPoolOfRows[i]][choicesPoolOfColumns[i]] != targetMatrix[0][0]){
+               databaseMatrix[choicesPoolOfRows[i]][choicesPoolOfColumns[j]] != targetMatrix[0][0]){
 				continue;
 			}
 			firstElement[0][0] = choicesPoolOfRows[i];
 			firstElement[1][0] = choicesPoolOfColumns[j];
-
+            
 	        int* newPoolOfRow = new int[numberOfRowChoicesInPool - 1];
-			for(int j = 0, k = 0; j < numberOfRowChoicesInPool; j++){
-				if( i != j){
-					newPoolOfRow[k] = choicesPoolOfRows[j];
+			for(int h = 0, k = 0; h < numberOfRowChoicesInPool; h ++){
+				if( i != h){
+					newPoolOfRow[k] = choicesPoolOfRows[h];
 					k++;
 				}
 			}
+
+			
 			int* newPoolOfColumn = new int[numberOfColmunsChoicesInPool - 1];
-			for(int j = 0, k = 0; j < numberOfColmunsChoicesInPool; j++){
-				if( i != j){
-					newPoolOfColumn[k] = choicesPoolOfColumns[j];
+			for(int g = 0, k = 0; g < numberOfColmunsChoicesInPool; g ++){
+				if( j != g){
+					newPoolOfColumn[k] = choicesPoolOfColumns[g];
 					k++;
 				}
 			}
-		
+            
+			
 			int numberOfNewSets;
 			int*** possibleSolutions = findMatrixRecursion2(
-														   databaseMatrix,
-														   (const int**)newTargetMatrix,
-														   newPoolOfRow,
-														   newPoolOfColumn,
-														   numberOfRowChoicesInPool - 1,
-														   numberOfColmunsChoicesInPool - 1,
-														   numberOfChoicesToBeChosen - 1,
-														   &numberOfNewSets
-														   );
-			 //  judge whether the solutions work
+                                                            databaseMatrix,
+                                                            newTargetMatrix,
+                                                            newPoolOfRow,
+                                                            newPoolOfColumn,
+                                                            numberOfRowChoicesInPool - 1,
+                                                            numberOfColmunsChoicesInPool - 1,
+                                                            numberOfChoicesToBeChosen - 1,
+                                                            &numberOfNewSets
+                                                            );
+            //  judge whether the solutions work
 			for(int i = 0; i < numberOfNewSets; i ++){
 				bool work = true;
 				for(int j = 0; j < numberOfChoicesToBeChosen - 1; j ++){
-					if((databaseMatrix[firstElement[0][0]][possibleSolutions[i][1][j]] != 2) &&
-						(newTargetMatrix[0][j + 1] != databaseMatrix[firstElement[1][0]][possibleSolutions[i][1][j]]) &&
-						(databaseMatrix[possibleSolutions[i][0][j]][firstElement[1][0]] != 2) &&
-						(newTargetMatrix[j + 1][0] != databaseMatrix[possibleSolutions[i][0][j]][firstElement[1][0]])
-						){
+					if(databaseMatrix[firstElement[0][0]][possibleSolutions[i][1][j]] != 2 &&
+                       targetMatrix[0][j + 1] != databaseMatrix[firstElement[1][0]][possibleSolutions[i][1][j]] &&
+                       databaseMatrix[possibleSolutions[i][0][j]][firstElement[1][0]] != 2 &&
+                       targetMatrix[j + 1][0] != databaseMatrix[possibleSolutions[i][0][j]][firstElement[1][0]] )
+					   {
 						work = false;
 						break;
 					}
@@ -331,8 +338,8 @@ int*** findMatrixRecursion2	(const int** databaseMatrix,
 		choices[i] = choicesVector[i];
 	}
 	return choices;
-
-}    
+    
+}
     
     
     

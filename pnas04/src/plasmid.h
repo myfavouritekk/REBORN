@@ -72,7 +72,7 @@ public:
     //      read complete regulatory matrix from a text file
     void readCompleteMatrix(const int cellIndex);
     
-    //      find suitable strctures to rebuild itself based on the whole matrix
+    //      find suitable strctures to rebuild itself based on the whole matrix of operon-operon relationships
     void findCompleteCondidates(
                                 const int numRow,
                                 const int numColumn,
@@ -80,6 +80,16 @@ public:
                                 const std::string* namesOfRegulatees,
                                 const int** database
                                 );
+
+    //      find suitable strctures to rebuild itself based on the whole matrix of promoter-gene relationships
+    void findCompleteCondidatesUsingBiobricks(
+                                const int numRow,
+                                const int numColumn,
+                                const std::string* namesOfRegualters,
+                                const std::string* namesOfRegulatees,
+                                const int** database
+                                );
+
     
     //==========================================================//
     //      PART 2: generate build plans based on the cadidates //
@@ -94,6 +104,7 @@ private:
     //      members related to real parts                       //
     //==========================================================//
     std::vector<std::vector<Operon*> > plans;
+    std::vector<std::vector<BioBrick*> > biobrickPlans;
     
     
     //==========================================================//

@@ -35,7 +35,7 @@ void BuildPlasmids::buildProcess(){
     switch (buildChoice) {
 
         case 2:{
-            
+            buildUsingBioBricks();
             break;
         }
         default:{
@@ -128,7 +128,7 @@ void BuildPlasmids::buildUsingOperons(){
         plasmids[plasmidIndex] -> readCompleteMatrix(plasmidIndex);
         
         //  find complete regulatory matrix in the database
-        plasmids[plasmidIndex] -> findCompleteCondidates(
+        plasmids[plasmidIndex] -> findCompleteCandidates(
                                                          numOfRegulatees,
                                                          numOfRegulators,
                                                          regulatorNames,
@@ -158,7 +158,7 @@ void BuildPlasmids::buildUsingBioBricks(){
         plasmids[plasmidIndex] -> readCompleteMatrix(plasmidIndex);
         
         //  find complete regulatory matrix in the database
-        plasmids[plasmidIndex] -> findCompleteCondidates(
+        plasmids[plasmidIndex] -> findCompleteCandidatesUsingBiobricks(
                                                          numOfRegulatees,
                                                          numOfRegulators,
                                                          regulatorNames,

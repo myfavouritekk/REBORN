@@ -73,7 +73,7 @@ public:
     void readCompleteMatrix(const int cellIndex);
     
     //      find suitable strctures to rebuild itself based on the whole matrix of operon-operon relationships
-    void findCompleteCondidates(
+    void findCompleteCandidates(
                                 const int numRow,
                                 const int numColumn,
                                 const std::string* namesOfRegualters,
@@ -82,7 +82,7 @@ public:
                                 );
 
     //      find suitable strctures to rebuild itself based on the whole matrix of promoter-gene relationships
-    void findCompleteCondidatesUsingBiobricks(
+    void findCompleteCandidatesUsingBiobricks(
                                 const int numRow,
                                 const int numColumn,
                                 const std::string* namesOfRegualters,

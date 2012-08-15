@@ -200,23 +200,23 @@ int** findMatrixRecursion(
     //                                                                              //
     //==============================================================================//
 
-int*** findMatrixRecursion2	(int** databaseMatrix,
-                             int** targetMatrix,
-                             int* choicesPoolOfRows,
-                             int* choicesPoolOfColumns,
-                             int numberOfRowChoicesInPool,
-                             int numberOfColmunsChoicesInPool,
-                             int numberOfChoicesToBeChosen,
+int*** findMatrixRecursion2	(const int** databaseMatrix,
+                             const int** targetMatrix,
+                             const int* choicesPoolOfRows,
+                             const int* choicesPoolOfColumns,
+                             const int numberOfRowChoicesInPool,
+                             const int numberOfColmunsChoicesInPool,
+                             const int numberOfChoicesToBeChosen,
                              int* numberOfPossibleChoices
                              )
 {
-	int*** findMatrixRecursion2(int** databaseMatrix,
-								int** targetMatrix,
-								int* choicesPoolOfRows,
-								int* choicesPoolOfColumns,
-								int numberOfRowChoicesInPool,
-								int numberOfColmunsChoicesInPool,
-								int numberOfChoicesToBeChosen,
+	int*** findMatrixRecursion2(const int** databaseMatrix,
+								const int** targetMatrix,
+								const int* choicesPoolOfRows,
+								const int* choicesPoolOfColumns,
+								const int numberOfRowChoicesInPool,
+								const int numberOfColmunsChoicesInPool,
+								const int numberOfChoicesToBeChosen,
 								int* numberOfPossibleChoices
 								);
 	if(numberOfChoicesToBeChosen == 1){
@@ -294,10 +294,10 @@ int*** findMatrixRecursion2	(int** databaseMatrix,
 			
 			int numberOfNewSets;
 			int*** possibleSolutions = findMatrixRecursion2(
-                                                            databaseMatrix,
-                                                            newTargetMatrix,
-                                                            newPoolOfRow,
-                                                            newPoolOfColumn,
+                                                            (const int**)databaseMatrix,
+                                                            (const int**)newTargetMatrix,
+                                                            (const int*)newPoolOfRow,
+                                                            (const int*)newPoolOfColumn,
                                                             numberOfRowChoicesInPool - 1,
                                                             numberOfColmunsChoicesInPool - 1,
                                                             numberOfChoicesToBeChosen - 1,
@@ -403,7 +403,7 @@ void Plasmid::findCompleteCandidates(
    
 void Plasmid::findCompleteCandidatesUsingBiobricks(
 													const int numRow,
-													const int numcolumn,
+													const int numColumn,
 													const std::string* namesOfRegulators,
 													const std::string* namesOfRegulatees,
 													const int** database)
@@ -411,16 +411,25 @@ void Plasmid::findCompleteCandidatesUsingBiobricks(
 	int*** candidateIndice;
 	int numberOfCandidates;
 	int *choicePoolOfRows = new int[numRow];
-	int *choicePoolOfColumns = new int[numcolumn];
+	int *choicePoolOfColumns = new int[numColumn];
 
 	for(int i = 0 ; i < numRow; i++){
 		choicePoolOfRows[i] = i;
 	}
-	for(int i = 0 ; i < numcolumn; i++){
+	for(int i = 0 ; i < numColumn; i++){
 		choicePoolOfColumns[i] = i;
 	}
 
-	candidateIndice = findMatrixRecursion2(database, (const int**)wholeRegulatoryMatrix,choicePoolOfRows,choicePoolOfColumns,numRow,numcolumn,numOfGenes,&numberOfCandidates);
+	candidateIndice = findMatrixRecursion2(
+                                           database,
+                                           (const int**)wholeRegulatoryMatrix,
+                                           choicePoolOfRows,
+                                           choicePoolOfColumns,
+                                           numRow,
+                                           numColumn,
+                                           numOfGenes,
+                                           &numberOfCandidates
+                                           );
 	biobrickPlans.clear();
 
 	for(int i = 0;i < numberOfCandidates;i++){

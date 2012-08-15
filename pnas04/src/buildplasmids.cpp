@@ -99,9 +99,14 @@ void BuildPlasmids::loadDatabase(){
 	promoterNames = new std::string[numOfPromoters];
 	for(int i = 0;i < numOfGenes; i++){
 		databaseOfGenesAndPromoters >> geneNames[i];
+        std::cout << geneNames[i] << "\t";
 	}
+    
+    std::cout << std::endl << std::endl;
+    
 	for(int i = 0;i < numOfPromoters;i++){
 		databaseOfGenesAndPromoters >> promoterNames[i];
+        std::cout << promoterNames[i] << "\t";
 	}
 
 	wholeRegulatoryMatrixOfGenesAndPromoters = new int*[numOfPromoters];
@@ -109,7 +114,9 @@ void BuildPlasmids::loadDatabase(){
 		wholeRegulatoryMatrixOfGenesAndPromoters[i] = new int[numOfGenes];
 		for(int j = 0;j < numOfGenes; j++){
 			databaseOfGenesAndPromoters >> wholeRegulatoryMatrixOfGenesAndPromoters[i][j];
+            std::cout << wholeRegulatoryMatrixOfGenesAndPromoters[i][j] << "\t";
 		}
+        std::cout << std::endl << std::endl;
 	}
 
 	databaseOfGenesAndPromoters.close();
@@ -159,18 +166,18 @@ void BuildPlasmids::buildUsingBioBricks(){
         
         //  find complete regulatory matrix in the database
         plasmids[plasmidIndex] -> findCompleteCandidatesUsingBiobricks(
-                                                         numOfRegulatees,
-                                                         numOfRegulators,
+                                                         numOfPromoters,
+                                                         numOfGenes,
                                                          regulatorNames,
                                                          regulateeNames,
-                                                         (const int**)wholeRegulatoryMatrixInDataBase
+                                                         (const int**)wholeRegulatoryMatrixOfGenesAndPromoters
                                                          );
         
         //  generate plans to build the plasmid
-        plasmids[plasmidIndex] -> generatePlans();
+        //plasmids[plasmidIndex] -> generatePlans();
         
         //  output those plans into files
-        plasmids[plasmidIndex] -> generatePlanOutputs(plasmidIndex);
+        //plasmids[plasmidIndex] -> generatePlanOutputs(plasmidIndex);
         
     }
    

@@ -166,6 +166,15 @@ int** findMatrixRecursion(
                     aChoice[k] = possibleSolutions[i][k - 1];
                 }
                 choicesVector.push_back(aChoice);
+                
+                if (numOfWorkingChoices > 99) {
+                    *numberOfPossibleChoiceSets = numOfWorkingChoices;
+                    int **choices = new int*[numOfWorkingChoices];
+                    for (int k = 0; k < numOfWorkingChoices; k++) {
+                        choices[k] = choicesVector[k];
+                    }
+                    return choices;      //      restriction to the total number of results
+                }
             }
         }
     }
@@ -328,7 +337,16 @@ int*** findMatrixRecursion2	(const int** databaseMatrix,
 						aChoice[1][k] = possibleSolutions[i][1][k - 1];
 					}
 					choicesVector.push_back (aChoice);
-				}
+                    if (numOfWorkingChoices > 99) {
+                        *numberOfPossibleChoices = numOfWorkingChoices;
+                        int ***choices = new int**[numOfWorkingChoices];
+                        for(int i = 0 ; i < numOfWorkingChoices; i ++){
+                            choices[i] = choicesVector[i];
+                        }
+                        return choices;      //      restriction to the total number of results
+                    }
+
+                }
 			}
 		}
     }

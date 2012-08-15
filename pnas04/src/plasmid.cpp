@@ -420,13 +420,13 @@ void Plasmid::findCompleteCandidatesUsingBiobricks(
 		choicePoolOfColumns[i] = i;
 	}
 
-	candidateIndice = findMatrixRecursion2(database, (const int**)wholeRegulatoryMatrix,choicePoolOfRows,choicePoolOfColumns,numRow,numcolumn,numOfGenes,&numberOfCandidates);
+	candidateIndice = findMatrixRecursion2(database, wholeRegulatoryMatrix,choicePoolOfRows,choicePoolOfColumns,numRow,numcolumn,numOfGenes,&numberOfCandidates);
 	biobrickPlans.clear();
 
 	for(int i = 0;i < numberOfCandidates;i++){
 		std::vector<BioBrick*> aPlan;
 		for(int j = 0; j < numOfGenes; j++){ 
-				BioBrick *aNewBiobrick = new BioBrick(namesOfRegulators[candidateIndice[i][0][j]],namesOfRegulatees[candidateIndice[i][1][j]]);
+				BioBrick *aNewBiobrick = new BioBrick(namesOfRegulators[candidateIndice[i][1][j]],namesOfRegulatees[candidateIndice[i][0][j]]);
 			    aPlan.push_back(aNewBiobrick);
 		}
 		biobrickPlans.push_back(aPlan);

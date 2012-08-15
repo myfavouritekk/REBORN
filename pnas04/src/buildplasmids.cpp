@@ -168,8 +168,8 @@ void BuildPlasmids::buildUsingBioBricks(){
         plasmids[plasmidIndex] -> findCompleteCandidatesUsingBiobricks(
                                                          numOfPromoters,
                                                          numOfGenes,
-                                                         regulatorNames,
-                                                         regulateeNames,
+                                                         geneNames,
+                                                         promoterNames,
                                                          (const int**)wholeRegulatoryMatrixOfGenesAndPromoters
                                                          );
         

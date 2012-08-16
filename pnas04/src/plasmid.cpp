@@ -316,10 +316,10 @@ int*** findMatrixRecursion2	(const int** databaseMatrix,
 			for(int i = 0; i < numberOfNewSets; i ++){
 				bool work = true;
 				for(int j = 0; j < numberOfChoicesToBeChosen - 1; j ++){
-					if(databaseMatrix[firstElement[0][0]][possibleSolutions[i][1][j]] != 2 &&
-                       targetMatrix[0][j + 1] != databaseMatrix[firstElement[1][0]][possibleSolutions[i][1][j]] &&
-                       databaseMatrix[possibleSolutions[i][0][j]][firstElement[1][0]] != 2 &&
-                       targetMatrix[j + 1][0] != databaseMatrix[possibleSolutions[i][0][j]][firstElement[1][0]] )
+					if((databaseMatrix[firstElement[0][0]][possibleSolutions[i][1][j]] != 2 &&
+                       targetMatrix[0][j + 1] != databaseMatrix[firstElement[0][0]][possibleSolutions[i][1][j]]) ||
+                       (databaseMatrix[possibleSolutions[i][0][j]][firstElement[1][0]] != 2 &&
+                       targetMatrix[j + 1][0] != databaseMatrix[possibleSolutions[i][0][j]][firstElement[1][0]]) )
 					   {
 						work = false;
 						break;

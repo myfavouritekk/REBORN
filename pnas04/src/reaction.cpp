@@ -345,7 +345,7 @@ std::string Reaction::htmlDescription(int reactionIndex){
     
     
     //Print Type:
-    result << "<p>Type: " << "Type " << (int)rtype << "  ";
+    result << "<p>Type: ";
     switch (rtype) {
         case TRANSCRIPTION:
             result << "Transcription";

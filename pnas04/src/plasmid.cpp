@@ -365,7 +365,7 @@ int*** findMatrixRecursion2	(const int** databaseMatrix,
 void Plasmid::findCompleteCandidates(
                                      const int numRowOfDatabase,
                                      const int numColumnOfDatabase,
-                                     const std::string* namesOfRegualters,
+                                     const std::string* namesOfRegulators,
                                      const std::string* namesOfRegulatees,
                                      const int** database
                                      )
@@ -397,7 +397,7 @@ void Plasmid::findCompleteCandidates(
             
             //  constructing a regulator
             RegulatorCandidates* aRegulator = new RegulatorCandidates;
-            aRegulator -> name = namesOfRegualters[candidateIndice[i][j]];
+            aRegulator -> name = namesOfRegulators[candidateIndice[i][j]];
             //  find its regulatees
             for (int k = 0; k < numOfGenes; k++) {
                 //  find regulation that is not 0

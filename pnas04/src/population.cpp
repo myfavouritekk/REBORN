@@ -572,7 +572,31 @@ void Population::output(){
     
     
 }
-  
+
+
+void Population::genHTMLFormat(){
+    
+    Cell* currCell;
+    for (int i = 0; i < NUM_SBMLMODEL; i++) {
+        currCell = cells[i];
+        //      create html file;
+        std::ofstream htmlOutput;
+        std::stringstream fileName;
+        fileName << HTML_SAVES_PATH << "Cell_" << i << "_Description.html";
+        htmlOutput.open(fileName.str().c_str());
+        htmlOutput << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\"\n\"http://www.w3.org/TR/html4/strict.dtd\">";
+        htmlOutput << "<html>\n<head>\n<title>Cell " << i + 1 << " Details</title>\n";
+        //      link css file
+        htmlOutput << "<link href=\"cell_description_style.css\" type=\"text/css\" rel=\"stylesheet\" />";
+        htmlOutput << "</head>\n";
+        htmlOutput << currCell -> htmlDescription();
+        htmlOutput << "</html>\n";
+        
+        htmlOutput.close();
+    }
+}
+    
+    
 void Population:: genSBMLFormat(){
 	
 	// creat unit

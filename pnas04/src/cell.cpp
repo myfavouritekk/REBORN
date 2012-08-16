@@ -190,6 +190,10 @@ void Cell::addRanking(int ranking){
     rankings.push_back(ranking);
 }
 
+int Cell::getIndex(){
+    return cellIndex;
+}
+    
 
 /*
  *five types of mutation:
@@ -1135,6 +1139,53 @@ void Cell::description(int time){
 }
 
 
+//html description method
+std::string Cell::htmlDescription(){
+    
+    std::stringstream bodyMarkUp;
+    
+    bodyMarkUp << "<body>\n";
+    //      global wrapper
+    bodyMarkUp << "<div id=\"wrapper\">\n";
+    
+    bodyMarkUp << "<div id=\"header\"><h1>Cell " << cellIndex + 1 << "</h1></div>\n<div id=\"details\">\n";
+    bodyMarkUp << "<h2>Rankings:</h2>\n<p>";
+    for (int i = 0; i < (int)rankings.size(); i++) {
+        bodyMarkUp << rankings[i];
+        if (i != (int)rankings.size() - 1) {
+            bodyMarkUp << " -> ";
+        }
+    }
+    bodyMarkUp << "</p>";
+    
+    //      print Nodes
+    bodyMarkUp << "<div id=\"nodes\">\n";
+    bodyMarkUp << "<h2>Nodes:</h2>\n";
+    for (int i = 0; i < (int)nodes.size(); i++) {
+        bodyMarkUp << "<p>Node " << i << ": ";
+        bodyMarkUp << nodes[i] -> getNstring();
+        bodyMarkUp << "</p>\n";
+    }
+    bodyMarkUp << "</div>\n";   //      nodes div close tag
+    
+    //      print Reactions
+    bodyMarkUp << "<div id=\"reactions\">\n";
+    bodyMarkUp << "<h2>Reactions:</h2>\n";
+    for (int i = 0; i < (int)rlist.size(); i++) {
+        bodyMarkUp << "<h3>Reaction " << i << ":</h3>\n";
+        bodyMarkUp << rlist[i] -> htmlDescription(i);
+    }
+    bodyMarkUp << "</div>\n";   //      reaction div close tag
+
+    bodyMarkUp << "</div>\n";   //      wrapper close tag
+
+    
+    bodyMarkUp << "</body>\n";
+    return bodyMarkUp.str();
+}
+
+    
+    
 std::vector<Node*>* Cell::getNodesVector(){
     return &nodes;
 }

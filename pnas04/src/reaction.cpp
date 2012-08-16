@@ -339,6 +339,84 @@ void Reaction::description(int reactionIndex){
     
 }
 
+//output method
+std::string Reaction::htmlDescription(int reactionIndex){
+    std::stringstream result;
+    
+    
+    //Print Type:
+    result << "<p>Type: " << "Type " << (int)rtype << "  ";
+    switch (rtype) {
+        case TRANSCRIPTION:
+            result << "Transcription";
+            break;
+        case DEGRADATION:
+            result << "Protein Degradation";
+            break;
+        case BINDING:
+            result << "Binding";
+            break;
+        case MODIFICATION:
+            result << "Modification";
+            break;
+        case PARTIAL_DEGRADATION:
+            result << "Partial Degradation";
+            break;
+        case DIMERIZATION:
+            result << "Dimerization";
+            break;
+        case CATALYTIC_DEGRADATION:
+            result << "Catalytic Degradation";
+            break;
+        case PARTIAL_CATALYTIC_DEGRADATION:
+            result << "Partial Catalytic Degradation";
+            break;
+        default:
+            break;
+    }
+    result << "</p>\n";
+    
+    //Print reactant, modifiers and products
+    result << "<p>Reactants: ";
+    vector<Node*>::iterator iter = reactants.begin();
+    while (iter != reactants.end()) {
+        result << (*iter)->getNstring() << "\t";
+        iter++;
+    }
+    if ((int)reactants.size() == 0) {
+        result << "none";
+    }
+    result << "</p>\n";
+    result << "<p>Modifiers: ";
+    iter = modifiers.begin();
+    while (iter != modifiers.end()) {
+        result << (*iter)->getNstring() << "\t";
+        iter++;
+    }
+    if ((int)modifiers.size() == 0) {
+        result << "none";
+    }
+    result << "</p>\n";
+    result << "<p>Products: ";
+    iter = products.begin();
+    while (iter != products.end()) {
+        result << (*iter)->getNstring() << "\t";
+        iter++;
+    }
+    if ((int)products.size() == 0) {
+        result << "none";
+    }
+    result << "</p>\n";
+    
+    //Print kinect rates
+    result << "<p>Forward rate: " << forwardRate << "</p>\n";
+    result << "<p>Reverse rate: " << reverseRate << "</p>\n";
+    
+    return result.str();
+}
+    
+    
+    
 }//namespace ustc
 
 

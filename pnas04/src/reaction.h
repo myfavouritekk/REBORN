@@ -88,7 +88,10 @@ class Reaction{
 
         //output method
         void description(int reactionIndex);
-    
+        
+        //output method
+        std::string htmlDescription(int reactionIndex);
+        
 
     private:
 

@@ -48,6 +48,7 @@ void NetworkInference::reverseEngineering(){
     myPop.sort();
     myPop.output();
     myPop.genSBMLFormat();
+    myPop.genHTMLFormat();
 }
 
 

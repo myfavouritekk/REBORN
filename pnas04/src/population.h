@@ -90,6 +90,8 @@ class Population {
         //generating XML output format
         void genXMLFormat();
        
+        //generating HTML output format for display in GUI
+        void genHTMLFormat();
     
         //generating SBML output format
         void genSBMLFormat();

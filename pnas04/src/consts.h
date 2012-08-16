@@ -27,6 +27,7 @@
 #define PROMOTERS_PATH DATABASE_PATH"promoters/"
 #define RBSES_PATH DATABASE_PATH"rbses/"
 #define TERMINATORS_PATH DATABASE_PATH"rbses/"
+#define HTML_SAVES_PATH SAVES_PATH"html/"
 //
 //      constants in network inference process
 //
@@ -35,10 +36,10 @@
 #define TOTAL_EVO 1000
 
 //      Total number of cells
-#define POPULATION 1000
+#define POPULATION 20
 
 //      Number of cells that do not change topology
-#define CELLS_UNCHANGED 5
+#define CELLS_UNCHANGED 0
 
 //      Number of cells that are generated to SBMLModels
 #define NUM_SBMLMODEL 10

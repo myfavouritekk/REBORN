@@ -52,6 +52,10 @@ class Cell {
         //description method
         void description(int time);
     
+    
+        //html description method
+        std::string htmlDescription();
+    
         //cell's equation operator
         bool operator== (Cell& aCell);
     

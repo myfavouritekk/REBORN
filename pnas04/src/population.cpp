@@ -16,7 +16,7 @@ Population::~Population () {
 	if(ypoints != NULL) {
         for (int i = 0; i < numInputSets; i++) {
             for(int ir = 0; ir < numind + numprot; ir++) {
-                if(ypoints[ir] != NULL) {
+                if(ypoints[i][ir] != NULL) {
                     delete [] ypoints[i][ir];
                 }
             }

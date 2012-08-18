@@ -426,25 +426,69 @@ void Plasmid::findCompleteCandidatesUsingBiobricks(
 													const std::string* namesOfRegulatees,
 													const int** database)
 {
+    
+    
+    //==========================================================================//
+    //      because this method usually finds too many suitable results,        //
+    //      so the database is too big, here reduce the database                //
+    //==========================================================================//
+    
+    const int reducedNumRow = 50;
+    const int reducedNumColumn = 50;
+    int* reducedRow = new int[reducedNumRow];
+    int* reducedColumn = new int[reducedNumColumn];
+    
+    
+
+    
+    //      choose 50 rows and columns in the database to construct reduced database
+    for (int i = 0; i < reducedNumRow; i++) {
+        int aChoice;
+        bool exists;
+        do {
+            aChoice = rand() % numRow;
+            exists = false;
+            for (int j = 0; j < i; j++) {
+                if (aChoice == reducedRow[j]) {
+                    exists = true;
+                    break;
+                }
+            }
+        } while (exists);
+        reducedRow[i] = aChoice;
+        std::cout << reducedRow[i] << " ";
+    }
+    std::cout << std::endl;
+    
+    for (int i = 0; i < reducedNumColumn; i++) {
+        int aChoice;
+        bool exists;
+        do {
+            aChoice = rand() % numColumn;
+            exists = false;
+            for (int j = 0; j < i; j++) {
+                if (aChoice == reducedColumn[j]) {
+                    exists = true;
+                    break;
+                }
+            }
+        } while (exists);
+        reducedColumn[i] = aChoice;
+        std::cout << reducedColumn[i] << " ";
+    }
+    std::cout << std::endl;
+    
+    
 	int*** candidateIndice;
 	int numberOfCandidates;
-	int *choicePoolOfRows = new int[numRow];
-	int *choicePoolOfColumns = new int[numColumn];
-
-	for(int i = 0 ; i < numRow; i++){
-		choicePoolOfRows[i] = i;
-	}
-	for(int i = 0 ; i < numColumn; i++){
-		choicePoolOfColumns[i] = i;
-	}
 
 	candidateIndice = findMatrixRecursion2(
                                            database,
                                            (const int**)wholeRegulatoryMatrix,
-                                           choicePoolOfRows,
-                                           choicePoolOfColumns,
-                                           numRow,
-                                           numColumn,
+                                           reducedRow,
+                                           reducedColumn,
+                                           reducedNumRow,
+                                           reducedNumColumn,
                                            numOfGenes,
                                            &numberOfCandidates
                                            );

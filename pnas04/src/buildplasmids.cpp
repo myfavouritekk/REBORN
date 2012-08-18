@@ -173,8 +173,6 @@ void BuildPlasmids::buildUsingBioBricks(){
                                                          (const int**)wholeRegulatoryMatrixOfGenesAndPromoters
                                                          );
         
-        //  generate plans to build the plasmid
-        //plasmids[plasmidIndex] -> generatePlans();
         
         //  output those plans into files
         //plasmids[plasmidIndex] -> generatePlanOutputs(plasmidIndex);

@@ -4,6 +4,9 @@
 #include <stdlib.h>
 
 
+//  global constants
+//  default values
+//  
 //      Total evolution number of the program
 int total_evo = 1000;
 
@@ -17,13 +20,16 @@ int cells_unchanged = 5;
 int num_sbmlmodel = 10;
 
 
+void printHelp() {
+    std::cout << "Usage: reborn_cl [options]\n\n-e total_evo\t\t-p population\n-u cells_unchanged\t-b num_sbmlmodel" << std::endl;
+    std::cout << "Example: reborn_cl -e 1000 -p 200 -u 5 -b 10" << std::endl;
+}
+
+
+
+
 int main (int argc, char *argv[]) {
     
-    //  global constants
-    //  default values
-    
-
-
     
     for (int i = 1; i < argc; i++) {
         if ('-' == argv[i][0]) {
@@ -50,12 +56,21 @@ int main (int argc, char *argv[]) {
                     break;
                     
                 default:
-                    break;
+                    printHelp();
+                    return 0;
             }
+        }
+        else {
+            printHelp();
+            return 0;
         }
     }
     
-    
+    if (total_evo == 0 || population == 0 || num_sbmlmodel == 0)
+    {
+        printHelp();
+        return 0;
+    }
 
     time_t start, end;
     time(&start);

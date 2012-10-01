@@ -40,12 +40,14 @@ Population::~Population () {
 
 
 //population initializer
-void Population::init(){
+void Population::init(std::string fn){
     
     //read dynamic data
-    std::string fn;
-    std::cout << "Enter the input file name:" << std::endl;
-    std::cin >> fn;
+    //std::string fn;
+    if (!fn.length()) {
+        std::cout << "Enter the input file name:" << std::endl;
+        std::cin >> fn;
+    }
     
     //initialize the total set of cells that can contain 2*ncell cells
     cells = new Cell*[2 * ncell];

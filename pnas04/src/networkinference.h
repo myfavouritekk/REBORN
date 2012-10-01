@@ -28,7 +28,7 @@ public:
     //      the how process of generating genetic regulatory networks
     //      based on the input time courses
     //
-    void reverseEngineering();
+    void reverseEngineering(std::string);
     
 private:
     

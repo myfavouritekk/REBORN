@@ -18,12 +18,12 @@ NetworkInference::~NetworkInference()
 {}
 
 
-void NetworkInference::reverseEngineering(){
+void NetworkInference::reverseEngineering(std::string fn){
     
     srand(1);
     //  initialization
     ustc::Population myPop(population, total_evo);
-    myPop.init ();
+    myPop.init(fn);
     //  ask users if they can input more information about the cell
     askInformation(&myPop);
     

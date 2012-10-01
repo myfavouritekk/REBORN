@@ -21,7 +21,7 @@ int num_sbmlmodel = 10;
 
 
 void printHelp() {
-    std::cout << "Usage: reborn_cl [options]\n\n-e total_evo\t\t-p population\n-u cells_unchanged\t-b num_sbmlmodel" << std::endl;
+    std::cout << "Usage: reborn_cl [options]\n\n-f input_file_name\n-e total_evo\t\t-p population\n-u cells_unchanged\t-b num_sbmlmodel" << std::endl;
     std::cout << "Example: reborn_cl -e 1000 -p 200 -u 5 -b 10" << std::endl;
 }
 
@@ -30,7 +30,8 @@ void printHelp() {
 
 int main (int argc, char *argv[]) {
     
-    
+    std::string inputfilename;
+
     for (int i = 1; i < argc; i++) {
         if ('-' == argv[i][0]) {
             switch (argv[i][1]) {
@@ -54,7 +55,12 @@ int main (int argc, char *argv[]) {
                 case 'B':
                     num_sbmlmodel = atoi(argv[++i]);
                     break;
-                    
+
+                case 'f':
+                case 'F':
+                    inputfilename = string(argv[++i]);
+                    break;
+
                 default:
                     printHelp();
                     return 0;
@@ -76,7 +82,7 @@ int main (int argc, char *argv[]) {
     time(&start);
     
     ustc::NetworkInference networkInference;
-    networkInference.reverseEngineering();
+    networkInference.reverseEngineering(inputfilename);
     
     time(&end);
     double NIDuration = difftime(end, start);

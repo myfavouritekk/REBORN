@@ -49,7 +49,7 @@ class Population {
         void readDynamicsFromConsole();
 
         //initializer
-        void init();
+        void init(std::string);
     
         //get evolution number
         int getEvolution();

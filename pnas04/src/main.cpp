@@ -9,16 +9,16 @@ int main (int argc, char *argv[]) {
     //  default values
     
     //      Total evolution number of the program
-    TOTAL_EVO = 1000;
+    total_evo = 1000;
     
     //      Total number of cells
-    POPULATION = 200;
+    population = 200;
     
     //      Number of cells that do not change topology
-    CELLS_UNCHANGED = 5;
+    cells_unchanged = 5;
     
     //      Number of cells that are generated to SBMLModels
-    NUM_SBMLMODEL = 10;
+    num_sbmlmodel = 10;
 
     
     for (int i = 1; i < argc; i++) {
@@ -27,22 +27,22 @@ int main (int argc, char *argv[]) {
                 
                 case 'e':
                 case 'E':
-                    TOTAL_EVO = atoi(argv[++i]);
+                    total_evo = atoi(argv[++i]);
                     break;
                     
                 case 'p':
                 case 'P':
-                    POPULATION = atoi(argv[++i]);
+                    population = atoi(argv[++i]);
                     break;
                 
                 case 'u':
                 case 'U':
-                    CELLS_UNCHANGED = atoi(argv[++i]);
+                    cells_unchanged = atoi(argv[++i]);
                     break;
                     
                 case 'b':
                 case 'B':
-                    NUM_SBMLMODEL = atoi(argv[++i]);
+                    num_sbmlmodel = atoi(argv[++i]);
                     break;
                     
                 default:

@@ -22,7 +22,7 @@ void NetworkInference::reverseEngineering(){
     
     srand(1);
     //  initialization
-    ustc::Population myPop(POPULATION, TOTAL_EVO);
+    ustc::Population myPop(population, total_evo);
     myPop.init ();
     //  ask users if they can input more information about the cell
     askInformation(&myPop);
@@ -31,7 +31,7 @@ void NetworkInference::reverseEngineering(){
     int sum = 1;
     //  evolution
     while (!myPop.isTerminate ()) {
-        if ((TOTAL_EVO + 1 - myPop.getEvolution()) % (50 * sum) == 0) {
+        if ((total_evo + 1 - myPop.getEvolution()) % (50 * sum) == 0) {
             //sort
             myPop.sort();
             myPop.output();
@@ -40,7 +40,7 @@ void NetworkInference::reverseEngineering(){
             sum += i;
         }
         myPop.mut_parameters_simAnneal();
-        std::cout << "Finished Evolution: " << TOTAL_EVO - myPop.getEvolution() << std::endl;
+        std::cout << "Finished Evolution: " << total_evo - myPop.getEvolution() << std::endl;
     }
     
     
@@ -87,7 +87,7 @@ void NetworkInference::askInformation(ustc::Population* targetPop){
             std::cin >> tempIndex;
             int index = (tempIndex - 1);
             rType = ustc::MODIFICATION;
-            for(int i = 0; i < POPULATION; i ++){
+            for(int i = 0; i < population; i ++){
                 ((targetPop -> getCells())[i]) -> addReaction(rType,index);
             }
         }
@@ -115,7 +115,7 @@ void NetworkInference::askInformation(ustc::Population* targetPop){
             std::cout<< "please type in the index of another reactans";
             std::cin>> tempIndex2;
             index2 = (tempIndex2 - 1);
-            for(int i = 0; i < POPULATION; i ++){
+            for(int i = 0; i < population; i ++){
                 ((targetPop -> getCells())[i]) -> addReaction(rType,index1,index2);
             }
         }

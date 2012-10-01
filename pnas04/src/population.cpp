@@ -94,7 +94,7 @@ void Population::growth(){;
 //mutation only for topology
 void Population::mutation(){
     Cell* currCell;
-    for(int i = CELLS_UNCHANGED; i < ncell; i++){
+    for(int i = cells_unchanged; i < ncell; i++){
         
         currCell = cells[i];
         
@@ -218,7 +218,7 @@ void Population::selection(){
         }
     }
     
-    std::cout << "Finished Evolution: " << TOTAL_EVO - evolution + 1 << std::endl;
+    std::cout << "Finished Evolution: " << total_evo - evolution + 1 << std::endl;
     std::cout << "BestScore: " << cells[0]->getCurrScore() << std::endl;
 }
 
@@ -553,7 +553,7 @@ void Population::output(){
         currCell = cells[i];
         currCell->generateTimeCourses(ypoints, numind + numprot, numr);
         
-        int generation = TOTAL_EVO - evolution + 1;// current generation of whole evolution process
+        int generation = total_evo - evolution + 1;// current generation of whole evolution process
         int ranking = i + 1; //ranking of this cell
         std::stringstream name;
         name << "generation_" << generation << "_cell_" << ranking << ".txt";
@@ -578,7 +578,7 @@ void Population::output(){
 void Population::genHTMLFormat(){
     
     Cell* currCell;
-    for (int i = 0; i < NUM_SBMLMODEL; i++) {
+    for (int i = 0; i < num_sbmlmodel; i++) {
         currCell = cells[i];
         //      create html file;
         std::ofstream htmlOutput;
@@ -603,7 +603,7 @@ void Population:: genSBMLFormat(){
 	// creat unit
     
 	// define sp
-    for (int i = 0; i < NUM_SBMLMODEL; i++) {
+    for (int i = 0; i < num_sbmlmodel; i++) {
         
         // declear model
         std::stringstream ss;

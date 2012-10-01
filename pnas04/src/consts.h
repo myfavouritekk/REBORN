@@ -33,16 +33,16 @@
 //
 
 //      Total evolution number of the program
-int TOTAL_EVO;// 1000
+extern int total_evo;// 1000
 
 //      Total number of cells
-int POPULATION;// 200
+extern int population;// 200
 
 //      Number of cells that do not change topology
-int CELLS_UNCHANGED;// 5
+extern int cells_unchanged;// 5
 
 //      Number of cells that are generated to SBMLModels
-int NUM_SBMLMODEL;// 10
+extern int num_sbmlmodel;// 10
 
 //      parameters for mutation in Cell
 #define PROB_MUT_DEG_PROT 0.5

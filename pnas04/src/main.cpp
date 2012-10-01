@@ -3,22 +3,26 @@
 #include "buildplasmids.h"
 #include <stdlib.h>
 
+
+//      Total evolution number of the program
+int total_evo = 1000;
+
+//      Total number of cells
+int population = 200;
+
+//      Number of cells that do not change topology
+int cells_unchanged = 5;
+
+//      Number of cells that are generated to SBMLModels
+int num_sbmlmodel = 10;
+
+
 int main (int argc, char *argv[]) {
     
     //  global constants
     //  default values
     
-    //      Total evolution number of the program
-    total_evo = 1000;
-    
-    //      Total number of cells
-    population = 200;
-    
-    //      Number of cells that do not change topology
-    cells_unchanged = 5;
-    
-    //      Number of cells that are generated to SBMLModels
-    num_sbmlmodel = 10;
+
 
     
     for (int i = 1; i < argc; i++) {

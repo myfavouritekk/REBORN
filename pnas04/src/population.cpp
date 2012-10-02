@@ -565,15 +565,12 @@ void Population::output(){
         
     }
     
-    //plot the best result
-    currCell = cells[0];
-    std::cout << "Best Time Courses:" << std::endl;
-    currCell->getScore(sfunc, ypoints, numind + numprot, numr, true);
-    std::cout << "Best Cell:" << std::endl;
-    currCell->generateTimeCourses(ypoints, numind + numprot, numr);
-    currCell->description(numr);
-    
-    
+    // _num_sbmlmodel cells' time courses
+    for (int i = 0 ; i < num_sbmlmodel; i++) {
+        currCell = cells[i];
+        std::cout << "Time Courses of Cell " << i + 1  << std::endl;
+        currCell->getScore(sfunc, ypoints, numind + numprot, numr, true);
+    }
 }
 
 

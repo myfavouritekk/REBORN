@@ -37,7 +37,7 @@ void NetworkInference::reverseEngineering(std::string fn, bool isnoinfo){
         if ((total_evo + 1 - myPop.getEvolution()) % (50 * sum) == 0) {
             //sort
             myPop.sort();
-            myPop.output();
+            //myPop.output();
             myPop.mutation();
             i++;
             sum += i;

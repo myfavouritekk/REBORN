@@ -963,8 +963,8 @@ void Cell::generateTimeCourses(double*** targetData,int numTargetNodes, int time
  *third: assign the score to currScore
  *prerequirements: nodes in the cell's "nodes" vector should be sorted by indice
  */
-void Cell::getScore(ScoreFunc& sfunc, double*** targetData, int numTargetNodes, int time, bool print){
-	
+void Cell::getScore(ScoreFunc& sfunc, double*** targetData, int numind, int numprot, int time, bool print){
+	int numTargetNodes = numind + numprot;
 	double score = 0;
 	int** timeOfAddInducers = new int*[numInputSets];
 	for(int i = 0; i < numInputSets; i++){
@@ -1053,13 +1053,14 @@ void Cell::getScore(ScoreFunc& sfunc, double*** targetData, int numTargetNodes, 
         std::stringstream timeCoursesFileName;
         timeCoursesFileName << output_path << "Cell_" << cellIndex << "_TimeCourses.txt";
         timeCoursesFile.open(timeCoursesFileName.str().c_str());
+        timeCoursesFile << time << "\t" << numind << "\t" << numprot << "\t" << numInputSets << "\t";
 		for (int i = 0; i < numInputSets; i++){
 			for (int j = 0; j < numTargetNodes; j++) {
 				for (int k = 0; k < time; k++) {
-					std::cout << this->currData[i][inputIndice[j]][k] << "\t";
+					//std::cout << this->currData[i][inputIndice[j]][k] << "\t";
 					timeCoursesFile << this->currData[i][inputIndice[j]][k] << "\t";
 				}
-				std::cout << std::endl;
+				//std::cout << std::endl;
 				timeCoursesFile << std::endl;
 			}
 		}

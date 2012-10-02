@@ -57,7 +57,7 @@ void Population::init(std::string fn){
     //	for each cell, initialization
 	for (int i = 0; i < ncell; i++) {
 		cells[i] = new Cell(numind, numprot, numInputSets);
-        cells[i]->getScore(sfunc, ypoints, numind + numprot, numr, false);//getScore in initialization
+        cells[i]->getScore(sfunc, ypoints, numind, numprot, numr, false);//getScore in initialization
 	}
 
    
@@ -88,7 +88,7 @@ void Population::growth(){;
         currCell->mutation();
         
         //get its score
-        currCell->getScore(sfunc, ypoints, numind + numprot, numr, false);
+        currCell->getScore(sfunc, ypoints, numind, numprot, numr, false);
     }
     evolution--;//evolution once
 }
@@ -117,8 +117,8 @@ void Population::mut_parameters(){
         curCell = cells[ncell + i];
         curCell -> mut_parameters();
         
-        curCell -> getScore(sfunc, ypoints, numind + numprot, numr, false);
-        cells[i] -> getScore(sfunc, ypoints, numind + numprot, numr, false);
+        curCell -> getScore(sfunc, ypoints, numind, numprot, numr, false);
+        cells[i] -> getScore(sfunc, ypoints, numind, numprot, numr, false);
         
         if (curCell -> getCurrScore() < cells[i] -> getCurrScore()) {
             delete cells[i];
@@ -140,8 +140,8 @@ void Population::mut_parameters_simAnneal(){
         curCell = cells[ncell + i];
         curCell -> mut_parameters_simAnneal();
         
-        curCell -> getScore(sfunc, ypoints, numind + numprot, numr, false);
-        cells[i] -> getScore(sfunc, ypoints, numind + numprot, numr, false);
+        curCell -> getScore(sfunc, ypoints, numind, numprot, numr, false);
+        cells[i] -> getScore(sfunc, ypoints, numind, numprot, numr, false);
         
         if (curCell -> getCurrScore() < cells[i] -> getCurrScore()) {
             delete cells[i];
@@ -569,7 +569,7 @@ void Population::output(){
     for (int i = 0 ; i < num_sbmlmodel; i++) {
         currCell = cells[i];
         std::cout << "Time Courses of Cell " << i + 1  << std::endl;
-        currCell->getScore(sfunc, ypoints, numind + numprot, numr, true);
+        currCell->getScore(sfunc, ypoints, numind, numprot, numr, true);
     }
 }
 

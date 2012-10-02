@@ -775,8 +775,9 @@ void Population:: genSBMLFormat(){
 			}
 		}
         SBMLWriter sbmlWriter;
-        
-        bool result = sbmlWriter.writeSBML(sbmlDoc,ss.str());
+        std::stringstream sbmlfilepath;
+        sbmlfilepath << output_path << "SBMLModel_" << i << 1 <<".xml";
+        bool result = sbmlWriter.writeSBML(sbmlDoc, sbmlfilepath.str());
         
         if ( result ){
             std::cout << "Wrote file \"" << ss.str() << "\"" << std:: endl;

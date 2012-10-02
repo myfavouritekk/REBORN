@@ -19,7 +19,7 @@ Plasmid::Plasmid(){
     
 void Plasmid::readCompleteMatrix(const int cellIndex){
     std::stringstream fileName;
-    fileName << SAVES_PATH << "Cell_" << cellIndex << "_Complete.txt";
+    fileName << saves_path << "Cell_" << cellIndex << "_Complete.txt";
     std::fstream file;
     file.open(fileName.str().c_str());
     file >> numOfGenes;
@@ -540,7 +540,7 @@ void Plasmid::generatePlanOutputs(const int plasmidIndex){
     while (iter_plan != iter_plan_end) {
         std::ofstream plasmidPlanFile;
         std::stringstream plasmidPlanFileName;
-        plasmidPlanFileName << OUTPUT_PATH << "Plasmid_" << plasmidIndex + 1 <<"_Plan_" << planIndex << "_.txt";
+        plasmidPlanFileName << output_path << "Plasmid_" << plasmidIndex + 1 <<"_Plan_" << planIndex << "_.txt";
         plasmidPlanFile.open(plasmidPlanFileName.str().c_str());
         
         //  write this plan into a file

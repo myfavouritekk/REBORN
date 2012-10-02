@@ -20,9 +20,18 @@ int cells_unchanged = 5;
 int num_sbmlmodel = 10;
 
 
+
+std::string output_path("output/");
+std::string saves_path("saves/");
+std::string html_saves_path("saves/html/");
+
+
+
+
+
 void printHelp() {
-    std::cout << "Usage: reborn_cl [options]\n\n-f input_file_name\n-e total_evo\t\t-p population\n-u cells_unchanged\t-b num_sbmlmodel" << std::endl;
-    std::cout << "Example: reborn_cl -e 1000 -p 200 -u 5 -b 10" << std::endl;
+    std::cout << "Usage: reborn_cl [options]\n\n-f input_file_name\t-o output folder\n-n no more information\n-e total_evo\t\t-p population\n-u cells_unchanged\t-b num_sbmlmodel" << std::endl;
+    std::cout << "Example: reborn_cl -o Result/out -n -e 1000 -p 200 -u 5 -b 10" << std::endl;
 }
 
 
@@ -31,6 +40,7 @@ void printHelp() {
 int main (int argc, char *argv[]) {
     
     std::string inputfilename;
+    bool isnoinfo = 0;
 
     for (int i = 1; i < argc; i++) {
         if ('-' == argv[i][0]) {
@@ -61,6 +71,17 @@ int main (int argc, char *argv[]) {
                     inputfilename = string(argv[++i]);
                     break;
 
+                case 'o':
+                case 'O':
+                    output_path = string(argv[++i]) + "/" + output_path;
+                    saves_path = string(argv[i]) + "/" + saves_path;
+                    html_saves_path = string(argv[i]) + "/" + html_saves_path;
+                    break;
+
+                case 'n':
+                case 'N':
+                    isnoinfo = 1;
+                    break;
                 default:
                     printHelp();
                     return 0;
@@ -82,7 +103,7 @@ int main (int argc, char *argv[]) {
     time(&start);
     
     ustc::NetworkInference networkInference;
-    networkInference.reverseEngineering(inputfilename);
+    networkInference.reverseEngineering(inputfilename, isnoinfo);
     
     time(&end);
     double NIDuration = difftime(end, start);

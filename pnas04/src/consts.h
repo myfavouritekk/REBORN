@@ -9,25 +9,33 @@
 #ifndef PNAS04Team_consts_h
 #define PNAS04Team_consts_h
 
+#include <string>
+
 //
 //      glaobal constants
 //
 //      path strings
-#define ROOT_PATH "/users/apple/desktop/root/"
-#define INPUT_PATH ROOT_PATH"input/"
-#define OUTPUT_PATH ROOT_PATH"output/"
-#define DATABASE_PATH ROOT_PATH"database/"
-#define SAVES_PATH ROOT_PATH"saves/"
 
-#define COMPLETEMODEL_OUTPUT_PATH SAVES_PATH"complete/"
-#define MOTIFMODEL_OUTPUT_PATH SAVES_PATH"motifs/"
-#define COMPLETEMODEL_OUTPUT_PATH SAVES_PATH"complete/"
+//#define ROOT_PATH "/users/apple/desktop/root/"
+//#define INPUT_PATH "input/"
+#define DATABASE_PATH "database/"
+
 #define OPERONS_PATH DATABASE_PATH"operons/"
 #define GENES_PATH DATABASE_PATH"genes/"
 #define PROMOTERS_PATH DATABASE_PATH"promoters/"
 #define RBSES_PATH DATABASE_PATH"rbses/"
 #define TERMINATORS_PATH DATABASE_PATH"rbses/"
-#define HTML_SAVES_PATH SAVES_PATH"html/"
+
+
+//#define COMPLETEMODEL_OUTPUT_PATH saves_path"complete/"
+//#define MOTIFMODEL_OUTPUT_PATH saves_path"motifs/"
+
+extern std::string output_path;
+extern std::string saves_path;
+extern std::string html_saves_path;
+
+
+
 //
 //      constants in network inference process
 //

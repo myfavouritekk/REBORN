@@ -940,7 +940,7 @@ void Cell::generateTimeCourses(double*** targetData,int numTargetNodes, int time
      //print time courses to file
      std::ofstream timeCoursesFile;
      std::stringstream currDataFileName;
-     currDataFileName << OUTPUT_PATH << name;
+     currDataFileName << output_path << name;
      timeCoursesFile.open(currDataFileName.str().c_str());
      int nodeSize = (int)nodes.size();
      for (int i = 0; i < numInputSets; i++) {
@@ -1051,7 +1051,7 @@ void Cell::getScore(ScoreFunc& sfunc, double*** targetData, int numTargetNodes, 
         //print time courses to file
         std::ofstream timeCoursesFile;
         std::stringstream timeCoursesFileName;
-        timeCoursesFileName << OUTPUT_PATH << "Cell_" << cellIndex << "_TimeCourses.txt";
+        timeCoursesFileName << output_path << "Cell_" << cellIndex << "_TimeCourses.txt";
         timeCoursesFile.open(timeCoursesFileName.str().c_str());
 		for (int i = 0; i < numInputSets; i++){
 			for (int j = 0; j < numTargetNodes; j++) {
@@ -1349,7 +1349,7 @@ void Cell::genRegulatoryRelationships(){
     //
     std::ofstream completeFile;
     std::stringstream fileName;
-    fileName << SAVES_PATH << "Cell_" << cellIndex << "_Complete.txt";
+    fileName << saves_path << "Cell_" << cellIndex << "_Complete.txt";
     completeFile.open(fileName.str().c_str());
     
     std::cout<< "\t";
@@ -1419,7 +1419,7 @@ void Cell::findMotifs(){
     
     std::ofstream motifFile;
     std::stringstream fileName;
-    fileName << SAVES_PATH << "Cell_" << cellIndex << "_Motifs.txt";
+    fileName << saves_path << "Cell_" << cellIndex << "_Motifs.txt";
     motifFile.open(fileName.str().c_str());
     motifFile << numOfSingleMotifs << "\t" << numOfDoubleMotifs << "\t" << numOfTripleMotifs << std::endl;
     motifFile << singleString << doubleString << tripleString;

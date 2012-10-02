@@ -240,7 +240,7 @@ void Population::readDynamics (const string& fn) {
 	 */
     std::ifstream infile;
     std::stringstream infileName;
-    infileName << INPUT_PATH << fn;
+    infileName << fn;
     std::cout << infileName.str();
     infile.open (infileName.str().c_str());
     if (!infile) {
@@ -585,7 +585,7 @@ void Population::genHTMLFormat(){
         //      create html file;
         std::ofstream htmlOutput;
         std::stringstream fileName;
-        fileName << HTML_SAVES_PATH << "Cell_" << i << "_Description.html";
+        fileName << html_saves_path << "Cell_" << i << "_Description.html";
         htmlOutput.open(fileName.str().c_str());
         htmlOutput << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\"\n\"http://www.w3.org/TR/html4/strict.dtd\">";
         htmlOutput << "<html>\n<head>\n<title>Cell " << i + 1 << " Details</title>\n";

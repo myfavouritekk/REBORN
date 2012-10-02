@@ -1499,9 +1499,9 @@ std::string Cell::findDoubleMotifs(int numberOfGenes, int* indiceOfGenes){
                 int** motifMatrix = new int*[2];
                 motifMatrix[0] = new int[2];
                 motifMatrix[1] = new int[2];
-                for (int i = 0; i < 2; i++) {
-                    for (int j = 0;  j < 2; j++) {
-                        motifMatrix[i][j] = 0;
+                for (int m = 0; m < 2; m++) {
+                    for (int n = 0;  n < 2; n++) {
+                        motifMatrix[m][n] = 0;
                     }
                 }
                 
@@ -1520,9 +1520,9 @@ std::string Cell::findDoubleMotifs(int numberOfGenes, int* indiceOfGenes){
                 motifMatrix[1][0] = regulatoryMatrix[j][i];
                 motifMatrix[1][1] = regulatoryMatrix[j][j];
                 
-                for (int i = 0; i < 2; i++) {
-                    for (int j = 0; j < 2 ; j++) {
-                        doubleString << motifMatrix[i][j] << "\t";
+                for (int m = 0; m < 2; m++) {
+                    for (int n = 0; n < 2 ; j++) {
+                        doubleString << motifMatrix[m][n] << "\t";
                     }
                     doubleString << std::endl;
                 }
@@ -1563,10 +1563,10 @@ std::string Cell::findTripleMotifs(int numberOfGenes, int* indiceOfGenes){
 				else{
                     
                     int** motifMatrix = new int*[3];
-                    for (int i = 0; i < 3; i++) {
-                        motifMatrix[i] = new int[3];
-                        for (int j = 0; j < 3; j++) {
-                            motifMatrix[i][j] = 0;
+                    for (int m = 0; m < 3; m++) {
+                        motifMatrix[m] = new int[3];
+                        for (int n = 0; n < 3; n++) {
+                            motifMatrix[m][n] = 0;
                         }
                     }
                     

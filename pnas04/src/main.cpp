@@ -23,9 +23,9 @@ int num_sbmlmodel = 10;
 int buildChoice = 0;
 
 
-std::string output_path("output/");
-std::string saves_path("saves/");
-std::string html_saves_path("saves/html/");
+std::string output_path("Output/");
+std::string saves_path("Saves/");
+std::string html_saves_path("Saves/html/");
 
 
 

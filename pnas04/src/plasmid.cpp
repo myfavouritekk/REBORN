@@ -240,8 +240,8 @@ int*** findMatrixRecursion2	(const int** databaseMatrix,
                    databaseMatrix[choicesPoolOfRows[i]][choicesPoolOfColumns[j]] == targetMatrix[0][0]){
                     numPossible ++;
                     int** aChoice = new int*[2];
-                    for(int i = 0; i < 2; i ++){
-                        aChoice[i] = new int[1];
+                    for(int k = 0; k < 2; k ++){
+                        aChoice[k] = new int[1];
                     }
                     aChoice[0][0] = choicesPoolOfRows[i];
                     aChoice[1][0] = choicesPoolOfColumns[j];

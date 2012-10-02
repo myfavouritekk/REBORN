@@ -25,12 +25,15 @@ void BuildPlasmids::buildProcess(){
     //      loading data from database
     loadDatabase();
     
-    
-    std::cout << "Which build method do you what?" << std::endl
-        << "1. Using Operons as basic elements." << std::endl
-        << "2. Using promoters and genes as basic elements." << std::endl;
-    int buildChoice;
-    std::cin >> buildChoice;
+    if (!buildChoice)
+    {
+        std::cout << "Which build method do you what?" << std::endl
+            << "1. Using Operons as basic elements." << std::endl
+            << "2. Using promoters and genes as basic elements." << std::endl;
+        //int buildChoice;
+        std::cin >> buildChoice;
+    }
+
     
     switch (buildChoice) {
 

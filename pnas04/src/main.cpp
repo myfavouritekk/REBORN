@@ -20,6 +20,8 @@ int cells_unchanged = 5;
 int num_sbmlmodel = 10;
 
 
+int buildChoice = 0;
+
 
 std::string output_path("output/");
 std::string saves_path("saves/");
@@ -30,7 +32,7 @@ std::string html_saves_path("saves/html/");
 
 
 void printHelp() {
-    std::cout << "Usage: reborn_cl [options]\n\n-f input_file_name\t-o output folder\n-n no more information\n-e total_evo\t\t-p population\n-u cells_unchanged\t-b num_sbmlmodel" << std::endl;
+    std::cout << "Usage: reborn_cl [options]\n\n-f input_file_name\t-o output folder\n-n no more information\t-m buildChoice\n-e total_evo\t\t-p population\n-u cells_unchanged\t-b num_sbmlmodel" << std::endl;
     std::cout << "Example: reborn_cl -o Result/out -n -e 1000 -p 200 -u 5 -b 10" << std::endl;
 }
 
@@ -82,6 +84,12 @@ int main (int argc, char *argv[]) {
                 case 'N':
                     isnoinfo = 1;
                     break;
+
+                case 'm':
+                case 'M':
+                    buildChoice = atoi(argv[++i]);
+                    break;
+
                 default:
                     printHelp();
                     return 0;

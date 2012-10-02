@@ -52,6 +52,9 @@ extern int cells_unchanged;// 5
 //      Number of cells that are generated to SBMLModels
 extern int num_sbmlmodel;// 10
 
+extern int buildChoice;
+
+
 //      parameters for mutation in Cell
 #define PROB_MUT_DEG_PROT 0.5
 #define PROB_MUT_KIN_CONST 1.0

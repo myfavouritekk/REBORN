@@ -273,11 +273,15 @@ void Population::readDynamics (const string& fn) {
 
 	for(int ir=0;ir<numr;ir++){
 		infile >> xpoints[ir];
+#if defined(DEBUG)||defined(_DEBUG)
         std::cout << xpoints[ir] << "\t";
+#endif
 		for(int iinput=0;iinput<numInputSets;iinput++){
 			for(int ic=0;ic < numy;ic++){
 				infile >> ypoints[iinput][ic][ir];
+#if defined(DEBUG)||defined(_DEBUG)
 				std::cout << ypoints[iinput][ic][ir]<<"\t";
+#endif
 				if (infile.bad ()) throw std::runtime_error ("IO stream corrupted");
 				if (infile.fail ()) throw std::runtime_error ("bad data");
 			}

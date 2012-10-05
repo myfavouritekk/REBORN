@@ -1522,7 +1522,7 @@ std::string Cell::findDoubleMotifs(int numberOfGenes, int* indiceOfGenes){
                 motifMatrix[1][1] = regulatoryMatrix[j][j];
                 
                 for (int m = 0; m < 2; m++) {
-                    for (int n = 0; n < 2 ; j++) {
+                    for (int n = 0; n < 2 ; n++) {
                         doubleString << motifMatrix[m][n] << "\t";
                     }
                     doubleString << std::endl;

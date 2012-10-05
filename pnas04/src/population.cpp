@@ -250,7 +250,7 @@ void Population::readDynamics (const string& fn) {
 
 	//	number of xpoints, inducers and proteins
 	infile >>  numr >> numind >> numprot>>numInputSets;
-    std::cout << "Time points: " << numr << std::endl << "Inducers: " << numind << std::endl << "Proteins: " << numprot <<std::endl << "Input Sets: " << numInputSets<< std::endl;
+    std::cout << "\nTime points: " << numr << std::endl << "Inducers: " << numind << std::endl << "Proteins: " << numprot <<std::endl << "Input Sets: " << numInputSets<< std::endl;
     if (infile.bad ()) throw std::runtime_error ("IO stream corrupted");
 	if (infile.fail ()) throw std::runtime_error ("bad data");
 	if (!numr) {
@@ -286,7 +286,9 @@ void Population::readDynamics (const string& fn) {
 				if (infile.fail ()) throw std::runtime_error ("bad data");
 			}
 		}
+#if defined(DEBUG)||defined(_DEBUG)
 		std::cout<<std::endl;
+#endif
 	}
 
     infile.close();
@@ -572,7 +574,7 @@ void Population::output(){
     // _num_sbmlmodel cells' time courses
     for (int i = 0 ; i < num_sbmlmodel; i++) {
         currCell = cells[i];
-        std::cout << "Time Courses of Cell " << i + 1  << std::endl;
+        std::cout << "Time Courses of Cell " << i + 1  << " written successfully!" << std::endl;
         currCell->getScore(sfunc, ypoints, numind, numprot, numr, true);
     }
 }

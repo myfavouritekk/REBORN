@@ -105,11 +105,11 @@ void BuildPlasmids::loadDatabase(){
         std::cout << geneNames[i] << "\t";
 	}
     
-    std::cout << std::endl << std::endl;
+    //std::cout << std::endl << std::endl;
     
 	for(int i = 0;i < numOfPromoters;i++){
 		databaseOfGenesAndPromoters >> promoterNames[i];
-        std::cout << promoterNames[i] << "\t";
+        //std::cout << promoterNames[i] << "\t";
 	}
 
 	wholeRegulatoryMatrixOfGenesAndPromoters = new int*[numOfPromoters];
@@ -117,9 +117,9 @@ void BuildPlasmids::loadDatabase(){
 		wholeRegulatoryMatrixOfGenesAndPromoters[i] = new int[numOfGenes];
 		for(int j = 0;j < numOfGenes; j++){
 			databaseOfGenesAndPromoters >> wholeRegulatoryMatrixOfGenesAndPromoters[i][j];
-            std::cout << wholeRegulatoryMatrixOfGenesAndPromoters[i][j] << "\t";
+            //std::cout << wholeRegulatoryMatrixOfGenesAndPromoters[i][j] << "\t";
 		}
-        std::cout << std::endl << std::endl;
+        //std::cout << std::endl << std::endl;
 	}
 
 	databaseOfGenesAndPromoters.close();

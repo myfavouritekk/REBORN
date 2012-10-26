@@ -24,7 +24,7 @@
 #define GENES_PATH DATABASE_PATH"genes/"
 #define PROMOTERS_PATH DATABASE_PATH"promoters/"
 #define RBSES_PATH DATABASE_PATH"rbses/"
-#define TERMINATORS_PATH DATABASE_PATH"rbses/"
+#define TERMINATORS_PATH DATABASE_PATH"terminators/"
 
 
 //#define COMPLETEMODEL_OUTPUT_PATH saves_path"complete/"

@@ -117,7 +117,7 @@ int main (int argc, char *argv[]) {
     double NIDuration = difftime(end, start);
     
     std::cout << "\nIt tooks " << NIDuration << " seconds.\n";
-    
+/*
     time(&start);
     
     ustc::BuildPlasmids buildingPlasmids;
@@ -126,7 +126,7 @@ int main (int argc, char *argv[]) {
     time(&end);
     double BPDuration = difftime(end, start);
     
-    std::cout << "\nIt tooks " << BPDuration << " seconds.\n";
+    std::cout << "\nIt tooks " << BPDuration << " seconds.\n";*/
     
     return 0;
 }
